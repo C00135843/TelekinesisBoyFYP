@@ -27,6 +27,9 @@
 #include <iostream> 
 #define _USE_MATH_DEFINES
 #include <math.h>
+#include "Player.h"
+#include "Platform.h"
+#include "ContactListener.h"
 
 
 
@@ -55,7 +58,7 @@ int main()
 
 	// Create the main window 
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "SFML First Program");
-
+	window.setFramerateLimit(60);
 	//load a font
 	/*sf::Font font;
 	font.loadFromFile("C:\\Windows\\Fonts\\GARA.TTF");
@@ -73,21 +76,17 @@ int main()
 	circle.setPosition(300, 200);*/
 
 	//setup the world properties
-	sf::Texture groundTexture;
-	groundTexture.loadFromFile("../Assets/ground.png");
 
-	b2Vec2 gravity(0, 9.8f);
+	b2Vec2 gravity(0, 9.81f);
 	b2World world(gravity);
-	createGround(world, 0.f, 580.f);
 
+	ContactListener contact = ContactListener();
+	world.SetContactListener(&contact);
+	Platform ground = Platform(&world, &window, -175, 500,200,16);
 
+	//groundSprite.setRotation(0);
 
-	sf::Sprite groundSprite;
-	groundSprite.setTexture(groundTexture);
-	groundSprite.setPosition(0, 580.f);
-	groundSprite.setRotation(0);
-
-
+	Player p = Player(&world, &window, 39, 1);
 	//create the size of world
 
 	//create the world
@@ -108,18 +107,18 @@ int main()
 			// Escape key : exit 
 			if ((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::Escape))
 				window.close();
-
+			if ((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::Left || Event.key.code == sf::Keyboard::Right))
+			{
+				p.movePlayer(&Event);
+			}
 
 		}
-		float32 timeStep = 1.0f / 60.0f;
-		int32 velocityIterations = 8;
-		int32 positionIterations = 3;
-		world.Step(timeStep, velocityIterations, positionIterations);
+		world.Step(1/60.f, 8, 3);
 		//prepare frame
 		window.clear(sf::Color::White);
-
-
-		window.draw(groundSprite);
+		ground.draw();
+		p.draw();
+		p.update();
 
 		
 

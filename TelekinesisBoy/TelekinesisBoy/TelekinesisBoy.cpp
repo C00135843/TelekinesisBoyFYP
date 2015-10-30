@@ -45,22 +45,6 @@ enum _gameStates
 ////////////////////////////////////////////////////////////
 ///Entrypoint of application 
 //////////////////////////////////////////////////////////// 
-void createGround(b2World& world, float x, float y)
-{
-	b2BodyDef bodyDef;
-	bodyDef.position = b2Vec2(x / 30.0f, y / 30.0f);
-	bodyDef.type = b2_staticBody;
-	b2Body* Body = world.CreateBody(&bodyDef);
-	b2PolygonShape Shape;
-	Shape.SetAsBox((500.f / 2) / 30.f, (16.f / 2) /30.f);
-	b2FixtureDef fixtureDef;
-	fixtureDef.density = 0.3f;
-	fixtureDef.userData = "Ground";
-	fixtureDef.shape = &Shape;
-	Body->CreateFixture(&fixtureDef);
-
-
-}
 static const float SCALE = 30.f;
 int main()
 {

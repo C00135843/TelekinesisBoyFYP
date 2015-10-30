@@ -1,7 +1,14 @@
 #include "stdafx.h"
 #include "Player.h"
 
+enum _entityCatergory{
+	PLATFORM = 0x0001,
+	PLAYER = 0x0002
+};
+
 const float SCALE = 30.f;
+
+
 
 Player::Player(b2World* world, RenderWindow* win, float x, float y) : m_world(world), m_win(win){
 	startPosition = b2Vec2(x, y);
@@ -22,8 +29,8 @@ void Player::createBox2dBody()
 	fixtureDef.density = 1.f;
 	fixtureDef.userData = "Player";
 
-	//fixtureDef.filter.categoryBits = PLAYER;
-	//fixtureDef.filter.maskBits = BOUNDARY | PLATFORM | CLOCK | SHROOM | TIMEPICKUP | SPIKE | EXIT;
+	fixtureDef.filter.categoryBits = PLAYER;
+	fixtureDef.filter.maskBits = PLATFORM;
 
 	m_body->CreateFixture(&fixtureDef);
 }

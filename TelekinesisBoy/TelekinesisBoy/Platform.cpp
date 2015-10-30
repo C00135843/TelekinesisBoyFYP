@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "Platform.h"
-
+enum _entityCatergory{
+	PLATFORM = 0x0001,
+	PLAYER = 0x0002
+};
 
 Platform::Platform(b2World* world, RenderWindow* win, float x, float y, float w, float h) : m_world(world), m_win(win){
 	position = b2Vec2(x,y);
@@ -23,8 +26,8 @@ void Platform::createBox2dBody()
 	fixtureDef.density = 1.f;
 	fixtureDef.userData = "Ground";
 
-	//fixtureDef.filter.categoryBits = PLAYER;
-	//fixtureDef.filter.maskBits = BOUNDARY | PLATFORM | CLOCK | SHROOM | TIMEPICKUP | SPIKE | EXIT;
+	fixtureDef.filter.categoryBits = PLATFORM;
+	fixtureDef.filter.maskBits =  PLAYER;
 
 	m_body->CreateFixture(&fixtureDef);
 }

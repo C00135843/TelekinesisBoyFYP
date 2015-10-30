@@ -30,8 +30,17 @@
 #include "Player.h"
 #include "Platform.h"
 #include "ContactListener.h"
+#include "Menu.h"
+
+enum _gameStates
+{
+	MENU = 0,
+	GAME = 1,
+	EXIT = 2,
+	OPTIONS = 3
 
 
+};
 
 ////////////////////////////////////////////////////////////
 ///Entrypoint of application 
@@ -76,7 +85,7 @@ int main()
 	circle.setPosition(300, 200);*/
 
 	//setup the world properties
-
+	int gameState = MENU;
 	b2Vec2 gravity(0, 9.81f);
 	b2World world(gravity);
 
@@ -84,14 +93,12 @@ int main()
 	world.SetContactListener(&contact);
 	Platform ground = Platform(&world, &window, -1, 500,200,16);
 
-	//groundSprite.setRotation(0);
-
 	Player p = Player(&world, &window, 39, 1);
 	//create the size of world
 
 	//create the world
 
-
+	Menu menu(window.getSize().x, window.getSize().y);
 
 	// Start game loop 
 	while (window.isOpen())
@@ -107,23 +114,58 @@ int main()
 			// Escape key : exit 
 			if ((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::Escape))
 				window.close();
-			/*if ((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::Left || 
-				Event.key.code == sf::Keyboard::Right ||
-				Event.key.code == sf::Keyboard::Up))
-			{
-				p.movePlayer(&Event);
-			}*/
-			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+
+
+			// for menu system
+			if (gameState == MENU){
+				if ((Event.type == sf::Event::KeyReleased) && (Event.key.code == sf::Keyboard::Up))
+					menu.MoveUP();
+				if ((Event.type == sf::Event::KeyReleased) && (Event.key.code == sf::Keyboard::Down))
+					menu.MoveDown();
+				if ((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::Return))
+				{
+					//play game
+					if (menu.GetPressedItem() == 0)
+					{
+						std::cout << "PLAY pressed";
+						gameState = GAME;
+					}
+					// options
+					if (menu.GetPressedItem() == 1)
+					{
+						std::cout << "options pressed";
+						//gameState = OPTIONS;
+					}
+					//exit
+					if (menu.GetPressedItem() == 2)
+					{
+						window.close();
+					}
+				}
+			}
 				
 
 		}
-		p.movePlayer();
-		world.Step(1/60.f, 8, 3);
+		
+		
+
+		if (gameState == MENU)
+		{
+			window.clear(sf::Color::Black);
+			menu.draw(window);
+		}
+		if (gameState == GAME){
+			window.clear(sf::Color::White);
+			world.Step(1 / 60.f, 8, 3);
+			ground.draw();
+			p.draw();
+			p.movePlayer();
+			p.update();
+		}
+		
 		//prepare frame
-		window.clear(sf::Color::White);
-		ground.draw();
-		p.draw();
-		p.update();
+		//window.clear(sf::Color::White);
+
 
 		
 

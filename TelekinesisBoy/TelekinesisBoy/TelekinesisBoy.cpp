@@ -82,7 +82,7 @@ int main()
 
 	ContactListener contact = ContactListener();
 	world.SetContactListener(&contact);
-	Platform ground = Platform(&world, &window, -175, 500,200,16);
+	Platform ground = Platform(&world, &window, -1, 500,200,16);
 
 	//groundSprite.setRotation(0);
 
@@ -107,12 +107,17 @@ int main()
 			// Escape key : exit 
 			if ((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::Escape))
 				window.close();
-			if ((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::Left || Event.key.code == sf::Keyboard::Right))
+			/*if ((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::Left || 
+				Event.key.code == sf::Keyboard::Right ||
+				Event.key.code == sf::Keyboard::Up))
 			{
 				p.movePlayer(&Event);
-			}
+			}*/
+			//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+				
 
 		}
+		p.movePlayer();
 		world.Step(1/60.f, 8, 3);
 		//prepare frame
 		window.clear(sf::Color::White);

@@ -19,6 +19,12 @@ class Player{
 		b2FixtureDef fixtureDef;
 		b2Vec2 startPosition;
 		bool grounded;
+		float desiredVelX;
+		float desiredVelY;
+		float velChangeX;
+		float velChangeY;
+		float impulseX;
+		float impulseY;
 
 	public:
 		Player(){};
@@ -28,7 +34,7 @@ class Player{
 		void update();
 		void draw();
 		void ground();
-		void movePlayer(sf::Event*);
+		void movePlayer();
 
 };
 #endif

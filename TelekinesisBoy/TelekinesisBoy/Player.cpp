@@ -38,26 +38,38 @@ void Player::draw()
 {
 	m_win->draw(m_sprite);
 }
-void Player::movePlayer(Event *e)
+void Player::movePlayer()
 {
-	//velocity = m_body->GetLinearVelocity();
-	if ((e->type == sf::Event::KeyPressed) && (e->key.code == sf::Keyboard::Left))
+	desiredVelX = 0;
+	desiredVelY = 0;
+	velocity = m_body->GetLinearVelocity();
+	if (Keyboard::isKeyPressed(Keyboard::Left))
 	{
-		m_body->SetTransform(b2Vec2(m_body->GetPosition().x - 0.08f, m_body->GetPosition().y), 0);
+		m_body->SetTransform(b2Vec2(m_body->GetPosition().x - 0.03f, m_body->GetPosition().y), 0);
 	}
-	if ((e->type == sf::Event::KeyPressed) && (e->key.code == sf::Keyboard::Right))
+	if (Keyboard::isKeyPressed(Keyboard::Right))
 	{
-		m_body->SetTransform(b2Vec2(m_body->GetPosition().x + 0.08f, m_body->GetPosition().y), 0);
+		m_body->SetTransform(b2Vec2(m_body->GetPosition().x + 0.03f, m_body->GetPosition().y), 0);
 	}
+	if ((Keyboard::isKeyPressed(Keyboard::Up)))
+	{
+		if (grounded){
+			m_body->SetLinearVelocity(b2Vec2(0, -6));
+			//grounded = false;
+		}
+	}
+
+	// helps with gravity
+	velChangeX = desiredVelX - velocity.x;
+
+	impulseX = m_body->GetMass() * desiredVelX;
+	impulseY = m_body->GetMass() * desiredVelY;
+
+	m_body->ApplyLinearImpulse(b2Vec2(impulseX, impulseY), m_body->GetWorldCenter(), true);
 
 }
 void Player::update()
 {
-	if (grounded)
-	{
-		m_body->GetLinearVelocity();
-
-	}
 	m_sprite.setPosition(m_body->GetPosition().x * SCALE-26/2, m_body->GetPosition().y*SCALE-26/2);
 }
 void Player::ground()

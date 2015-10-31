@@ -28,6 +28,22 @@ public:
 				static_cast<Player*>(bodyUserData)->ground();
 			}
 		}
+
+		if (fixAType == "Player" && fixBType == "Pickup"
+			|| fixAType == "Pickup" && fixBType == "Player"){
+			if (fixAType == "Player")
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+				//static_cast<Player*>(bodyUserData)->ground();
+			}
+			else
+			{
+				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+				//static_cast<Player*>(bodyUserData)->ground();
+			}
+		}
+
+
 	}
 
 	void EndContact(b2Contact* contact)

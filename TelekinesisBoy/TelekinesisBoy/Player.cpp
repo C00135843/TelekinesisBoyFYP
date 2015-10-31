@@ -3,7 +3,8 @@
 
 enum _entityCatergory{
 	PLATFORM = 0x0001,
-	PLAYER = 0x0002
+	PLAYER = 0x0002,
+	PICKUP = 0x0004
 };
 
 const float SCALE = 30.f;
@@ -29,8 +30,8 @@ void Player::createBox2dBody()
 	fixtureDef.density = 1.f;
 	fixtureDef.userData = "Player";
 
-	fixtureDef.filter.categoryBits = PLAYER;
-	fixtureDef.filter.maskBits = PLATFORM;
+	//fixtureDef.filter.categoryBits = PLAYER;
+	//fixtureDef.filter.maskBits = PLATFORM | PICKUP;
 
 	m_body->CreateFixture(&fixtureDef);
 }

@@ -2,7 +2,8 @@
 #include "Platform.h"
 enum _entityCatergory{
 	PLATFORM = 0x0001,
-	PLAYER = 0x0002
+	PLAYER = 0x0002,
+	PICKUP = 0x0004
 };
 
 Platform::Platform(b2World* world, RenderWindow* win, float x, float y, float w, float h) : m_world(world), m_win(win){
@@ -26,15 +27,15 @@ void Platform::createBox2dBody()
 	fixtureDef.density = 1.f;
 	fixtureDef.userData = "Ground";
 
-	fixtureDef.filter.categoryBits = PLATFORM;
-	fixtureDef.filter.maskBits =  PLAYER;
+	//fixtureDef.filter.categoryBits = PLATFORM;
+	//fixtureDef.filter.maskBits =  PLAYER;
 
 	m_body->CreateFixture(&fixtureDef);
 }
 void Platform::loadAssets(){
 	m_texture.loadFromFile("../Assets/ground.png");
 	m_sprite.setTexture(m_texture);
-	m_sprite.setTextureRect(sf::IntRect(position.x, position.y, size.x, size.y));
+	m_sprite.setTextureRect(sf::IntRect(0, 0, size.x, size.y));
 	m_sprite.setPosition(position.x, position.y);
 
 	

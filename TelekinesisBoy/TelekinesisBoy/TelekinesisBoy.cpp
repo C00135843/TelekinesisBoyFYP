@@ -31,6 +31,7 @@
 #include "Platform.h"
 #include "ContactListener.h"
 #include "Menu.h"
+#include "Pickup.h"
 
 enum _gameStates
 {
@@ -53,20 +54,13 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "SFML First Program");
 	window.setFramerateLimit(60);
 	//load a font
-	/*sf::Font font;
-	font.loadFromFile("C:\\Windows\\Fonts\\GARA.TTF");
+	sf::Texture background;
+	sf::Sprite bgsprite;
 
-	//create a formatted text string
-	sf::Text text;
-	text.setFont(font);
-	text.setString("Hello World");
-	text.setStyle(sf::Text::Underlined | sf::Text::Italic | sf::Text::Bold);
-	text.setPosition(20, 40);
-	text.setCharacterSize(40);
-
-	//create a circle
-	sf::CircleShape circle(50);
-	circle.setPosition(300, 200);*/
+	background.loadFromFile("../Assets/menuBackground.png");
+	bgsprite.setTexture(background);
+	bgsprite.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
+	
 
 	//setup the world properties
 	int gameState = MENU;
@@ -75,9 +69,10 @@ int main()
 
 	ContactListener contact = ContactListener();
 	world.SetContactListener(&contact);
-	Platform ground = Platform(&world, &window, -1, 500,200,16);
+	Platform ground = Platform(&world, &window, 1, 500,200,16);
 
 	Player p = Player(&world, &window, 39, 1);
+	Pickup neuros = Pickup(&world, &window, 120, 450);
 	//create the size of world
 
 	//create the world
@@ -136,6 +131,7 @@ int main()
 		if (gameState == MENU)
 		{
 			window.clear(sf::Color::Black);
+			window.draw(bgsprite);
 			menu.draw(window);
 		}
 		if (gameState == GAME){
@@ -145,6 +141,9 @@ int main()
 			p.draw();
 			p.movePlayer();
 			p.update();
+			neuros.draw();
+			neuros.animation();
+			
 		}
 		
 		//prepare frame

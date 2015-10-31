@@ -25,6 +25,9 @@ class Player{
 		float velChangeY;
 		float impulseX;
 		float impulseY;
+		int score = 0;
+		int lives = 3;
+
 
 	public:
 		Player(){};
@@ -33,8 +36,14 @@ class Player{
 		void loadAssets();
 		void update();
 		void draw();
+		void drawHud();
 		void ground();
 		void movePlayer();
+		void increaseScore(){ score += 10; }
+		void decreaseLives(){ lives--; }
+		int getScore(){ return score; }
+		int getLives(){ return lives; }
+		b2Body* getBody(){ return m_body; }
 
 };
 #endif

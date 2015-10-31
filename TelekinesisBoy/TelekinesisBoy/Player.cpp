@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Player.h"
+#include <iostream>
 
 enum _entityCatergory{
 	PLATFORM = 0x0001,
@@ -30,14 +31,17 @@ void Player::createBox2dBody()
 	fixtureDef.density = 1.f;
 	fixtureDef.userData = "Player";
 
-	//fixtureDef.filter.categoryBits = PLAYER;
-	//fixtureDef.filter.maskBits = PLATFORM | PICKUP;
+	fixtureDef.filter.categoryBits = PLAYER;
+	fixtureDef.filter.maskBits = PLATFORM | PICKUP;
 
 	m_body->CreateFixture(&fixtureDef);
 }
 void Player::loadAssets()
 {
-	m_texture.loadFromFile("../Assets/player.png");
+
+	if (!m_texture.loadFromFile("../Assets/player.png")){
+		std::cout << "error with Texture load for player ";
+	}
 	m_sprite.setTexture(m_texture);
 	m_sprite.setPosition(startPosition.x,startPosition.y);
 	//m_sprite.setOrigin(Vector2f(startPosition.x - m_texture.getSize().x / 2, startPosition.y - m_texture.getSize().y / 2));

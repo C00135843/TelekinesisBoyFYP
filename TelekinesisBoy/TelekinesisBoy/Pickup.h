@@ -5,7 +5,6 @@ using namespace sf;
 class Pickup
 {
 public:
-	Pickup(){};
 	Pickup(b2World*, RenderWindow*, float, float);
 	~Pickup();
 	void createbox2dBody();
@@ -13,6 +12,9 @@ public:
 	void draw();
 	void animation();
 	void animationFrames();
+	b2Body* getBody(){ return n_body; }
+	void setDelete(){ n_delete = true; };
+	bool getDelete(){ return n_delete; };
 
 
 private:
@@ -30,6 +32,8 @@ private:
 	sf::IntRect rec[9];
 	int frame = 0;
 	float frameTiming = 0;
+	bool n_delete;
+	
 
 
 };

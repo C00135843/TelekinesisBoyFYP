@@ -4,6 +4,7 @@
 #include "Box2D\Box2D.h"
 
 #include "Player.h"
+#include "Pickup.h"
 #include "Platform.h"
 
 class ContactListener :public b2ContactListener{
@@ -34,14 +35,22 @@ public:
 			if (fixAType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-				//static_cast<Player*>(bodyUserData)->ground();
+				void* bodyUserData1 = contact->GetFixtureB()->GetBody()->GetUserData();
+				static_cast<Player*>(bodyUserData)->increaseScore();
+				static_cast<Pickup*>(bodyUserData1)->setDelete();
+				
+
 			}
 			else
 			{
+				void* bodyUserData1 = contact->GetFixtureA()->GetBody()->GetUserData();
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-				//static_cast<Player*>(bodyUserData)->ground();
+				static_cast<Player*>(bodyUserData)->increaseScore();
+				static_cast<Pickup*>(bodyUserData1)->setDelete();
 			}
+			
 		}
+		
 
 
 	}

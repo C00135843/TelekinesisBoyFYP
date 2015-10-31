@@ -32,6 +32,7 @@
 #include "ContactListener.h"
 #include "Menu.h"
 #include "Pickup.h"
+#include <vector>
 
 enum _gameStates
 {
@@ -49,10 +50,27 @@ enum _gameStates
 static const float SCALE = 30.f;
 int main()
 {
-
+	std::vector<Pickup*> pickupScheduledForRemoval;
 	// Create the main window 
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "SFML First Program");
 	window.setFramerateLimit(60);
+
+	sf::Font font;
+	Text textScore;
+	Text textLives;
+	if (!font.loadFromFile("../Font/leadcoat.ttf"))
+	{
+		std::cout << "error with font load for player hud";
+	}
+	textScore.setFont(font);
+	textScore.setColor(Color::Red);
+	textScore.setCharacterSize(15);
+	textScore.setPosition(window.getSize().x / 2 - 20.f, 10);
+
+	textLives.setFont(font);
+	textLives.setColor(Color::Red);
+	textLives.setCharacterSize(15);
+	textLives.setPosition(10, 10);
 	//load a font
 	sf::Texture background;
 	sf::Sprite bgsprite;
@@ -61,7 +79,7 @@ int main()
 	bgsprite.setTexture(background);
 	bgsprite.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
 	
-
+	bool tb_delete = false;
 	//setup the world properties
 	int gameState = MENU;
 	b2Vec2 gravity(0, 9.81f);
@@ -69,10 +87,12 @@ int main()
 
 	ContactListener contact = ContactListener();
 	world.SetContactListener(&contact);
-	Platform ground = Platform(&world, &window, 1, 500,200,16);
+	Platform ground = Platform(&world, &window, 1, 500,500,16);
 
 	Player p = Player(&world, &window, 39, 1);
-	Pickup neuros = Pickup(&world, &window, 120, 450);
+	std::vector<Pickup*>neuros;
+	Pickup n = Pickup(&world, &window, 120, 450);
+	neuros.push_back(&n);
 	//create the size of world
 
 	//create the world
@@ -127,6 +147,7 @@ int main()
 		}
 		
 		
+		
 
 		if (gameState == MENU)
 		{
@@ -141,8 +162,33 @@ int main()
 			p.draw();
 			p.movePlayer();
 			p.update();
-			neuros.draw();
-			neuros.animation();
+			//how to destroy bodies in box2d
+			for (int i = 0; i < neuros.size(); i++)
+			{
+				tb_delete = neuros[i]->getDelete();
+				if (tb_delete)
+				{
+					pickupScheduledForRemoval.push_back(neuros[i]);
+					neuros.erase(neuros.begin() + i);
+				}
+			}
+			if (pickupScheduledForRemoval.size() != 0){
+				std::vector<Pickup*>::iterator it = pickupScheduledForRemoval.begin();
+				std::vector<Pickup*>::iterator end = pickupScheduledForRemoval.end();
+				for (; it != end; ++it){
+					Pickup* dyingNeuros = *it;
+					world.DestroyBody( dyingNeuros->getBody());
+				}
+				pickupScheduledForRemoval.clear();
+			}
+			for (int i = 0; i < neuros.size(); i++){
+				neuros[i]->draw();
+				neuros[i]->animation();
+			}
+			textLives.setString("lives: " + std::to_string(p.getLives()));
+			textScore.setString("score: " + std::to_string(p.getScore()));
+			window.draw(textLives);
+			window.draw(textScore);
 			
 		}
 		

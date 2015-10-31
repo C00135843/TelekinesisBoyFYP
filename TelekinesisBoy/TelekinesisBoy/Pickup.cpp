@@ -18,6 +18,7 @@ Pickup::Pickup(b2World* world, RenderWindow* win, float x, float y) : n_world(wo
 	loadAssets();
 	source = 0;
 	animationFrames();
+	n_delete = false;
 }
 
 Pickup::~Pickup()
@@ -44,8 +45,8 @@ void Pickup::createbox2dBody(){
 	fixtureDef.density = 1.f;
 	fixtureDef.userData = "Pickup";
 
-	//fixtureDef.filter.categoryBits = PICKUP;
-	//fixtureDef.filter.maskBits = PLATFORM | PLAYER;
+	fixtureDef.filter.categoryBits = PICKUP;
+	fixtureDef.filter.maskBits = PLATFORM | PLAYER;
 
 	n_body->CreateFixture(&fixtureDef);
 

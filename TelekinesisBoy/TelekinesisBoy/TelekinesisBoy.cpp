@@ -53,6 +53,10 @@ int main()
 	std::vector<Pickup*> pickupScheduledForRemoval;
 	// Create the main window 
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "SFML First Program");
+	sf::View player_view(FloatRect(0,0,800,600));
+	player_view.zoom(1.f);
+
+	
 	window.setFramerateLimit(60);
 
 	sf::Font font;
@@ -65,12 +69,10 @@ int main()
 	textScore.setFont(font);
 	textScore.setColor(Color::Red);
 	textScore.setCharacterSize(15);
-	textScore.setPosition(window.getSize().x / 2 - 20.f, 10);
 
 	textLives.setFont(font);
 	textLives.setColor(Color::Red);
 	textLives.setCharacterSize(15);
-	textLives.setPosition(10, 10);
 	//load a font
 	sf::Texture background;
 	sf::Sprite bgsprite;
@@ -158,6 +160,20 @@ int main()
 		if (gameState == GAME){
 			window.clear(sf::Color::White);
 			world.Step(1 / 60.f, 8, 3);
+			if (p.getPosition().x >= 400)
+			{
+				player_view.setCenter(p.getPosition().x, 300);
+				textLives.setPosition(player_view.getCenter().x - 390, player_view.getCenter().y - 290);
+				textScore.setPosition(player_view.getCenter().x, player_view.getCenter().y - 290);
+				window.setView(player_view);
+			}
+			else
+			{
+				textLives.setPosition(window.getView().getCenter().x - 390, window.getView().getCenter().y - 290);
+				textScore.setPosition(window.getView().getCenter().x, window.getView().getCenter().y - 290);
+			}
+			
+
 			ground.draw();
 			p.draw();
 			p.movePlayer();

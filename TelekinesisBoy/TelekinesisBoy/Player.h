@@ -44,6 +44,7 @@ class Player{
 		int getScore(){ return score; }
 		int getLives(){ return lives; }
 		b2Body* getBody(){ return m_body; }
+		Vector2f getPosition(){ return m_sprite.getPosition(); }
 
 };
 #endif

@@ -28,7 +28,8 @@ class Player{
 		float impulseY;
 		int score = 0;
 		int lives = 3;
-
+		bool resetPos;
+		const float SCALE = 30.f;
 
 	public:
 		Player(){};
@@ -44,6 +45,7 @@ class Player{
 		void increaseScore(){ score += 10; }
 		void decreaseLives(){ lives--; }
 		int getScore(){ return score; }
+		void resetPosition();
 		int getLives(){ return lives; }
 		b2Body* getBody(){ return m_body; }
 		Vector2f getPosition(){ return m_sprite.getPosition(); }

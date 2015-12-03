@@ -41,9 +41,8 @@ enum _gameStates
 	MENU = 0,
 	GAME = 1,
 	EXIT = 2,
-	OPTIONS = 3
-
-
+	OPTIONS = 3,
+	END = 4
 };
 
 ////////////////////////////////////////////////////////////
@@ -112,8 +111,8 @@ int main()
 		else
 			k++;
 	}
-	Hazard h = Hazard(&world, &window, 800, 500, 100, 16);
-	Player p = Player(&world, &window, 39, 1);
+	Hazard h = Hazard(&world, &window, 800, 500, 300, 16);
+	Player p = Player(&world, &window, 500, 1);
 	std::vector<Pickup*>neuros;
 	Pickup n = Pickup(&world, &window, 120, 450);
 	neuros.push_back(&n);
@@ -231,11 +230,20 @@ int main()
 				neuros[i]->draw();
 				neuros[i]->animation();
 			}
+			if (p.getLives() <= 0)
+			{
+				gameState = END;
+			}
 			textLives.setString("lives: " + std::to_string(p.getLives()));
 			textScore.setString("score: " + std::to_string(p.getScore()));
 			window.draw(textLives);
 			window.draw(textScore);
+
 			
+		}
+		if (gameState == END)
+		{
+			window.clear(sf::Color::Black);
 		}
 		
 		//prepare frame

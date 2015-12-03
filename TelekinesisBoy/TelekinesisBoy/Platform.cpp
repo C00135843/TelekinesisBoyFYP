@@ -28,8 +28,8 @@ void Platform::createBox2dBody()
 	fixtureDef.density = 1.f;
 	fixtureDef.userData = "Ground";
 
-	fixtureDef.filter.categoryBits = PLATFORM;
-	fixtureDef.filter.maskBits =  PLAYER | CRATE ;
+	//fixtureDef.filter.categoryBits = PLATFORM;
+	//fixtureDef.filter.maskBits =  PLAYER | CRATE ;
 
 	m_body->CreateFixture(&fixtureDef);
 	

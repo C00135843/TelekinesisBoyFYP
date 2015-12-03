@@ -20,7 +20,7 @@ Hazard::~Hazard()
 }
 void Hazard::createBox2dBody()
 {
-	m_bodyDef.type = b2_dynamicBody;
+	m_bodyDef.type = b2_staticBody;
 	m_bodyDef.position.Set((startPosition.x + size.x / 2.0f) / SCALE, (startPosition.y + size.y / 2.f) / SCALE);
 	m_bodyDef.userData = this;
 	m_bodyDef.angle = 0;
@@ -33,8 +33,8 @@ void Hazard::createBox2dBody()
 	fixtureDef.userData = "Hazard";
 
 
-	fixtureDef.filter.categoryBits = HAZARD;
-	fixtureDef.filter.maskBits = PLAYER ;
+	//fixtureDef.filter.categoryBits = HAZARD;
+	//fixtureDef.filter.maskBits = PLAYER ;
 
 	m_body->CreateFixture(&fixtureDef);
 }

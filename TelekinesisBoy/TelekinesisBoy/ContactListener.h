@@ -73,7 +73,23 @@ public:
 			}
 			
 		}
-		
+		//PLAYER AND HAZARD
+
+		if (fixAType == "Player" && fixBType == "Hazard"
+			|| fixAType == "Hazard" && fixBType == "Player"){
+			if (fixAType == "Player")
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+				static_cast<Player*>(bodyUserData)->decreaseLives();
+				static_cast<Player*>(bodyUserData)->resetPosition();
+			}
+			else
+			{
+				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+				static_cast<Player*>(bodyUserData)->decreaseLives();
+				static_cast<Player*>(bodyUserData)->resetPosition();
+			}
+		}
 
 
 	}

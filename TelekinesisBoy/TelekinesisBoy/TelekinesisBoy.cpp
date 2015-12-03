@@ -90,27 +90,26 @@ int main()
 
 	ContactListener contact = ContactListener();
 	world.SetContactListener(&contact);
-	Platform ground = Platform(&world, &window, 1, 500,500,16);
+	Platform ground = Platform(&world, &window, 1, 500,800,16);
 	std::vector<Crate*>crates;
 	int const numOfCrates = 9;
 	crates.reserve(numOfCrates);
-	float pos = 275;
+	float pos = 300;
 	for (int i = 0,k=0,j=0; i < numOfCrates; i++){
-		if (i == 5 )
+		Crate* c = new Crate(&world, &window, pos + k * 34, 468 - j * 34, 32, 32);
+		crates.push_back(c);
+		if (i == 4 )
 		{
-			k = 2;
+			k = 1;
 			j = 1;
 		}
-		else if (i == 8)
+		else if (i == 7)
 		{
-			k = 3;
+			k = 2;
 			j = 2;
 		}
 		else
 			k++;
-
-		Crate* c = new Crate(&world, &window, pos + k *34, 468 - j * 34, 32, 32);
-		crates.push_back(c);
 	}
 
 	Player p = Player(&world, &window, 39, 1);

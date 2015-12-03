@@ -39,6 +39,7 @@ class Player{
 		void draw();
 		void drawHud();
 		void ground();
+		void notGrounded();
 		void movePlayer();
 		void increaseScore(){ score += 10; }
 		void decreaseLives(){ lives--; }

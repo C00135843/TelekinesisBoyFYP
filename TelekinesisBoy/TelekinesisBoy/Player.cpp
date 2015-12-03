@@ -5,7 +5,8 @@
 enum _entityCatergory{
 	PLATFORM = 0x0001,
 	PLAYER = 0x0002,
-	PICKUP = 0x0004
+	PICKUP = 0x0004,
+	CRATE = 0x0008
 };
 
 const float SCALE = 30.f;
@@ -24,6 +25,7 @@ void Player::createBox2dBody()
 	m_bodyDef.type = b2_dynamicBody;
 	m_bodyDef.position.Set(startPosition.x / SCALE, startPosition.y / SCALE);
 	m_bodyDef.userData = this;
+	m_bodyDef.fixedRotation = true;
 	m_body = m_world->CreateBody(&m_bodyDef);
 	dynamicBox.SetAsBox((26 / 2.0f) / SCALE, (26 / 2.0f) / SCALE);
 	fixtureDef.shape = &dynamicBox;
@@ -32,7 +34,7 @@ void Player::createBox2dBody()
 	fixtureDef.userData = "Player";
 
 	fixtureDef.filter.categoryBits = PLAYER;
-	fixtureDef.filter.maskBits = PLATFORM | PICKUP;
+	fixtureDef.filter.maskBits = PLATFORM | PICKUP | CRATE;
 
 	m_body->CreateFixture(&fixtureDef);
 }
@@ -86,10 +88,10 @@ void Player::update()
 }
 void Player::ground()
 {
-	if (grounded == false)
-	{
 		grounded = true;
-	}
-	else
-		grounded = false;
+
+}
+void Player::notGrounded()
+{
+	grounded = false;
 }

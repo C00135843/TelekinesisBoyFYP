@@ -30,6 +30,29 @@ public:
 			}
 		}
 
+		//PLAYER AND CRATE
+		if (fixAType == "Player" && fixBType == "Crate"
+			|| fixAType == "Crate" && fixBType == "Player"){
+			if (fixAType == "Player")
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
+				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+
+				if (posPlat.y - (5 / 60.0f) > posPlayer.y + 8 / 30.0f)
+					static_cast<Player*>(bodyUserData)->ground();
+
+			}
+			else
+			{
+				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
+				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+				if (posPlat.y - (5 / 60.0f) > posPlayer.y + 8 / 30.0f)
+					static_cast<Player*>(bodyUserData)->ground();
+			}
+		}
+
 		if (fixAType == "Player" && fixBType == "Pickup"
 			|| fixAType == "Pickup" && fixBType == "Player"){
 			if (fixAType == "Player")
@@ -65,12 +88,28 @@ public:
 			if (fixAType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-				static_cast<Player*>(bodyUserData)->ground();
+				static_cast<Player*>(bodyUserData)->notGrounded();
+
 			}
 			else
 			{
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-				static_cast<Player*>(bodyUserData)->ground();
+				static_cast<Player*>(bodyUserData)->notGrounded();
+
+			}
+		}
+
+		if (fixAType == "Player" && fixBType == "Crate"
+			|| fixAType == "Crate" && fixBType == "Player"){
+			if (fixAType == "Player")
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+				static_cast<Player*>(bodyUserData)->notGrounded();
+			}
+			else
+			{
+				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+				static_cast<Player*>(bodyUserData)->notGrounded();
 			}
 		}
 	}

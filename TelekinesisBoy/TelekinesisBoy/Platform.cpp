@@ -3,7 +3,8 @@
 enum _entityCatergory{
 	PLATFORM = 0x0001,
 	PLAYER = 0x0002,
-	PICKUP = 0x0004
+	PICKUP = 0x0004,
+	CRATE = 0x0008
 };
 
 Platform::Platform(b2World* world, RenderWindow* win, float x, float y, float w, float h) : m_world(world), m_win(win){
@@ -27,8 +28,8 @@ void Platform::createBox2dBody()
 	fixtureDef.density = 1.f;
 	fixtureDef.userData = "Ground";
 
-	//fixtureDef.filter.categoryBits = PLATFORM;
-	//fixtureDef.filter.maskBits =  PLAYER;
+	fixtureDef.filter.categoryBits = PLATFORM;
+	fixtureDef.filter.maskBits =  PLAYER | CRATE ;
 
 	m_body->CreateFixture(&fixtureDef);
 	

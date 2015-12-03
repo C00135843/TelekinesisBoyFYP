@@ -23,7 +23,7 @@ void Platform::createBox2dBody()
 	m_body = m_world->CreateBody(&m_bodyDef);
 	dynamicBox.SetAsBox((size.x / 2.0f) / SCALE, (size.y / 2.0f) / SCALE);
 	fixtureDef.shape = &dynamicBox;
-
+	
 	fixtureDef.density = 1.f;
 	fixtureDef.userData = "Ground";
 
@@ -31,6 +31,7 @@ void Platform::createBox2dBody()
 	//fixtureDef.filter.maskBits =  PLAYER;
 
 	m_body->CreateFixture(&fixtureDef);
+	
 }
 void Platform::loadAssets(){
 	m_texture.loadFromFile("../Assets/ground.png");

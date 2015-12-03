@@ -32,6 +32,7 @@
 #include "ContactListener.h"
 #include "Menu.h"
 #include "Pickup.h"
+#include "Crate.h"
 #include <vector>
 
 enum _gameStates
@@ -90,6 +91,27 @@ int main()
 	ContactListener contact = ContactListener();
 	world.SetContactListener(&contact);
 	Platform ground = Platform(&world, &window, 1, 500,500,16);
+	std::vector<Crate*>crates;
+	int const numOfCrates = 9;
+	crates.reserve(numOfCrates);
+	float pos = 275;
+	for (int i = 0,j=0; i < numOfCrates; i++){
+		if (i >=4)
+		{
+			pos = 275 + j*35;
+			if (i == 4)
+				j++;
+			if (i == 8)
+				j++;
+			
+		}
+		else
+		{
+			pos = 275 + i * 35;
+		}
+		Crate* c = new Crate(&world, &window, pos, 468 - j * 34, 32, 32);
+		crates.push_back(c);
+	}
 
 	Player p = Player(&world, &window, 39, 1);
 	std::vector<Pickup*>neuros;
@@ -175,6 +197,14 @@ int main()
 			
 
 			ground.draw();
+
+			// drawing and updating crates
+			for (int i = 0; i < crates.size(); i++)
+			{
+				crates[i]->crateMove();
+				crates[i]->Draw();
+			}
+
 			p.draw();
 			p.movePlayer();
 			p.update();

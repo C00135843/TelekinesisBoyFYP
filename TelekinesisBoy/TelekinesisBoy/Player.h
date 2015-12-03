@@ -18,6 +18,7 @@ class Player{
 		b2Body* m_body;
 		b2FixtureDef fixtureDef;
 		b2Vec2 startPosition;
+		b2Draw *b_draw;
 		bool grounded;
 		float desiredVelX;
 		float desiredVelY;

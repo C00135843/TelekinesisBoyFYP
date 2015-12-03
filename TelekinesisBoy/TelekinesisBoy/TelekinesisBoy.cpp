@@ -95,21 +95,21 @@ int main()
 	int const numOfCrates = 9;
 	crates.reserve(numOfCrates);
 	float pos = 275;
-	for (int i = 0,j=0; i < numOfCrates; i++){
-		if (i >=4)
+	for (int i = 0,k=0,j=0; i < numOfCrates; i++){
+		if (i == 5 )
 		{
-			pos = 275 + j*35;
-			if (i == 4)
-				j++;
-			if (i == 8)
-				j++;
-			
+			k = 2;
+			j = 1;
+		}
+		else if (i == 8)
+		{
+			k = 3;
+			j = 2;
 		}
 		else
-		{
-			pos = 275 + i * 35;
-		}
-		Crate* c = new Crate(&world, &window, pos, 468 - j * 34, 32, 32);
+			k++;
+
+		Crate* c = new Crate(&world, &window, pos + k *34, 468 - j * 34, 32, 32);
 		crates.push_back(c);
 	}
 

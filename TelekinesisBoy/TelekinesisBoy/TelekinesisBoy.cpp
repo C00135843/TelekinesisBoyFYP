@@ -34,6 +34,7 @@
 #include "Pickup.h"
 #include "Crate.h"
 #include "Hazard.h"
+#include "Exit.h"
 #include <vector>
 
 enum _gameStates
@@ -112,7 +113,8 @@ int main()
 			k++;
 	}
 	Hazard h = Hazard(&world, &window, 800, 500, 300, 16);
-	Player p = Player(&world, &window, 500, 1);
+	Exit e = Exit(&world, &window, 0, 453, 61, 47);
+	Player p = Player(&world, &window, 100, 1);
 	std::vector<Pickup*>neuros;
 	Pickup n = Pickup(&world, &window, 120, 450);
 	neuros.push_back(&n);
@@ -197,6 +199,7 @@ int main()
 
 			ground.draw();
 			h.Draw();
+			e.Draw();
 			// drawing and updating crates
 			for (int i = 0; i < crates.size(); i++)
 			{

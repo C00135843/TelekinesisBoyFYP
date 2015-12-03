@@ -87,6 +87,7 @@
   <ItemGroup>
     <ClInclude Include="ContactListener.h" />
     <ClInclude Include="Crate.h" />
+    <ClInclude Include="Exit.h" />
     <ClInclude Include="Hazard.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Pickup.h" />
@@ -97,6 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Crate.cpp" />
+    <ClCompile Include="Exit.cpp" />
     <ClCompile Include="Hazard.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Pickup.cpp" />

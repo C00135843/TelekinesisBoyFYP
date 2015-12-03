@@ -7,7 +7,8 @@ enum _entityCatergory{
 	PLAYER = 0x0002,
 	PICKUP = 0x0004,
 	CRATE = 0x0008,
-	HAZARD = 0x0016
+	HAZARD = 0x0016,
+	EXIT = 0x0032
 };
 
 
@@ -35,8 +36,8 @@ void Player::createBox2dBody()
 	fixtureDef.density = 1.f;
 	fixtureDef.userData = "Player";
 
-	//fixtureDef.filter.categoryBits = PLAYER;
-	//fixtureDef.filter.maskBits = PLATFORM | PICKUP | CRATE | HAZARD;
+	fixtureDef.filter.categoryBits = PLAYER;
+	fixtureDef.filter.maskBits = PLATFORM | PICKUP | CRATE | HAZARD | EXIT;
 
 	m_body->CreateFixture(&fixtureDef);
 }

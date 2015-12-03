@@ -4,7 +4,10 @@ const float SCALE = 30.f;
 enum _entityCatergory{
 	PLATFORM = 0x0001,
 	PLAYER = 0x0002,
-	PICKUP = 0x0004
+	PICKUP = 0x0004,
+	CRATE = 0x0008,
+	HAZARD = 0x0016,
+	EXIT = 0x0032
 };
 enum _animationFrame{
 	FIRST = 0 * 42,

@@ -23,7 +23,7 @@ private:
 	b2World* n_world;
 	RenderWindow* n_win;
 	b2BodyDef n_bodyDef;
-	b2PolygonShape dynamicBox;
+	b2CircleShape dynamicBox;
 	b2Body* n_body;
 	b2FixtureDef fixtureDef;
 	b2Vec2 position;

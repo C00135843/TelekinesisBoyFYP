@@ -42,7 +42,8 @@ void Pickup::createbox2dBody(){
 	n_bodyDef.position.Set((position.x+20) / SCALE, (position.y+20) / SCALE);
 	n_bodyDef.userData = this;
 	n_body = n_world->CreateBody(&n_bodyDef);
-	dynamicBox.SetAsBox(( 30/ 2.0f) / SCALE, (30 / 2.0f) / SCALE);
+	dynamicBox.m_p.Set((30 / 2.0f) / SCALE, (30 / 2.0f) / SCALE);
+	dynamicBox.m_radius= 15 /SCALE;
 	fixtureDef.shape = &dynamicBox;
 
 	fixtureDef.density = 1.f;

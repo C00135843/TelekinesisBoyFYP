@@ -185,16 +185,17 @@ int main()
 			if (p.getPosition().x >= 400)
 			{
 				player_view.setCenter(p.getPosition().x, 300);
-				textLives.setPosition(player_view.getCenter().x - 390, player_view.getCenter().y - 290);
-				textScore.setPosition(player_view.getCenter().x, player_view.getCenter().y - 290);
-				window.setView(player_view);
+				//textLives.setPosition(player_view.getCenter().x - 390, player_view.getCenter().y - 290);
+				//textScore.setPosition(player_view.getCenter().x, player_view.getCenter().y - 290);
 			}
 			else
 			{
+				player_view.setCenter(400, 300);
 				textLives.setPosition(window.getView().getCenter().x - 390, window.getView().getCenter().y - 290);
 				textScore.setPosition(window.getView().getCenter().x, window.getView().getCenter().y - 290);
+				
 			}
-			
+			window.setView(player_view);
 
 			ground.draw();
 			h.Draw();

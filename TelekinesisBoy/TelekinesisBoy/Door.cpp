@@ -29,7 +29,7 @@ void Door::createBox2dBody()
 	fixtureDef.shape = &dynamicBox;
 
 	fixtureDef.density = 1.f;
-	fixtureDef.userData = "Ground";
+	fixtureDef.userData = "Door";
 
 	//fixtureDef.filter.categoryBits = PLATFORM;
 	//fixtureDef.filter.maskBits =  PLAYER | CRATE ;

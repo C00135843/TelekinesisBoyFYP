@@ -12,10 +12,6 @@ enum _entityCatergory{
 	BUTTON = 0x0064
 };
 
-
-
-
-
 Player::Player(b2World* world, RenderWindow* win, float x, float y) : m_world(world), m_win(win){
 	startPosition = b2Vec2(x, y);
 	createBox2dBody();
@@ -73,7 +69,7 @@ void Player::movePlayer()
 	{
 		if (grounded){
 			m_body->SetLinearVelocity(b2Vec2(0, -6));
-			//grounded = false;
+			grounded = false;
 		}
 	}
 

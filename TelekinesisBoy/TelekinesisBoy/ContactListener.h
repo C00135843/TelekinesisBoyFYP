@@ -40,7 +40,7 @@ public:
 				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
 				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
 
-				if (posPlat.y - (5 / 60.0f) > posPlayer.y + 8 / 30.0f)
+				if (posPlat.y - (10 / 60.0f) > posPlayer.y + 16 / 30.0f)
 					static_cast<Player*>(bodyUserData)->ground();
 
 			}
@@ -49,7 +49,7 @@ public:
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
 				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
-				if (posPlat.y - (5 / 60.0f) > posPlayer.y + 8 / 30.0f)
+				if (posPlat.y - (10 / 60.0f) > posPlayer.y + 16 / 30.0f)
 					static_cast<Player*>(bodyUserData)->ground();
 			}
 		}

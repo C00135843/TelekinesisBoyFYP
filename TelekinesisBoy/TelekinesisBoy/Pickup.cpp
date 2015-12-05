@@ -39,13 +39,13 @@ void Pickup::loadAssets()
 void Pickup::createbox2dBody(){
 
 	n_bodyDef.type = b2_staticBody;
-	n_bodyDef.position.Set((position.x+20) / SCALE, (position.y+20) / SCALE);
+	n_bodyDef.position.Set((position.x) / SCALE, (position.y) / SCALE);
 	n_bodyDef.userData = this;
 	n_body = n_world->CreateBody(&n_bodyDef);
-	dynamicBox.m_p.Set((30 / 2.0f) / SCALE, (30 / 2.0f) / SCALE);
-	dynamicBox.m_radius= 15 /SCALE;
+	dynamicBox.m_p.Set((40 / 2.0f) / SCALE, (40 / 2.0f) / SCALE);
+	dynamicBox.m_radius= 10 /SCALE;
 	fixtureDef.shape = &dynamicBox;
-
+	fixtureDef.isSensor = true;
 	fixtureDef.density = 1.f;
 	fixtureDef.userData = "Pickup";
 

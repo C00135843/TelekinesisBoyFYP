@@ -116,8 +116,14 @@ int main()
 	Exit e = Exit(&world, &window, 0, 453, 61, 47);
 	Player p = Player(&world, &window, 100, 1);
 	std::vector<Pickup*>neuros;
-	Pickup n = Pickup(&world, &window, 120, 450);
-	neuros.push_back(&n);
+	Pickup* n = new Pickup(&world, &window, 320, 460);
+	Pickup* n1 = new Pickup(&world, &window, 360, 460);
+	Pickup* n2 = new Pickup(&world, &window, 400, 460);
+	Pickup* n3 = new Pickup(&world, &window, 360, 420);
+	neuros.push_back(n);
+	neuros.push_back(n1);
+	neuros.push_back(n2);
+	neuros.push_back(n3);
 	//create the size of world
 
 	//create the world

@@ -38,6 +38,7 @@
 #include "GameStates.h"
 #include "Button.h"
 #include "Door.h"
+#include "DebugDraw.h"
 #include <vector>
 
 ////////////////////////////////////////////////////////////
@@ -79,10 +80,15 @@ int main()
 	bgsprite.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
 	
 	bool tb_delete = false;
+	bool drawDebug = false;
 	//setup the world properties
 
 	b2Vec2 gravity(0, 9.81f);
 	b2World world(gravity);
+
+	DebugDraw debugDraw(&window);
+	world.SetDebugDraw(&debugDraw);
+	debugDraw.SetFlags(b2Draw::e_shapeBit);
 
 	ContactListener contact = ContactListener();
 	world.SetContactListener(&contact);
@@ -171,6 +177,18 @@ int main()
 					}
 				}
 			}
+			//for game 
+			// check keypress for 
+			if (g_States->CurrentState() == GAME){
+				
+				if ((Event.type == sf::Event::KeyReleased) && (Event.key.code == sf::Keyboard::F1))
+				{
+					if (drawDebug)
+						drawDebug = false;
+					else
+						drawDebug = true;
+				}
+			}
 				
 
 		}
@@ -249,6 +267,10 @@ int main()
 			textScore.setString("score: " + std::to_string(p.getScore()));
 			window.draw(textLives);
 			window.draw(textScore);
+
+
+			if (drawDebug)
+				world.DrawDebugData();
 
 			
 		}

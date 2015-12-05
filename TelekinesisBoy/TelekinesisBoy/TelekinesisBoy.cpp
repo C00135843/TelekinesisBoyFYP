@@ -36,6 +36,8 @@
 #include "Hazard.h"
 #include "Exit.h"
 #include "GameStates.h"
+#include "Button.h"
+#include "Door.h"
 #include <vector>
 
 ////////////////////////////////////////////////////////////
@@ -85,6 +87,8 @@ int main()
 	ContactListener contact = ContactListener();
 	world.SetContactListener(&contact);
 	Platform ground = Platform(&world, &window, 1, 500,800,16);
+	Platform roof = Platform(&world, &window, 600, 250, 800, 16);
+	Door door = Door(&world, &window, 650, 266, 16, 234);
 	std::vector<Crate*>crates;
 	int const numOfCrates = 9;
 	crates.reserve(numOfCrates);
@@ -108,6 +112,7 @@ int main()
 	Hazard h = Hazard(&world, &window, 800, 500, 300, 16);
 	Exit e = Exit(&world, &window, 0, 453, 61, 47);
 	Player p = Player(&world, &window, 100, 1);
+	Button b = Button(&world, &window,200, 474,57,26);
 	std::vector<Pickup*>neuros;
 	Pickup* n = new Pickup(&world, &window, 320, 460);
 	Pickup* n1 = new Pickup(&world, &window, 360, 460);
@@ -198,14 +203,16 @@ int main()
 			window.setView(player_view);
 
 			ground.draw();
+			roof.draw();
 			h.Draw();
 			e.Draw();
 			// drawing and updating crates
-
-
+			door.draw();
+			b.Draw();
 			p.draw();
 			p.movePlayer();
 			p.update();
+			
 			//how to destroy bodies in box2d
 			for (int i = 0; i < neuros.size(); i++)
 			{

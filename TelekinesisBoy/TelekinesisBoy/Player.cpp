@@ -8,7 +8,8 @@ enum _entityCatergory{
 	PICKUP = 0x0004,
 	CRATE = 0x0008,
 	HAZARD = 0x0016,
-	EXIT = 0x0032
+	EXIT = 0x0032,
+	BUTTON = 0x0064
 };
 
 

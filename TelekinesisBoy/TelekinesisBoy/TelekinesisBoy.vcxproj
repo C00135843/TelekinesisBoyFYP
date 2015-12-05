@@ -85,8 +85,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
     <ClInclude Include="ContactListener.h" />
     <ClInclude Include="Crate.h" />
+    <ClInclude Include="Door.h" />
     <ClInclude Include="Exit.h" />
     <ClInclude Include="GameStates.h" />
     <ClInclude Include="Hazard.h" />
@@ -98,7 +100,9 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Crate.cpp" />
+    <ClCompile Include="Door.cpp" />
     <ClCompile Include="Exit.cpp" />
     <ClCompile Include="GameStates.cpp" />
     <ClCompile Include="Hazard.cpp" />

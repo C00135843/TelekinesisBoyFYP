@@ -6,10 +6,11 @@
 #include "Player.h"
 #include "Pickup.h"
 #include "Platform.h"
+#include "GameStates.h"
 
 class ContactListener :public b2ContactListener{
 private:
-
+	GameStates* g_states = GameStates::getInstance();
 public:
 	void BeginContact(b2Contact* contact)
 	{
@@ -52,6 +53,21 @@ public:
 					static_cast<Player*>(bodyUserData)->ground();
 			}
 		}
+		// PLAYER AND EXIT COLLISION
+
+		if (fixAType == "Player" && fixBType == "Exit"
+			|| fixAType == "Exit" && fixBType == "Player"){
+			if (fixAType == "Player")
+			{
+				g_states->setState(END);
+			}
+			else
+			{
+				g_states->setState(END);
+			}
+
+		}
+
 
 		if (fixAType == "Player" && fixBType == "Pickup"
 			|| fixAType == "Pickup" && fixBType == "Player"){

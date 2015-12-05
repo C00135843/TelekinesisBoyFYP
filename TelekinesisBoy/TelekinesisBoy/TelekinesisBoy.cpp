@@ -35,16 +35,8 @@
 #include "Crate.h"
 #include "Hazard.h"
 #include "Exit.h"
+#include "GameStates.h"
 #include <vector>
-
-enum _gameStates
-{
-	MENU = 0,
-	GAME = 1,
-	EXIT = 2,
-	OPTIONS = 3,
-	END = 4
-};
 
 ////////////////////////////////////////////////////////////
 ///Entrypoint of application 
@@ -57,10 +49,11 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "SFML First Program");
 	sf::View player_view(FloatRect(0,0,800,600));
 	player_view.zoom(1.f);
-
-	
 	window.setFramerateLimit(60);
-
+	
+	
+	GameStates* g_States = GameStates::getInstance();
+	g_States->setState(MENU);
 	sf::Font font;
 	Text textScore;
 	Text textLives;
@@ -85,7 +78,7 @@ int main()
 	
 	bool tb_delete = false;
 	//setup the world properties
-	int gameState = MENU;
+
 	b2Vec2 gravity(0, 9.81f);
 	b2World world(gravity);
 
@@ -147,7 +140,7 @@ int main()
 
 
 			// for menu system
-			if (gameState == MENU){
+			if (g_States->CurrentState() == 0){
 				if ((Event.type == sf::Event::KeyReleased) && (Event.key.code == sf::Keyboard::Up))
 					menu.MoveUP();
 				if ((Event.type == sf::Event::KeyReleased) && (Event.key.code == sf::Keyboard::Down))
@@ -158,13 +151,13 @@ int main()
 					if (menu.GetPressedItem() == 0)
 					{
 						std::cout << "PLAY pressed";
-						gameState = GAME;
+						g_States->setState(GAME);
 					}
 					// options
 					if (menu.GetPressedItem() == 1)
 					{
 						std::cout << "options pressed";
-						//gameState = OPTIONS;
+						//g_States->setState(OPTIONS);
 					}
 					//exit
 					if (menu.GetPressedItem() == 2)
@@ -180,13 +173,13 @@ int main()
 		
 		
 
-		if (gameState == MENU)
+		if (g_States->CurrentState()== MENU)
 		{
 			window.clear(sf::Color::Black);
 			window.draw(bgsprite);
 			menu.draw(window);
 		}
-		if (gameState == GAME){
+		if (g_States->CurrentState() == GAME){
 			window.clear(sf::Color::White);
 			world.Step(1 / 60.f, 8, 3);
 			if (p.getPosition().x >= 400)
@@ -207,11 +200,7 @@ int main()
 			h.Draw();
 			e.Draw();
 			// drawing and updating crates
-			for (int i = 0; i < crates.size(); i++)
-			{
-				crates[i]->crateMove();
-				crates[i]->Draw();
-			}
+
 
 			p.draw();
 			p.movePlayer();
@@ -239,9 +228,14 @@ int main()
 				neuros[i]->draw();
 				neuros[i]->animation();
 			}
+			for (int i = 0; i < crates.size(); i++)
+			{
+				crates[i]->crateMove();
+				crates[i]->Draw();
+			}
 			if (p.getLives() <= 0)
 			{
-				gameState = END;
+				g_States->setState(END);
 			}
 			textLives.setString("lives: " + std::to_string(p.getLives()));
 			textScore.setString("score: " + std::to_string(p.getScore()));
@@ -250,7 +244,7 @@ int main()
 
 			
 		}
-		if (gameState == END)
+		if (g_States->CurrentState() == END)
 		{
 			window.clear(sf::Color::Black);
 		}

@@ -54,6 +54,9 @@ int main()
 	player_view.zoom(1.f);
 	window.setFramerateLimit(60);
 	
+	float mouseX;
+	float mouseY;
+	Vector2f mousePos;
 	
 	GameStates* g_States = GameStates::getInstance();
 	g_States->setState(MENU);
@@ -90,7 +93,7 @@ int main()
 	world.SetDebugDraw(&debugDraw);
 	debugDraw.SetFlags(b2Draw::e_shapeBit);
 
-	ContactListener contact = ContactListener();
+	ContactListener contact = ContactListener(&world);
 	world.SetContactListener(&contact);
 	Platform ground = Platform(&world, &window, 1, 500,800,16);
 	Platform roof = Platform(&world, &window, 600, 250, 800, 16);
@@ -193,8 +196,6 @@ int main()
 
 		}
 		
-		
-		
 
 		if (g_States->CurrentState()== MENU)
 		{
@@ -205,19 +206,18 @@ int main()
 		if (g_States->CurrentState() == GAME){
 			window.clear(sf::Color::White);
 			world.Step(1 / 60.f, 8, 3);
+			mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 			if (p.getPosition().x >= 400)
 			{
 				player_view.setCenter(p.getPosition().x, 300);
-				//textLives.setPosition(player_view.getCenter().x - 390, player_view.getCenter().y - 290);
-				//textScore.setPosition(player_view.getCenter().x, player_view.getCenter().y - 290);
 			}
 			else
 			{
 				player_view.setCenter(400, 300);
-				textLives.setPosition(window.getView().getCenter().x - 390, window.getView().getCenter().y - 290);
-				textScore.setPosition(window.getView().getCenter().x, window.getView().getCenter().y - 290);
-				
+	
 			}
+			textLives.setPosition(window.getView().getCenter().x - 390, window.getView().getCenter().y - 290);
+			textScore.setPosition(window.getView().getCenter().x, window.getView().getCenter().y - 290);
 			window.setView(player_view);
 
 			ground.draw();
@@ -256,7 +256,7 @@ int main()
 			}
 			for (int i = 0; i < crates.size(); i++)
 			{
-				crates[i]->crateMove();
+				crates[i]->crateMove(mousePos);
 				crates[i]->Draw();
 			}
 			if (p.getLives() <= 0)

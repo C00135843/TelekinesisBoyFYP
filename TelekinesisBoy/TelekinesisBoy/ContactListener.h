@@ -7,11 +7,18 @@
 #include "Pickup.h"
 #include "Platform.h"
 #include "GameStates.h"
+#include "Crate.h"
+#include "Door.h"
+#include "Button.h"
 
 class ContactListener :public b2ContactListener{
 private:
 	GameStates* g_states = GameStates::getInstance();
+	b2World *w;
 public:
+	ContactListener(b2World* world) : b2ContactListener() {
+		w = world;
+	}
 	void BeginContact(b2Contact* contact)
 	{
 		void* fixAType = contact->GetFixtureA()->GetUserData();
@@ -68,6 +75,18 @@ public:
 
 		}
 
+		//CRATE AND BUTTON
+		if (fixAType == "Crate" && fixBType == "Button"
+			|| fixAType == "Button" && fixBType == "Crate"){
+				for (b2Body *b = w->GetBodyList(); b != NULL; b = b->GetNext())
+				{
+					if (b->GetFixtureList()->GetUserData() == "Door")
+					{
+						static_cast<Door*>(b->GetFixtureList()->GetUserData())->rotateDoor();
+					}
+				}
+
+		}
 
 		if (fixAType == "Player" && fixBType == "Pickup"
 			|| fixAType == "Pickup" && fixBType == "Player"){

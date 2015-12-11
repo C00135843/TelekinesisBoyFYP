@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Door.h"
+#include <iostream>
 
 enum _entityCatergory{
 	PLATFORM = 0x0001,
@@ -7,7 +8,9 @@ enum _entityCatergory{
 	PICKUP = 0x0004,
 	CRATE = 0x0008,
 	HAZARD = 0x0016,
-	EXIT = 0x0032
+	EXIT = 0x0032,
+	BUTTON = 0x0064,
+	DOOR = 0x0128
 };
 Door::Door(b2World* world, RenderWindow* win, float x, float y, float w, float h) : m_world(world), m_win(win), position(x, y), size(w, h)
 {
@@ -31,8 +34,8 @@ void Door::createBox2dBody()
 	fixtureDef.density = 1.f;
 	fixtureDef.userData = "Door";
 
-	//fixtureDef.filter.categoryBits = PLATFORM;
-	//fixtureDef.filter.maskBits =  PLAYER | CRATE ;
+	fixtureDef.filter.categoryBits = DOOR;
+	fixtureDef.filter.maskBits =  PLAYER | CRATE ;
 
 	m_body->CreateFixture(&fixtureDef);
 
@@ -44,6 +47,9 @@ void Door::loadAssets(){
 	m_sprite.setPosition(position.x, position.y);
 
 
+}
+void Door::rotateDoor(){
+	std::cout << "Door opening " << std::endl;
 }
 void Door::draw(){
 	m_win->draw(m_sprite);

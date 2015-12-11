@@ -23,5 +23,6 @@ public:
 	void createBox2dBody();
 	void loadAssets();
 	void draw();
+	void rotateDoor();
 };
 

@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include <Box2D\Box2D.h>
+#include <iostream>
 
 using namespace sf;
 class Crate
@@ -10,7 +11,7 @@ public:
 	~Crate();
 	void createBox2dBody();
 	void loadAssets();
-	void crateMove();
+	void crateMove(Vector2f m);
 	void Draw();
 private:
 	Sprite c_sprite;
@@ -23,7 +24,10 @@ private:
 	b2FixtureDef fixtureDef;
 	b2Vec2 startPosition;
 	b2Vec2 size;
+	float mouseX;
+	float mouseY;
 	const int SCALE = 30.f;
+	bool lifting = false;
 
 };
 

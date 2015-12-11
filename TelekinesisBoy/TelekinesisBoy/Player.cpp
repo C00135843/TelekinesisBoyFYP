@@ -74,12 +74,7 @@ void Player::movePlayer()
 	}
 
 	// helps with gravity
-	velChangeX = desiredVelX - velocity.x;
-
-	impulseX = m_body->GetMass() * desiredVelX;
-	impulseY = m_body->GetMass() * desiredVelY;
-
-	m_body->ApplyLinearImpulse(b2Vec2(impulseX, impulseY), m_body->GetWorldCenter(), true);
+	m_body->ApplyLinearImpulse(b2Vec2(0, 0), m_body->GetWorldCenter(), true);
 
 }
 void Player::update()

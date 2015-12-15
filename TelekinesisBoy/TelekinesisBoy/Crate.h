@@ -11,8 +11,12 @@ public:
 	~Crate();
 	void createBox2dBody();
 	void loadAssets();
-	void crateMove(Vector2f m);
+	void crateMove(Vector2f m,int);
 	void Draw();
+	int getWeight();
+	bool getLifting(){ return liftingObject; }
+	
+
 private:
 	Sprite c_sprite;
 	Texture c_Texture;
@@ -28,6 +32,8 @@ private:
 	float mouseY;
 	const int SCALE = 30.f;
 	bool lifting = false;
+	int weight = 2.f;
+	bool liftingObject = false;
 
 };
 

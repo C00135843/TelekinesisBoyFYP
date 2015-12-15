@@ -78,6 +78,16 @@ int main()
 	sf::Texture background;
 	sf::Sprite bgsprite;
 
+	//duration bar for the telekinesis power
+	sf::Texture barTexture;
+	sf::Sprite barSprite;
+	barTexture.loadFromFile("../Assets/player.png");
+	barSprite.setTexture(barTexture);
+	int barWidth = 300;
+	int barheight = 20;
+	barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
+	bool liftingObject = false;
+
 	background.loadFromFile("../Assets/menuBackground.png");
 	bgsprite.setTexture(background);
 	bgsprite.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
@@ -132,11 +142,11 @@ int main()
 	neuros.push_back(n2);
 	neuros.push_back(n3);
 	//create the size of world
-
+	int count = 0;
 	//create the world
 
 	Menu menu(window.getSize().x, window.getSize().y);
-
+	int weight = 0;
 	// Start game loop 
 	while (window.isOpen())
 	{
@@ -210,6 +220,8 @@ int main()
 			if (p.getPosition().x >= 400)
 			{
 				player_view.setCenter(p.getPosition().x, 300);
+				
+				
 			}
 			else
 			{
@@ -219,7 +231,35 @@ int main()
 			textLives.setPosition(window.getView().getCenter().x - 390, window.getView().getCenter().y - 290);
 			textScore.setPosition(window.getView().getCenter().x, window.getView().getCenter().y - 290);
 			window.setView(player_view);
-
+			count++;
+			// bar hud telekinesis 
+			if (weight > 0)
+			{
+				barWidth -= weight;
+				if (barWidth <= 0)
+				{
+					barWidth = 0;
+					
+				}
+				barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
+					
+			}
+			if (liftingObject)
+			{				
+				barSprite.setPosition(window.getView().getCenter().x - 150, window.getView().getCenter().y - 200);
+				window.draw(barSprite);
+				liftingObject = false;
+			}
+			else
+			{
+				if (count > 300)
+				{
+					barWidth = 300;
+					count = 0;
+				}
+				
+			}
+			
 			ground.draw();
 			roof.draw();
 			h.Draw();
@@ -254,11 +294,23 @@ int main()
 				neuros[i]->draw();
 				neuros[i]->animation();
 			}
+
 			for (int i = 0; i < crates.size(); i++)
 			{
-				crates[i]->crateMove(mousePos);
+				crates[i]->crateMove(mousePos, barWidth);
 				crates[i]->Draw();
+
 			}
+			for (int i = 0; i < crates.size(); i++)
+			{
+				weight = crates[i]->getWeight();
+				liftingObject = crates[i]->getLifting();
+				if (weight != 0)
+				{
+					break;
+				}
+			}
+			
 			if (p.getLives() <= 0)
 			{
 				g_States->setState(END);

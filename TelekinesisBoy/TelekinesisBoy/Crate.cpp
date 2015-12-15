@@ -51,41 +51,52 @@ void Crate::loadAssets()
 	//c_sprite.setOrigin(16,16);
 
 }
-void Crate::crateMove(Vector2f mousePos){
+void Crate::crateMove(Vector2f mousePos,int barTime){
 
 	if (Mouse::isButtonPressed(Mouse::Left)){
 		mouseX = mousePos.x;
 		mouseY = mousePos.y;
 	}
-	if (!lifting){
-
+	if (barTime > 0)
+	{
 		if (mouseX >= c_sprite.getPosition().x && mouseX <= c_sprite.getPosition().x + c_sprite.getTexture()->getSize().x
 			&& mouseY >= c_sprite.getPosition().y && mouseY <= c_sprite.getPosition().y + c_sprite.getTexture()->getSize().y)
 		{
+			lifting = true;
 			std::cout << mouseX << "Mouse X" << std::endl;
 			std::cout << mouseY << "Mouse Y" << std::endl;
-
-			//float posX = mouseX - c_sprite.getPosition().x;
-			//float posY = mouseY - c_sprite.getPosition().y;
 
 			m_body->SetTransform(b2Vec2((mouseX) / SCALE, (mouseY) / SCALE), 0);
 			mouseX = 0;
 			mouseY = 0;
 			std::cout << "position x  " << m_body->GetPosition().x << std::endl;
 			std::cout << "position x  " << m_body->GetPosition().y << std::endl;
-			lifting = true;
-		}
-		lifting = false;
 
+		}
+		else
+			lifting = false;
 	}
-	//
-	m_body->SetLinearVelocity(b2Vec2(0, 9.81f));
-	c_sprite.setPosition(m_body->GetPosition().x *SCALE - size.x/2, m_body->GetPosition().y*SCALE-size.y/2);
-	//m_body->ApplyLinearImpulse(b2Vec2(0, 0), m_body->GetWorldCenter(), true);
-	//c_sprite.rotate(m_body->GetAngle());
+	else
+	{
+		lifting = false;
+	}
+	liftingObject = lifting;
+	std::cout << "liftingObject " << liftingObject << std::endl;
 	
+	m_body->SetLinearVelocity(b2Vec2(0, 9.81f));
+	c_sprite.setPosition(m_body->GetPosition().x *SCALE - size.x/2, m_body->GetPosition().y*SCALE-size.y/2);	
 }
 void Crate::Draw()
 {
 	m_win->draw(c_sprite);
+}
+int Crate::getWeight()
+{
+	if (liftingObject)
+	{
+		return weight;
+	}
+	else
+		return 0;
+	
 }

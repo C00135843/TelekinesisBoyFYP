@@ -30,10 +30,18 @@ void Platform::createBox2dBody()
 	fixtureDef.shape = &dynamicBox;
 	
 	fixtureDef.density = 1.f;
-	fixtureDef.userData = "Ground";
-
-	//fixtureDef.filter.categoryBits = PLATFORM;
-	//fixtureDef.filter.maskBits =  PLAYER | CRATE ;
+	if (size.x > 16)
+	{
+		fixtureDef.userData = "Ground";
+		fixtureDef.filter.categoryBits = PLATFORM;
+		fixtureDef.filter.maskBits = PLAYER | CRATE;
+	}
+	else
+	{
+		fixtureDef.userData = "Wall";
+		fixtureDef.filter.categoryBits = PLATFORM;
+		fixtureDef.filter.maskBits = PLAYER | CRATE;
+	}
 
 	m_body->CreateFixture(&fixtureDef);
 	

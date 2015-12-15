@@ -68,7 +68,6 @@ void Crate::crateMove(Vector2f mousePos,int barTime){
 			mouseX = 0;
 			mouseY = 0;
 
-
 		}
 		else
 			lifting = false;

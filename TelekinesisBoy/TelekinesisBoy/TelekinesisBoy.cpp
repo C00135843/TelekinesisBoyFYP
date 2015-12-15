@@ -53,7 +53,7 @@ int main()
 	sf::View player_view(FloatRect(0,0,800,600));
 	player_view.zoom(1.f);
 	window.setFramerateLimit(60);
-	
+	float levelWidth = 1500;
 	float mouseX;
 	float mouseY;
 	Vector2f mousePos;
@@ -105,13 +105,20 @@ int main()
 
 	ContactListener contact = ContactListener(&world);
 	world.SetContactListener(&contact);
-	Platform ground = Platform(&world, &window, 1, 500,800,16);
-	Platform roof = Platform(&world, &window, 600, 250, 800, 16);
-	Door door = Door(&world, &window, 650, 150, 16, 234);
+	Platform wallLeft = Platform(&world, &window, -16, 0, 16, 600);
+	Platform wallRight = Platform(&world, &window, 1500, 0, 16, 600);
+	Platform ground = Platform(&world, &window, 1, 500,600,16);
+	Hazard h = Hazard(&world, &window, 600, 500, 300, 16);
+	Platform ground2 = Platform(&world, &window, 900, 500, 600, 16);
+	Platform roof = Platform(&world, &window, 900, 250, 800, 16);
+	Button b = Button(&world, &window, 950, 224, 57, 26);
+	Door door = Door(&world, &window, 1100, 150, 16, 234);
+	Exit e = Exit(&world, &window, 1440, 453, 61, 47);
+
 	std::vector<Crate*>crates;
 	int const numOfCrates = 9;
 	crates.reserve(numOfCrates);
-	float pos = 300;
+	float pos = 330;
 	for (int i = 0,k=0,j=0; i < numOfCrates; i++){
 		Crate* c = new Crate(&world, &window, pos + k * 34, 468 - j * 34, 32, 32);
 		crates.push_back(c);
@@ -128,10 +135,10 @@ int main()
 		else
 			k++;
 	}
-	Hazard h = Hazard(&world, &window, 800, 500, 300, 16);
-	Exit e = Exit(&world, &window, 0, 453, 61, 47);
-	Player p = Player(&world, &window, 100, 1);
-	Button b = Button(&world, &window,200, 474,57,26);
+	
+	
+	Player p = Player(&world, &window, 100, 500);
+
 	std::vector<Pickup*>neuros;
 	Pickup* n = new Pickup(&world, &window, 320, 460);
 	Pickup* n1 = new Pickup(&world, &window, 360, 460);
@@ -217,11 +224,14 @@ int main()
 			window.clear(sf::Color::White);
 			world.Step(1 / 60.f, 8, 3);
 			mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-			if (p.getPosition().x >= 400)
+
+			if (p.getPosition().x >= levelWidth - window.getSize().x/2)
+			{
+				player_view.setCenter(1100, 300);
+			}
+			else if (p.getPosition().x >= 400)
 			{
 				player_view.setCenter(p.getPosition().x, 300);
-				
-				
 			}
 			else
 			{
@@ -229,7 +239,7 @@ int main()
 	
 			}
 			textLives.setPosition(window.getView().getCenter().x - 390, window.getView().getCenter().y - 290);
-			textScore.setPosition(window.getView().getCenter().x, window.getView().getCenter().y - 290);
+			textScore.setPosition(window.getView().getCenter().x - 20, window.getView().getCenter().y - 290);
 			window.setView(player_view);
 			count++;
 			// bar hud telekinesis 
@@ -252,7 +262,7 @@ int main()
 			}
 			else
 			{
-				if (count > 300)
+				if (count > 200)
 				{
 					barWidth = 300;
 					count = 0;
@@ -261,6 +271,7 @@ int main()
 			}
 			
 			ground.draw();
+			ground2.draw();
 			roof.draw();
 			h.Draw();
 			e.Draw();

@@ -72,7 +72,6 @@ void Player::movePlayer()
 			grounded = false;
 		}
 	}
-
 	// helps with gravity
 	m_body->ApplyLinearImpulse(b2Vec2(0, 0), m_body->GetWorldCenter(), true);
 

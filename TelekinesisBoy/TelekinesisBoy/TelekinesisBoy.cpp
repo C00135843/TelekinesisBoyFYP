@@ -62,6 +62,7 @@ int main()
 	g_States->setState(MENU);
 	sf::Font font;
 	Text textScore;
+	Text tutorial1, tutorial2, tutorial3;
 	Text textLives;
 	if (!font.loadFromFile("../Font/leadcoat.ttf"))
 	{
@@ -69,14 +70,25 @@ int main()
 	}
 	textScore.setFont(font);
 	textScore.setColor(Color::Red);
-	textScore.setCharacterSize(15);
-
+	textScore.setCharacterSize(25);
 	textLives.setFont(font);
 	textLives.setColor(Color::Red);
-	textLives.setCharacterSize(15);
+	textLives.setCharacterSize(25);
+	tutorial1.setFont(font);
+	tutorial1.setColor(Color::Red);
+	tutorial1.setCharacterSize(25);
+	tutorial2.setFont(font);
+	tutorial2.setColor(Color::Red);
+	tutorial2.setCharacterSize(25);	
+	tutorial3.setFont(font);
+	tutorial3.setColor(Color::Red);
+	tutorial3.setCharacterSize(25);
+	
 	//load a font
 	sf::Texture background;
 	sf::Sprite bgsprite;
+	sf::Texture backgroundEnd;
+	sf::Sprite bgspriteEnd;
 
 	//duration bar for the telekinesis power
 	sf::Texture barTexture;
@@ -89,8 +101,10 @@ int main()
 	bool liftingObject = false;
 
 	background.loadFromFile("../Assets/menuBackground.png");
+	backgroundEnd.loadFromFile("../Assets/gameover.png");
 	bgsprite.setTexture(background);
 	bgsprite.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
+
 	
 	bool tb_delete = false;
 	bool drawDebug = false;
@@ -114,7 +128,7 @@ int main()
 	Button b = Button(&world, &window, 950, 224, 57, 26);
 	Door door = Door(&world, &window, 1100, 150, 16, 234);
 	Exit e = Exit(&world, &window, 1440, 453, 61, 47);
-
+	//Exit e = Exit(&world, &window, 0, 453, 61, 47);
 	std::vector<Crate*>crates;
 	int const numOfCrates = 9;
 	crates.reserve(numOfCrates);
@@ -137,17 +151,29 @@ int main()
 	}
 	
 	
-	Player p = Player(&world, &window, 100, 500);
-
+	Player p = Player(&world, &window, 100, 460);
+	//Player p = Player(&world, &window, 1200, 500);
 	std::vector<Pickup*>neuros;
 	Pickup* n = new Pickup(&world, &window, 320, 460);
 	Pickup* n1 = new Pickup(&world, &window, 360, 460);
 	Pickup* n2 = new Pickup(&world, &window, 400, 460);
 	Pickup* n3 = new Pickup(&world, &window, 360, 420);
+	Pickup* n4 = new Pickup(&world, &window, 200, 460);
+	Pickup* n5 = new Pickup(&world, &window, 500, 460);
+	Pickup* n6 = new Pickup(&world, &window, 700, 420);
+	Pickup* n7 = new Pickup(&world, &window, 900, 420);
+	Pickup* n8 = new Pickup(&world, &window, 1100, 460);
+	Pickup* n9 = new Pickup(&world, &window, 1300, 460);
 	neuros.push_back(n);
 	neuros.push_back(n1);
 	neuros.push_back(n2);
 	neuros.push_back(n3);
+	neuros.push_back(n4);
+	neuros.push_back(n5);
+	neuros.push_back(n6);
+	neuros.push_back(n7);
+	neuros.push_back(n8);
+	neuros.push_back(n9);
 	//create the size of world
 	int count = 0;
 	//create the world
@@ -210,7 +236,6 @@ int main()
 				}
 			}
 				
-
 		}
 		
 
@@ -221,7 +246,7 @@ int main()
 			menu.draw(window);
 		}
 		if (g_States->CurrentState() == GAME){
-			window.clear(sf::Color::White);
+			window.clear(sf::Color::Color(125,125,125));
 			world.Step(1 / 60.f, 8, 3);
 			mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
@@ -236,7 +261,9 @@ int main()
 			else
 			{
 				player_view.setCenter(400, 300);
-	
+				tutorial1.setPosition(200, window.getView().getCenter().y - 100);
+				tutorial2.setPosition(500, window.getView().getCenter().y);
+				tutorial3.setPosition(700, window.getView().getCenter().y - 250);
 			}
 			textLives.setPosition(window.getView().getCenter().x - 390, window.getView().getCenter().y - 290);
 			textScore.setPosition(window.getView().getCenter().x - 20, window.getView().getCenter().y - 290);
@@ -270,12 +297,13 @@ int main()
 				
 			}
 			
+
+			// drawing and updating crates
 			ground.draw();
 			ground2.draw();
 			roof.draw();
 			h.Draw();
 			e.Draw();
-			// drawing and updating crates
 			door.Update();
 			door.draw();
 			b.Draw();
@@ -329,8 +357,14 @@ int main()
 			}
 			textLives.setString("lives: " + std::to_string(p.getLives()));
 			textScore.setString("score: " + std::to_string(p.getScore()));
+			tutorial1.setString("USE THE LEFT MOUSE CLICK TO MOVE CRATES");
+			tutorial2.setString("USE THE CRATES AS A BRIDGE TO PASS SPIKES");
+			tutorial3.setString("PUT CRATE ON BUTTON TO OPEN DOOR");
 			window.draw(textLives);
 			window.draw(textScore);
+			window.draw(tutorial1);
+			window.draw(tutorial2);
+			window.draw(tutorial3);
 
 
 			if (drawDebug)
@@ -341,6 +375,13 @@ int main()
 		if (g_States->CurrentState() == END)
 		{
 			window.clear(sf::Color::Black);
+			bgspriteEnd.setTexture(backgroundEnd);
+			bgspriteEnd.setTextureRect(sf::IntRect(0, 0,503,166));
+			bgspriteEnd.setPosition(window.getView().getCenter().x -250, window.getView().getCenter().y - 250);
+			window.draw(bgspriteEnd);
+			textScore.setString("YOUR SCORE IS: " +std::to_string(p.getScore()));
+			textScore.setPosition(window.getView().getCenter().x - 100, window.getView().getCenter().y - 25);
+			window.draw(textScore);
 		}
 	
 		// Finally, display rendered frame on screen 

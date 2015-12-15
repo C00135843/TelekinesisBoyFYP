@@ -107,7 +107,7 @@ int main()
 	world.SetContactListener(&contact);
 	Platform ground = Platform(&world, &window, 1, 500,800,16);
 	Platform roof = Platform(&world, &window, 600, 250, 800, 16);
-	Door door = Door(&world, &window, 650, 266, 16, 234);
+	Door door = Door(&world, &window, 650, 150, 16, 234);
 	std::vector<Crate*>crates;
 	int const numOfCrates = 9;
 	crates.reserve(numOfCrates);
@@ -265,6 +265,7 @@ int main()
 			h.Draw();
 			e.Draw();
 			// drawing and updating crates
+			door.Update();
 			door.draw();
 			b.Draw();
 			p.draw();
@@ -330,20 +331,7 @@ int main()
 		{
 			window.clear(sf::Color::Black);
 		}
-		
-		//prepare frame
-		//window.clear(sf::Color::White);
-
-
-		
-
-		
-		//draw frame items
-		//window.draw(text);
-
-		//window.draw(circle);
-
-
+	
 		// Finally, display rendered frame on screen 
 		window.display();
 	} //loop back for next frame

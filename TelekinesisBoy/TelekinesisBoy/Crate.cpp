@@ -63,14 +63,11 @@ void Crate::crateMove(Vector2f mousePos,int barTime){
 			&& mouseY >= c_sprite.getPosition().y && mouseY <= c_sprite.getPosition().y + c_sprite.getTexture()->getSize().y)
 		{
 			lifting = true;
-			std::cout << mouseX << "Mouse X" << std::endl;
-			std::cout << mouseY << "Mouse Y" << std::endl;
 
 			m_body->SetTransform(b2Vec2((mouseX) / SCALE, (mouseY) / SCALE), 0);
 			mouseX = 0;
 			mouseY = 0;
-			std::cout << "position x  " << m_body->GetPosition().x << std::endl;
-			std::cout << "position x  " << m_body->GetPosition().y << std::endl;
+
 
 		}
 		else
@@ -81,7 +78,6 @@ void Crate::crateMove(Vector2f mousePos,int barTime){
 		lifting = false;
 	}
 	liftingObject = lifting;
-	std::cout << "liftingObject " << liftingObject << std::endl;
 	
 	m_body->SetLinearVelocity(b2Vec2(0, 9.81f));
 	c_sprite.setPosition(m_body->GetPosition().x *SCALE - size.x/2, m_body->GetPosition().y*SCALE-size.y/2);	

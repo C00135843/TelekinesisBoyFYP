@@ -82,7 +82,7 @@ public:
 				{
 					if (b->GetFixtureList()->GetUserData() == "Door")
 					{
-						static_cast<Door*>(b->GetFixtureList()->GetUserData())->rotateDoor();
+						static_cast<Door*>(b->GetUserData())->rotateDoor();
 					}
 				}
 

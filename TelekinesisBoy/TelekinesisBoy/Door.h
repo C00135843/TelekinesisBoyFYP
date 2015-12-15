@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include <Box2D\Box2D.h>
+#include <math.h>
 
 using namespace sf;
 class Door
@@ -16,7 +17,10 @@ private:
 	b2FixtureDef fixtureDef;
 	b2Vec2 position;
 	b2Vec2 size;
+	float desiredAngle = -90;
+	float currentAngle = 0;
 	const int SCALE = 30.f;
+	bool rotatingDoor = false;
 public:
 	Door(b2World*, RenderWindow*, float, float, float, float);
 	~Door();
@@ -24,5 +28,6 @@ public:
 	void loadAssets();
 	void draw();
 	void rotateDoor();
+	void Update();
 };
 

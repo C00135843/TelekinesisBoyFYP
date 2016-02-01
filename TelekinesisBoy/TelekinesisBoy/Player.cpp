@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "Player.h"
 #include <iostream>
-
+#include "Sounds.h"
 enum _entityCatergory{
 	PLATFORM = 0x0001,
 	PLAYER = 0x0002,
@@ -94,6 +94,7 @@ void Player::movePlayer()
 	if ((Keyboard::isKeyPressed(Keyboard::Up)))
 	{
 		if (grounded){
+			Sounds::getInstance()->playJumpSound();
 			m_body->SetLinearVelocity(b2Vec2(0, -6));
 			grounded = false;
 		}
@@ -206,10 +207,6 @@ void Player::animationCheck()
 			source = 0;
 		}
 	}
-
-
-
-
 	
 }
 void Player::ground()

@@ -38,6 +38,7 @@
 #include "GameStates.h"
 #include "Button.h"
 #include "Door.h"
+#include "Sounds.h"
 #include "DebugDraw.h"
 #include <vector>
 
@@ -60,6 +61,9 @@ int main()
 	
 	GameStates* g_States = GameStates::getInstance();
 	g_States->setState(MENU);
+	Sounds* s_Sound = Sounds::getInstance();
+	Sounds::getInstance()->playMenuMusic();
+	
 	sf::Font font;
 	Text textScore;
 	Text tutorial1, tutorial2, tutorial3;
@@ -89,7 +93,7 @@ int main()
 	sf::Sprite bgsprite;
 	sf::Texture backgroundEnd;
 	sf::Sprite bgspriteEnd;
-
+	
 	//duration bar for the telekinesis power
 	sf::Texture barTexture;
 	sf::Sprite barSprite;
@@ -177,14 +181,16 @@ int main()
 	//create the size of world
 	int count = 0;
 	//create the world
-
+	bool playSound = false;
 	Menu menu(window.getSize().x, window.getSize().y);
 	int weight = 0;
 	// Start game loop 
 	while (window.isOpen())
 	{
+
 		// Process events 
 		sf::Event Event;
+
 		while (window.pollEvent(Event))
 		{
 			// Close window : exit 
@@ -195,13 +201,23 @@ int main()
 			if ((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::Escape))
 				window.close();
 
-
 			// for menu system
 			if (g_States->CurrentState() == 0){
+
+
 				if ((Event.type == sf::Event::KeyReleased) && (Event.key.code == sf::Keyboard::Up))
+				{
+					
+					Sounds::getInstance()->playMenuSound();
 					menu.MoveUP();
+				}
 				if ((Event.type == sf::Event::KeyReleased) && (Event.key.code == sf::Keyboard::Down))
+				{
+					Sounds::getInstance()->playMenuSound();
 					menu.MoveDown();
+					
+				}
+					
 				if ((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::Return))
 				{
 					//play game
@@ -209,6 +225,8 @@ int main()
 					{
 						std::cout << "PLAY pressed";
 						g_States->setState(GAME);
+						Sounds::getInstance()->stopMenuMusic();
+						Sounds::getInstance()->playLevel1Music();
 					}
 					// options
 					if (menu.GetPressedItem() == 1)
@@ -223,10 +241,15 @@ int main()
 					}
 				}
 			}
+	/*		if (playSound)
+			{
+				Sounds::getInstance()->playMenuSound();
+				playSound = false;
+			}*/
 			//for game 
-			// check keypress for 
+			// check keypress for debug
 			if (g_States->CurrentState() == GAME){
-				
+
 				if ((Event.type == sf::Event::KeyReleased) && (Event.key.code == sf::Keyboard::F1))
 				{
 					if (drawDebug)
@@ -235,17 +258,17 @@ int main()
 						drawDebug = true;
 				}
 			}
-				
-		}
-		
 
+		}		
 		if (g_States->CurrentState()== MENU)
 		{
+						
 			window.clear(sf::Color::Black);
 			window.draw(bgsprite);
 			menu.draw(window);
 		}
 		if (g_States->CurrentState() == GAME){
+									
 			window.clear(sf::Color::Color(125,125,125));
 			world.Step(1 / 60.f, 8, 3);
 			mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
@@ -297,7 +320,6 @@ int main()
 				
 			}
 			
-
 			// drawing and updating crates
 			ground.draw();
 			ground2.draw();
@@ -354,6 +376,8 @@ int main()
 			if (p.getLives() <= 0)
 			{
 				g_States->setState(END);
+				Sounds::getInstance()->stopLevel1Music(); 
+				Sounds::getInstance()->playMenuMusic();
 			}
 			textLives.setString("lives: " + std::to_string(p.getLives()));
 			textScore.setString("score: " + std::to_string(p.getScore()));

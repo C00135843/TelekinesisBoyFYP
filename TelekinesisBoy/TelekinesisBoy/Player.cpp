@@ -77,14 +77,14 @@ void Player::movePlayer()
 		facingLeft = true;
 		facingRight = false;
 		running = true;
-		m_body->SetTransform(b2Vec2(m_body->GetPosition().x - 0.03f, m_body->GetPosition().y), 0);
+		m_body->SetTransform(b2Vec2(m_body->GetPosition().x - 0.04f, m_body->GetPosition().y), 0);
 	}
 	else if (Keyboard::isKeyPressed(Keyboard::Right))
 	{
 		facingRight = true;
 		facingLeft = false;
 		running = true;
-		m_body->SetTransform(b2Vec2(m_body->GetPosition().x + 0.03f, m_body->GetPosition().y), 0);
+		m_body->SetTransform(b2Vec2(m_body->GetPosition().x + 0.04f, m_body->GetPosition().y), 0);
 	}
 	else if (!Keyboard::isKeyPressed(Keyboard::Right) || !Keyboard::isKeyPressed(Keyboard::Left))
 	{
@@ -123,26 +123,20 @@ void Player::AnimateFrames()
 	rec[6] = IntRect(149, 33, 26, 32);
 	rec[7] = IntRect(179, 33, 24, 32);
 
+
+	rec2[0] = IntRect(134, 0, 25, 32);
+	rec2[1] = IntRect(107, 0, 26, 32);
+	rec2[2] = IntRect(0, 0, 24, 32);
+	rec2[3] = IntRect(207, 33, 26, 32);
+	rec2[4] = IntRect(160, 33, 24, 32);
+	rec2[5] = IntRect(111, 33, 25, 32);
+	rec2[6] = IntRect(59, 33, 24, 32);
+	rec2[7] = IntRect(30, 33, 24, 32);
+
 }
 void Player::update()
 {
 	animationCheck();
-	if (running && facingRight)
-	{
-		
-		frameTiming++;
-		m_sprite.setTextureRect(rec[source]);
-		if (frameTiming == 5)
-		{
-			source++;
-
-			frameTiming = 0;
-		}
-		if (source >= 8)
-		{
-			source = 0;
-		}
-	}
 
 	if (resetPos)
 	{
@@ -154,6 +148,8 @@ void Player::update()
 }
 void Player::animationCheck()
 {
+
+	// make sure the player is facing the right way
 	if (running)
 	{
 		if (facingRight)
@@ -176,6 +172,44 @@ void Player::animationCheck()
 			m_sprite.setTexture(m_textureLI);
 		}
 	}
+	// animate the actual sprite
+	if (running && facingRight)
+	{
+
+		frameTiming++;
+		m_sprite.setTextureRect(rec[source]);
+		if (frameTiming == 5)
+		{
+			source++;
+
+			frameTiming = 0;
+		}
+		if (source >= 8)
+		{
+			source = 0;
+		}
+	}
+
+	if (running && facingLeft)
+	{
+
+		frameTiming++;
+		m_sprite.setTextureRect(rec2[source]);
+		if (frameTiming == 5)
+		{
+			source++;
+
+			frameTiming = 0;
+		}
+		if (source >= 8)
+		{
+			source = 0;
+		}
+	}
+
+
+
+
 	
 }
 void Player::ground()

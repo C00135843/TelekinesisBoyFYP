@@ -10,6 +10,7 @@
 #include "Crate.h"
 #include "Door.h"
 #include "Button.h"
+#include "Sounds.h"
 
 class ContactListener :public b2ContactListener{
 private:
@@ -66,11 +67,15 @@ public:
 			|| fixAType == "Exit" && fixBType == "Player"){
 			if (fixAType == "Player")
 			{
-				g_states->setState(END);
+				g_states->setState(UPGRADE);
+				Sounds::getInstance()->stopLevel1Music();
+				Sounds::getInstance()->playMenuMusic();
 			}
 			else if (fixBType == "Player")
 			{
-				g_states->setState(END);
+				Sounds::getInstance()->stopLevel1Music();
+				Sounds::getInstance()->playMenuMusic();
+				g_states->setState(UPGRADE);
 			}
 
 		}

@@ -67,7 +67,7 @@ public:
 			|| fixAType == "Exit" && fixBType == "Player"){
 			if (fixAType == "Player")
 			{
-				g_states->setState(END);
+				g_states->setState(UPGRADE);
 				Sounds::getInstance()->stopLevel1Music();
 				Sounds::getInstance()->playMenuMusic();
 			}
@@ -75,7 +75,7 @@ public:
 			{
 				Sounds::getInstance()->stopLevel1Music();
 				Sounds::getInstance()->playMenuMusic();
-				g_states->setState(END);
+				g_states->setState(UPGRADE);
 			}
 
 		}

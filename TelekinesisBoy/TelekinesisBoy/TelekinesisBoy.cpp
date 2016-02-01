@@ -40,6 +40,7 @@
 #include "Door.h"
 #include "Sounds.h"
 #include "DebugDraw.h"
+#include "UpgradeScreen.h"
 #include <vector>
 
 ////////////////////////////////////////////////////////////
@@ -58,13 +59,17 @@ int main()
 	float mouseX;
 	float mouseY;
 	Vector2f mousePos;
-	
+	bool showTutorial = false;
+	UpgradeScreen us = UpgradeScreen(&window);
+
 	GameStates* g_States = GameStates::getInstance();
 	g_States->setState(MENU);
 	Sounds* s_Sound = Sounds::getInstance();
 	Sounds::getInstance()->playMenuMusic();
 	
 	sf::Font font;
+	Text pauseText;
+
 	Text textScore;
 	Text tutorial1, tutorial2, tutorial3;
 	Text textLives;
@@ -72,6 +77,9 @@ int main()
 	{
 		std::cout << "error with font load for player hud";
 	}
+	pauseText.setFont(font);
+	pauseText.setCharacterSize(80);
+	pauseText.setColor(Color::Red);
 	textScore.setFont(font);
 	textScore.setColor(Color::Red);
 	textScore.setCharacterSize(25);
@@ -104,6 +112,8 @@ int main()
 	barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
 	bool liftingObject = false;
 
+
+	//load background
 	background.loadFromFile("../Assets/menuBackground.png");
 	backgroundEnd.loadFromFile("../Assets/gameover.png");
 	bgsprite.setTexture(background);
@@ -112,6 +122,7 @@ int main()
 	
 	bool tb_delete = false;
 	bool drawDebug = false;
+	bool pause = false;
 	//setup the world properties
 
 	b2Vec2 gravity(0, 9.81f);
@@ -121,8 +132,10 @@ int main()
 	world.SetDebugDraw(&debugDraw);
 	debugDraw.SetFlags(b2Draw::e_shapeBit);
 
+	//level 1///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	ContactListener contact = ContactListener(&world);
 	world.SetContactListener(&contact);
+
 	Platform wallLeft = Platform(&world, &window, -16, 0, 16, 600);
 	Platform wallRight = Platform(&world, &window, 1500, 0, 16, 600);
 	Platform ground = Platform(&world, &window, 1, 500,600,16);
@@ -178,6 +191,11 @@ int main()
 	neuros.push_back(n7);
 	neuros.push_back(n8);
 	neuros.push_back(n9);
+	//level 1///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	Time t;
+	Clock c;
+
 	//create the size of world
 	int count = 0;
 	//create the world
@@ -241,12 +259,6 @@ int main()
 					}
 				}
 			}
-	/*		if (playSound)
-			{
-				Sounds::getInstance()->playMenuSound();
-				playSound = false;
-			}*/
-			//for game 
 			// check keypress for debug
 			if (g_States->CurrentState() == GAME){
 
@@ -256,6 +268,14 @@ int main()
 						drawDebug = false;
 					else
 						drawDebug = true;
+				}
+				if ((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::P))
+				{
+					if (!pause)
+						pause = true;
+					else
+						pause = false;
+
 				}
 			}
 
@@ -270,130 +290,160 @@ int main()
 		if (g_States->CurrentState() == GAME){
 									
 			window.clear(sf::Color::Color(125,125,125));
-			world.Step(1 / 60.f, 8, 3);
-			mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+			if (!pause)
+			{
+				world.Step(1 / 60.f, 8, 3);
+				mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
-			if (p.getPosition().x >= levelWidth - window.getSize().x/2)
-			{
-				player_view.setCenter(1100, 300);
-			}
-			else if (p.getPosition().x >= 400)
-			{
-				player_view.setCenter(p.getPosition().x, 300);
-			}
-			else
-			{
-				player_view.setCenter(400, 300);
-				tutorial1.setPosition(200, window.getView().getCenter().y - 100);
-				tutorial2.setPosition(500, window.getView().getCenter().y);
-				tutorial3.setPosition(700, window.getView().getCenter().y - 250);
-			}
-			textLives.setPosition(window.getView().getCenter().x - 390, window.getView().getCenter().y - 290);
-			textScore.setPosition(window.getView().getCenter().x - 20, window.getView().getCenter().y - 290);
-			window.setView(player_view);
-			count++;
-			// bar hud telekinesis 
-			if (weight > 0)
-			{
-				barWidth -= weight;
-				if (barWidth <= 0)
+				if (p.getPosition().x >= levelWidth - window.getSize().x / 2)
 				{
-					barWidth = 0;
-					
+					player_view.setCenter(1100, 300);
 				}
-				barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
-					
-			}
-			if (liftingObject)
-			{				
-				barSprite.setPosition(window.getView().getCenter().x - 150, window.getView().getCenter().y - 200);
-				window.draw(barSprite);
-				liftingObject = false;
-			}
-			else
-			{
-				if (count > 200)
+				else if (p.getPosition().x >= 400)
 				{
-					barWidth = 300;
-					count = 0;
+					player_view.setCenter(p.getPosition().x, 300);
 				}
-				
+				else
+				{
+					player_view.setCenter(400, 300);
+					tutorial1.setPosition(200, window.getView().getCenter().y - 100);
+					tutorial2.setPosition(500, window.getView().getCenter().y);
+					tutorial3.setPosition(700, window.getView().getCenter().y - 250);
+				}
+				textLives.setPosition(window.getView().getCenter().x - 390, window.getView().getCenter().y - 290);
+				textScore.setPosition(window.getView().getCenter().x - 20, window.getView().getCenter().y - 290);
+				pauseText.setPosition(window.getView().getCenter().x - 80, window.getView().getCenter().y - 80);
+				window.setView(player_view);
+				count++;
+				// bar hud telekinesis 
+				if (weight > 0)
+				{
+					barWidth -= weight;
+					if (barWidth <= 0)
+					{
+						barWidth = 0;
+
+					}
+					barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
+
+				}
+				if (liftingObject)
+				{
+					barSprite.setPosition(window.getView().getCenter().x - 150, window.getView().getCenter().y - 200);
+					window.draw(barSprite);
+					liftingObject = false;
+				}
+				else
+				{
+					if (count > 200)
+					{
+						barWidth = 300;
+						count = 0;
+					}
+
+				}
 			}
-			
 			// drawing and updating crates
 			ground.draw();
 			ground2.draw();
 			roof.draw();
 			h.Draw();
 			e.Draw();
-			door.Update();
+			
 			door.draw();
 			b.Draw();
 			p.draw();
-			p.movePlayer();
-			p.update();
-			
-			//how to destroy bodies in box2d
-			for (int i = 0; i < neuros.size(); i++)
+			if (!pause)
 			{
-				tb_delete = neuros[i]->getDelete();
-				if (tb_delete)
-				{
-					pickupScheduledForRemoval.push_back(neuros[i]);
-					neuros.erase(neuros.begin() + i);
-				}
-			}
-			if (pickupScheduledForRemoval.size() != 0){
-				std::vector<Pickup*>::iterator it = pickupScheduledForRemoval.begin();
-				std::vector<Pickup*>::iterator end = pickupScheduledForRemoval.end();
-				for (; it != end; ++it){
-					Pickup* dyingNeuros = *it;
-					world.DestroyBody( dyingNeuros->getBody());
-				}
-				pickupScheduledForRemoval.clear();
-			}
-			for (int i = 0; i < neuros.size(); i++){
-				neuros[i]->draw();
-				neuros[i]->animation();
+				door.Update();
+				p.movePlayer();
+				p.update();
 			}
 
-			for (int i = 0; i < crates.size(); i++)
-			{
-				crates[i]->crateMove(mousePos, barWidth);
-				crates[i]->Draw();
 
-			}
-			for (int i = 0; i < crates.size(); i++)
-			{
-				weight = crates[i]->getWeight();
-				liftingObject = crates[i]->getLifting();
-				if (weight != 0)
+				//how to destroy bodies in box2d
+				for (int i = 0; i < neuros.size(); i++)
 				{
-					break;
+					tb_delete = neuros[i]->getDelete();
+					if (tb_delete)
+					{
+						pickupScheduledForRemoval.push_back(neuros[i]);
+						neuros.erase(neuros.begin() + i);
+					}
 				}
-			}
+				if (pickupScheduledForRemoval.size() != 0){
+					std::vector<Pickup*>::iterator it = pickupScheduledForRemoval.begin();
+					std::vector<Pickup*>::iterator end = pickupScheduledForRemoval.end();
+					for (; it != end; ++it){
+						Pickup* dyingNeuros = *it;
+						world.DestroyBody(dyingNeuros->getBody());
+					}
+					pickupScheduledForRemoval.clear();
+				}
+				for (int i = 0; i < neuros.size(); i++){
+					neuros[i]->draw();
+					if (!pause)
+						neuros[i]->animation();
+				}
+
+				for (int i = 0; i < crates.size(); i++)
+				{
+					if (!pause)
+						crates[i]->crateMove(mousePos, barWidth);
+					crates[i]->Draw();
+
+				}
+				for (int i = 0; i < crates.size(); i++)
+				{
+					weight = crates[i]->getWeight();
+					liftingObject = crates[i]->getLifting();
+					if (weight != 0)
+					{
+						break;
+					}
+				}
+
+				if (p.getLives() <= 0)
+				{
+					g_States->setState(END);
+					Sounds::getInstance()->stopLevel1Music();
+					Sounds::getInstance()->playMenuMusic();
+				}
 			
-			if (p.getLives() <= 0)
-			{
-				g_States->setState(END);
-				Sounds::getInstance()->stopLevel1Music(); 
-				Sounds::getInstance()->playMenuMusic();
-			}
 			textLives.setString("lives: " + std::to_string(p.getLives()));
 			textScore.setString("score: " + std::to_string(p.getScore()));
-			tutorial1.setString("USE THE LEFT MOUSE CLICK TO MOVE CRATES");
-			tutorial2.setString("USE THE CRATES AS A BRIDGE TO PASS SPIKES");
-			tutorial3.setString("PUT CRATE ON BUTTON TO OPEN DOOR");
+			if (showTutorial)
+			{
+				tutorial1.setString("USE THE LEFT MOUSE CLICK TO MOVE CRATES");
+				tutorial2.setString("USE THE CRATES AS A BRIDGE TO PASS SPIKES");
+				tutorial3.setString("PUT CRATE ON BUTTON TO OPEN DOOR");
+				window.draw(tutorial1);
+				window.draw(tutorial2);
+				window.draw(tutorial3);
+			}
+			if (pause)
+			{
+				t = c.getElapsedTime();
+				if (t.asSeconds() > .3f)
+				{
+					if (pauseText.getColor() == Color::Red)
+					{
+						pauseText.setColor(Color::White);
+					}
+					else
+					{
+						pauseText.setColor(Color::Red);
+					}
+					c.restart();
+				}
+				pauseText.setString("PAUSED");
+				window.draw(pauseText);
+			}
 			window.draw(textLives);
 			window.draw(textScore);
-			window.draw(tutorial1);
-			window.draw(tutorial2);
-			window.draw(tutorial3);
-
 
 			if (drawDebug)
 				world.DrawDebugData();
-
 			
 		}
 		if (g_States->CurrentState() == END)
@@ -406,6 +456,11 @@ int main()
 			textScore.setString("YOUR SCORE IS: " +std::to_string(p.getScore()));
 			textScore.setPosition(window.getView().getCenter().x - 100, window.getView().getCenter().y - 25);
 			window.draw(textScore);
+		}
+		if (g_States->CurrentState() == UPGRADE)
+		{
+			window.clear(sf::Color::Black);
+			us.DisplayScreen();
 		}
 	
 		// Finally, display rendered frame on screen 

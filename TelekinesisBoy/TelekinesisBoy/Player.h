@@ -10,7 +10,10 @@ class Player{
 	private:
 		b2Vec2 velocity;
 		sf::Sprite m_sprite;
-		sf::Texture m_texture;
+		sf::Texture m_textureRR;
+		sf::Texture m_textureLR;
+		sf::Texture m_textureLI;
+		sf::Texture m_textureRI;
 		b2World* m_world;
 		RenderWindow* m_win;
 		b2BodyDef m_bodyDef;
@@ -30,6 +33,15 @@ class Player{
 		int lives = 3;
 		bool resetPos;
 		const float SCALE = 30.f;
+		bool facingRight;
+		bool facingLeft;
+		bool running;
+		sf::IntRect rec[17];
+		int frame = 0;
+		float frameTiming = 0;
+		void AnimateFrames();
+		int source;
+		void animationCheck();
 
 	public:
 		Player(){};

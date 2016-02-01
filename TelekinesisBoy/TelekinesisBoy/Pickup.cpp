@@ -1,5 +1,7 @@
 #include "stdafx.h"
 #include "Pickup.h"
+#include <iostream>
+
 const float SCALE = 30.f;
 enum _entityCatergory{
 	PLATFORM = 0x0001,
@@ -30,7 +32,10 @@ Pickup::~Pickup()
 
 void Pickup::loadAssets()
 {
-	n_texture.loadFromFile("../Assets/neuros.png");
+	if (!n_texture.loadFromFile("../Assets/neuros.png")){
+		std::cout << "error with Texture load for player ";
+	}
+	;
 	n_sprite.setTexture(n_texture );
 	n_sprite.setTextureRect(sf::IntRect(0, 0, 40, 40));
 	n_sprite.setPosition(position.x, position.y);

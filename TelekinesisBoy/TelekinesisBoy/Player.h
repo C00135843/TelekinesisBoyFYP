@@ -36,7 +36,8 @@ class Player{
 		bool facingRight;
 		bool facingLeft;
 		bool running;
-		sf::IntRect rec[17];
+		sf::IntRect rec[17]; //animate right
+		sf::IntRect rec2[17]; //animate left
 		int frame = 0;
 		float frameTiming = 0;
 		void AnimateFrames();

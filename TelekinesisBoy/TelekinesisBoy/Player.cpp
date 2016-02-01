@@ -126,7 +126,7 @@ void Player::AnimateFrames()
 }
 void Player::update()
 {
-
+	animationCheck();
 	if (running && facingRight)
 	{
 		

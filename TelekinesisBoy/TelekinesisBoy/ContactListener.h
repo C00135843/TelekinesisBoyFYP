@@ -31,7 +31,7 @@ public:
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
 				static_cast<Player*>(bodyUserData)->ground();
 			}
-			else
+			else if (fixBType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 				static_cast<Player*>(bodyUserData)->ground();
@@ -48,10 +48,10 @@ public:
 				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
 
 				if (posPlat.y - (10 / 60.0f) > posPlayer.y + 16 / 30.0f)
-					static_cast<Player*>(bodyUserData)->ground();
+					static_cast<Player*>(bodyUserData)->ground();			
 
 			}
-			else
+			else if (fixBType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
@@ -68,7 +68,7 @@ public:
 			{
 				g_states->setState(END);
 			}
-			else
+			else if (fixBType == "Player")
 			{
 				g_states->setState(END);
 			}
@@ -99,7 +99,7 @@ public:
 				
 
 			}
-			else
+			else if (fixBType == "Player")
 			{
 				void* bodyUserData1 = contact->GetFixtureA()->GetBody()->GetUserData();
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
@@ -118,7 +118,7 @@ public:
 				static_cast<Player*>(bodyUserData)->decreaseLives();
 				static_cast<Player*>(bodyUserData)->resetPosition();
 			}
-			else
+			else if (fixBType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 				static_cast<Player*>(bodyUserData)->decreaseLives();
@@ -142,7 +142,7 @@ public:
 				static_cast<Player*>(bodyUserData)->notGrounded();
 
 			}
-			else
+			else if (fixBType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 				static_cast<Player*>(bodyUserData)->notGrounded();
@@ -154,13 +154,19 @@ public:
 			|| fixAType == "Crate" && fixBType == "Player"){
 			if (fixAType == "Player")
 			{
+				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
+				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-				static_cast<Player*>(bodyUserData)->notGrounded();
+				if (posPlat.y + (10 / 60.0f) > posPlayer.y - 16 / 30.0f)
+					static_cast<Player*>(bodyUserData)->notGrounded();
 			}
-			else
+			else if (fixBType == "Player")
 			{
+				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
+				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-				static_cast<Player*>(bodyUserData)->notGrounded();
+				if (posPlat.y + (10 / 60.0f) > posPlayer.y - 16 / 30.0f)
+					static_cast<Player*>(bodyUserData)->notGrounded();
 			}
 		}
 	}

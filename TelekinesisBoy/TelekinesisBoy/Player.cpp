@@ -30,7 +30,7 @@ void Player::createBox2dBody()
 	dynamicBox.SetAsBox((26 / 2.0f) / SCALE, (26 / 2.0f) / SCALE);
 	fixtureDef.shape = &dynamicBox;
 
-	fixtureDef.density = 1.f;
+	fixtureDef.density = 1.1f;
 	fixtureDef.userData = "Player";
 
 	fixtureDef.filter.categoryBits = PLAYER;
@@ -88,8 +88,7 @@ void Player::update()
 }
 void Player::ground()
 {
-	grounded = true;
-
+		grounded = true;
 }
 void Player::notGrounded()
 {

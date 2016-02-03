@@ -32,12 +32,34 @@ void Sounds::LoadSounds()
 	{
 		std::cout << "Can't find Menu Sound" << std::endl;
 	}
-	menuSound.setBuffer(menuBuffer);
+	
 	if (!jumpBuffer.loadFromFile("../Assets/jump.ogg"))
 	{
 		std::cout << "Can't find jump Sound" << std::endl;
 	}
+
+	if (!deathBuffer.loadFromFile("../Assets/death.ogg"))
+	{
+		std::cout << "Can't find jump Sound" << std::endl;
+	}
+
+	if (!powerBuffer.loadFromFile("../Assets/Magic.ogg"))
+	{
+		std::cout << "Can't find jump Sound" << std::endl;
+	}
+
+	if (!pickupBuffer.loadFromFile("../Assets/pickup.ogg"))
+	{
+		std::cout << "Can't find jump Sound" << std::endl;
+	}
+
+
+	menuSound.setBuffer(menuBuffer);
 	jumpSound.setBuffer(jumpBuffer);
+	deathSound.setBuffer(deathBuffer);
+	pickupSound.setBuffer(pickupBuffer);
+	powerSound.setBuffer(powerBuffer);
+	soundOn = true;
 }
 
 //////////////////////////////////////////////menu music//////////////////
@@ -47,8 +69,11 @@ void Sounds::playMenuMusic()
 	{
 		std::cout << "Can't find MenuMusic" << std::endl;
 	}
-	menuMusic.play();
-	menuMusic.setLoop(true);
+	if (soundOn)
+	{
+		menuMusic.play();
+		menuMusic.setLoop(true);
+	}
 }
 void Sounds::stopMenuMusic()
 {
@@ -62,8 +87,12 @@ void Sounds::playLevel1Music()
 	{
 		std::cout << "Can't find Level 1 Music" << std::endl;
 	}
-	level1Music.play();
-	level1Music.setLoop(true);
+	if (soundOn)
+	{
+		level1Music.setVolume(30);
+		level1Music.play();
+		level1Music.setLoop(true);
+	}
 }
 void Sounds::stopLevel1Music()
 {
@@ -71,12 +100,51 @@ void Sounds::stopLevel1Music()
 }
 void Sounds::playMenuSound()
 {
-	menuSound.setVolume(100);
-	menuSound.play();
+	if (soundOn)
+	{
+		menuSound.setVolume(100);
+		menuSound.play();
+	}
 }
 void Sounds::playJumpSound()
 {
-	jumpSound.setVolume(60);
-	jumpSound.play();
+	if (soundOn)
+	{
+		jumpSound.setVolume(60);
+		jumpSound.play();
+	}
+}
+
+
+void Sounds::playPickupSound()
+{
+	if (soundOn)
+	{
+		pickupSound.setVolume(75);
+		pickupSound.play();
+	}
+}
+void Sounds::playPowerSound()
+{
+	if (soundOn)
+	{
+		powerSound.setVolume(100);
+		powerSound.play();
+		powerSound.setLoop(true);
+	}
+}
+void Sounds::stopPowerSound()
+{
+	powerSound.stop();
+
+}
+
+void Sounds::playDeathSound()
+{
+	if (soundOn)
+	{
+		deathSound.setVolume(100);
+		deathSound.play();
+	}
 }
 

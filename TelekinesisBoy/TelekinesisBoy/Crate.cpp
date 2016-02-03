@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Crate.h"
+#include "Sounds.h"
 enum _entityCatergory{
 	PLATFORM = 0x0001,
 	PLAYER = 0x0002,
@@ -54,28 +55,45 @@ void Crate::loadAssets()
 void Crate::crateMove(Vector2f mousePos,int barTime){
 
 	if (Mouse::isButtonPressed(Mouse::Left)){
+		mouseClicked = true;
 		mouseX = mousePos.x;
 		mouseY = mousePos.y;
 	}
+
 	if (barTime > 0)
 	{
-		if (mouseX >= c_sprite.getPosition().x && mouseX <= c_sprite.getPosition().x + c_sprite.getTexture()->getSize().x
+		if (mouseClicked && mouseX >= c_sprite.getPosition().x && mouseX <= c_sprite.getPosition().x + c_sprite.getTexture()->getSize().x
 			&& mouseY >= c_sprite.getPosition().y && mouseY <= c_sprite.getPosition().y + c_sprite.getTexture()->getSize().y)
 		{
 			lifting = true;
-
+			if (!playPowerSound)
+			{
+				Sounds::getInstance()->playPowerSound();
+				playPowerSound = true;
+			}
 			m_body->SetTransform(b2Vec2((mouseX) / SCALE, (mouseY) / SCALE), 0);
 			mouseX = 0;
 			mouseY = 0;
 
 		}
 		else
+		{
 			lifting = false;
+			if (playPowerSound)
+			{
+				playPowerSound = false;
+				Sounds::getInstance()->stopPowerSound();
+			}
+		}
 	}
 	else
 	{
+
 		lifting = false;
 	}
+		
+
+
 	liftingObject = lifting;
 	
 	m_body->SetLinearVelocity(b2Vec2(0, 9.81f));
@@ -90,6 +108,7 @@ int Crate::getWeight()
 	if (liftingObject)
 	{
 		return weight;
+
 	}
 	else
 		return 0;

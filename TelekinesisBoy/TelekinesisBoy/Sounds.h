@@ -10,10 +10,19 @@ private:
 	~Sounds();
 	sf::SoundBuffer menuBuffer;
 	sf::SoundBuffer jumpBuffer;
+	sf::SoundBuffer deathBuffer;
+	sf::SoundBuffer pickupBuffer;
+	sf::SoundBuffer powerBuffer;
+	//sf::SoundBuffer jumpBuffer;
 	sf::Music menuMusic;
 	sf::Music level1Music;
 	sf::Sound menuSound;
 	sf::Sound jumpSound;
+	sf::Sound deathSound;
+	sf::Sound pickupSound;
+	sf::Sound powerSound;
+
+	bool soundOn;
 	
 public:
 	static Sounds* getInstance();
@@ -24,6 +33,12 @@ public:
 	void LoadSounds();
 	void playMenuSound();
 	void playJumpSound();
+	void playDeathSound();
+	void playPickupSound();
+	void playPowerSound();
+	void stopPowerSound();
+	void setSound(bool s){ soundOn = s; }
+	bool getSound(){ return soundOn; }
 
 };
 

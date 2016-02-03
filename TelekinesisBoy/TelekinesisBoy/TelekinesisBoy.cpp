@@ -46,6 +46,10 @@
 ////////////////////////////////////////////////////////////
 ///Entrypoint of application 
 //////////////////////////////////////////////////////////// 
+
+void DisplayOptions(RenderWindow* w);
+bool showTutorial;
+bool mouseClick = false;
 static const float SCALE = 30.f;
 int main()
 {
@@ -59,7 +63,7 @@ int main()
 	float mouseX;
 	float mouseY;
 	Vector2f mousePos;
-	bool showTutorial = false;
+	showTutorial = false;
 	UpgradeScreen us = UpgradeScreen(&window);
 
 	GameStates* g_States = GameStates::getInstance();
@@ -250,7 +254,7 @@ int main()
 					if (menu.GetPressedItem() == 1)
 					{
 						std::cout << "options pressed";
-						//g_States->setState(OPTIONS);
+						g_States->setState(OPTIONS);
 					}
 					//exit
 					if (menu.GetPressedItem() == 2)
@@ -325,10 +329,10 @@ int main()
 
 					}
 					barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
-
 				}
 				if (liftingObject)
 				{
+					
 					barSprite.setPosition(window.getView().getCenter().x - 150, window.getView().getCenter().y - 200);
 					window.draw(barSprite);
 					liftingObject = false;
@@ -421,6 +425,7 @@ int main()
 				window.draw(tutorial2);
 				window.draw(tutorial3);
 			}
+			// pause
 			if (pause)
 			{
 				t = c.getElapsedTime();
@@ -462,10 +467,151 @@ int main()
 			window.clear(sf::Color::Black);
 			us.DisplayScreen();
 		}
+		if (g_States->CurrentState() == OPTIONS)
+		{
+			window.clear(sf::Color::Black);
+			DisplayOptions(&window);
+		}
+
+
 	
 		// Finally, display rendered frame on screen 
 		window.display();
 	} //loop back for next frame
 
 	return EXIT_SUCCESS;
+}
+
+void DisplayOptions(sf::RenderWindow *win)
+{
+
+	Vector2f mousePos;
+	sf::Text tutorialShow;
+	sf::Text playSoundShow;
+	sf::Texture SwitchOnTexture;
+	sf::Texture SwitchOffTexture;
+	sf::Sprite tutorialSwitchSprite;
+	sf::Sprite soundSwitchSprite;
+	sf::Texture backTexture;
+	sf::Sprite backSprite;
+	
+	///////////////////////////////////////////////////////// load assets ////////////////////////////////////////
+	if (!SwitchOnTexture.loadFromFile("../Assets/switchOn.png"))
+	{
+		std::cout << "cant find switch on texture" << std::endl;
+	}
+	if (!SwitchOffTexture.loadFromFile("../Assets/switchOff.png"))
+	{
+		std::cout << "cant find switch off texture" << std::endl;
+	}
+	if (!backTexture.loadFromFile("../Assets/back.png"))
+	{
+		std::cout << "cant find back texture" << std::endl;
+	}
+	backSprite.setTexture(backTexture);
+	backSprite.setPosition(win->getView().getCenter().x-400, win->getView().getCenter().y - 300);
+	sf::Font f;
+	if (!f.loadFromFile("../Font/leadcoat.ttf"))
+	{
+		std::cout << "cant find font for the options" << std::endl;
+	}
+	
+
+	tutorialShow.setFont(f);
+	tutorialShow.setCharacterSize(80);
+	tutorialShow.setString("TUTORIAL");
+	tutorialShow.setColor(sf::Color::Red);
+	tutorialShow.setPosition(win->getView().getCenter().x - 200, win->getView().getCenter().y - 120);
+	playSoundShow.setFont(f);
+	playSoundShow.setCharacterSize(80);
+	playSoundShow.setString("SOUNDS");
+	playSoundShow.setColor(sf::Color::Red);
+	playSoundShow.setPosition(win->getView().getCenter().x - 200, win->getView().getCenter().y + 50);
+	tutorialSwitchSprite.setPosition(win->getView().getCenter().x + 120, win->getView().getCenter().y - 110);
+	soundSwitchSprite.setPosition(win->getView().getCenter().x + 120, win->getView().getCenter().y + 60);
+
+	///////////////////////////////////////// show tutorial and switch ///////////////////////////////
+	if (showTutorial)
+	{
+		//switch on
+		tutorialSwitchSprite.setTexture(SwitchOnTexture);
+		
+	}
+	else
+		tutorialSwitchSprite.setTexture(SwitchOffTexture);
+
+	//////////////////////////////////////// show play sounds and switch //////////////////////////////
+	if (Sounds::getInstance()->getSound())
+	{
+		soundSwitchSprite.setTexture(SwitchOnTexture);
+	}
+	else
+		soundSwitchSprite.setTexture(SwitchOffTexture);
+
+	///////////////////////////////////////////// click on/off switches /////////////////////////////// 
+	if (!mouseClick)
+	{
+		if (Mouse::isButtonPressed(Mouse::Left))
+		{
+			mouseClick = true;
+			mousePos = win->mapPixelToCoords(sf::Mouse::getPosition(*win));
+		}
+
+	}
+	else if (!Mouse::isButtonPressed(Mouse::Left))
+	{
+		mouseClick = false;
+	}
+
+	//clicking tutorial on off
+	if (mousePos.x >= tutorialSwitchSprite.getPosition().x && mousePos.x <= tutorialSwitchSprite.getPosition().x + tutorialSwitchSprite.getTexture()->getSize().x
+		&& mousePos.y >= tutorialSwitchSprite.getPosition().y && mousePos.y <= tutorialSwitchSprite.getPosition().y + tutorialSwitchSprite.getTexture()->getSize().y)
+	{
+		if (showTutorial)
+		{
+			showTutorial = false;
+		}
+		else
+			showTutorial = true;
+		if (Sounds::getInstance()->getSound())
+			Sounds::getInstance()->playMenuSound();
+
+	}
+	//clicking sounds on off
+	if (mousePos.x >= soundSwitchSprite.getPosition().x && mousePos.x <= soundSwitchSprite.getPosition().x + soundSwitchSprite.getTexture()->getSize().x
+		&& mousePos.y >= soundSwitchSprite.getPosition().y && mousePos.y <= soundSwitchSprite.getPosition().y + soundSwitchSprite.getTexture()->getSize().y)
+	{
+		if (Sounds::getInstance()->getSound())
+		{
+			Sounds::getInstance()->setSound(false);
+		}
+		else
+			Sounds::getInstance()->setSound(true);
+		if (Sounds::getInstance()->getSound())
+		{
+			Sounds::getInstance()->playMenuSound();
+			Sounds::getInstance()->playMenuMusic();
+
+		}
+		else
+			Sounds::getInstance()->stopMenuMusic();
+
+	}
+	// clicking back
+	
+	if (mousePos != Vector2f(0,0) && mousePos.x >= backSprite.getPosition().x && mousePos.x <= backSprite.getPosition().x + backSprite.getTexture()->getSize().x
+		&& mousePos.y >= backSprite.getPosition().y && mousePos.y <= backSprite.getPosition().y + backSprite.getTexture()->getSize().y)
+	{
+
+		if (Sounds::getInstance()->getSound())
+			Sounds::getInstance()->playMenuSound();
+		GameStates::getInstance()->setState(MENU);
+	}
+	
+	win->draw(tutorialShow);
+	win->draw(playSoundShow);
+	win->draw(tutorialSwitchSprite);
+	win->draw(soundSwitchSprite);
+	win->draw(backSprite);
+
 }

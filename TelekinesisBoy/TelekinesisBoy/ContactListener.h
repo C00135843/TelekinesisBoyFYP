@@ -101,6 +101,7 @@ public:
 				void* bodyUserData1 = contact->GetFixtureB()->GetBody()->GetUserData();
 				static_cast<Player*>(bodyUserData)->increaseScore();
 				static_cast<Pickup*>(bodyUserData1)->setDelete();
+				Sounds::getInstance()->playPickupSound();
 				
 
 			}
@@ -110,6 +111,7 @@ public:
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 				static_cast<Player*>(bodyUserData)->increaseScore();
 				static_cast<Pickup*>(bodyUserData1)->setDelete();
+				Sounds::getInstance()->playPickupSound();
 			}
 			
 		}
@@ -122,12 +124,14 @@ public:
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
 				static_cast<Player*>(bodyUserData)->decreaseLives();
 				static_cast<Player*>(bodyUserData)->resetPosition();
+				Sounds::getInstance()->playDeathSound();
 			}
 			else if (fixBType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 				static_cast<Player*>(bodyUserData)->decreaseLives();
 				static_cast<Player*>(bodyUserData)->resetPosition();
+				Sounds::getInstance()->playDeathSound();
 			}
 		}
 

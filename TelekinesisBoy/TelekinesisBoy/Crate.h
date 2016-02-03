@@ -34,6 +34,8 @@ private:
 	bool lifting = false;
 	int weight = 2.f;
 	bool liftingObject = false;
+	bool playPowerSound = false;
+	bool mouseClicked;
 
 };
 

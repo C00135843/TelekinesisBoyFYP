@@ -97,6 +97,7 @@
     <ClInclude Include="GameStates.h" />
     <ClInclude Include="Hazard.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Player.h" />
@@ -114,6 +115,7 @@
     <ClCompile Include="GameStates.cpp" />
     <ClCompile Include="Hazard.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Player.cpp" />

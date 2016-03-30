@@ -59,7 +59,7 @@ void Sounds::LoadSounds()
 	deathSound.setBuffer(deathBuffer);
 	pickupSound.setBuffer(pickupBuffer);
 	powerSound.setBuffer(powerBuffer);
-	soundOn = true;
+	soundOn = false;
 }
 
 //////////////////////////////////////////////menu music//////////////////

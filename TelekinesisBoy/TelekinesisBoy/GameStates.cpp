@@ -50,4 +50,8 @@ void GameStates::setState(int s)
 	{
 		currentState = _gameStates::END;
 	}
+	else if (s == 5)
+	{
+		currentState = _gameStates::UPGRADE;
+	}
 }

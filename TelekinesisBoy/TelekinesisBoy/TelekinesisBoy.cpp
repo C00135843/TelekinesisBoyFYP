@@ -41,6 +41,7 @@
 #include "Sounds.h"
 #include "DebugDraw.h"
 #include "UpgradeScreen.h"
+#include "ParticleSystem.h"
 #include <vector>
 
 ////////////////////////////////////////////////////////////
@@ -59,6 +60,7 @@ int main()
 	sf::View player_view(FloatRect(0,0,800,600));
 	player_view.zoom(1.f);
 	window.setFramerateLimit(60);
+	bool partSystemCreated = false;
 	float levelWidth = 1500;
 	float mouseX;
 	float mouseY;
@@ -197,8 +199,9 @@ int main()
 	neuros.push_back(n9);
 	//level 1///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	Time t;
-	Clock c;
+	sf::Clock clock;
+	sf::Clock partClock;
+	sf::Time t;
 
 	//create the size of world
 	int count = 0;
@@ -206,11 +209,13 @@ int main()
 	bool playSound = false;
 	Menu menu(window.getSize().x, window.getSize().y);
 	int weight = 0;
+	ParticleSystem particles(2000);
+	bool partAlive = false;
+
 	// Start game loop 
 	while (window.isOpen())
 	{
-
-		// Process events 
+		// Process events
 		sf::Event Event;
 
 		while (window.pollEvent(Event))
@@ -266,24 +271,51 @@ int main()
 			// check keypress for debug
 			if (g_States->CurrentState() == GAME){
 
-				if ((Event.type == sf::Event::KeyReleased) && (Event.key.code == sf::Keyboard::F1))
+				
+				switch (Event.type)
 				{
-					if (drawDebug)
-						drawDebug = false;
-					else
-						drawDebug = true;
-				}
-				if ((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::P))
-				{
-					if (!pause)
-						pause = true;
-					else
-						pause = false;
+				case Event::KeyReleased:
+					if (Event.key.code == sf::Keyboard::F1)
+					{
+						if (drawDebug)
+							drawDebug = false;
+						else
+							drawDebug = true;
+					}
+					break;
+				case Event::KeyPressed:
+					if (Event.key.code == sf::Keyboard::P)
+					{
+						if (!pause)
+							pause = true;
+						else
+							pause = false;
+					}
+					break;
+				case Event::MouseButtonPressed:
+					if (Event.mouseButton.button == sf::Mouse::Left)
+					{
+						mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+						//particles = new ParticleSystem(3000);
+						particles.setEmitter(mousePos);
+						partAlive = true;
+					}
+					break;
+				case Event::MouseButtonReleased:
+					if (Event.mouseButton.button == sf::Mouse::Left)
+					{
+						//particles.erase(particles.end());
+						partAlive = false;
+							
+					}
+					break;
+				}				
 
-				}
 			}
 
-		}		
+		}// end of event while	
+		
+		
 		if (g_States->CurrentState()== MENU)
 		{
 						
@@ -291,14 +323,14 @@ int main()
 			window.draw(bgsprite);
 			menu.draw(window);
 		}
-		if (g_States->CurrentState() == GAME){
-									
+		if (g_States->CurrentState() == GAME){									
 			window.clear(sf::Color::Color(125,125,125));
+
 			if (!pause)
 			{
 				world.Step(1 / 60.f, 8, 3);
 				mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-
+				
 				if (p.getPosition().x >= levelWidth - window.getSize().x / 2)
 				{
 					player_view.setCenter(1100, 300);
@@ -347,6 +379,7 @@ int main()
 
 				}
 			}
+
 			// drawing and updating crates
 			ground.draw();
 			ground2.draw();
@@ -362,57 +395,58 @@ int main()
 				door.Update();
 				p.movePlayer();
 				p.update();
+
 			}
 
 
 				//how to destroy bodies in box2d
-				for (int i = 0; i < neuros.size(); i++)
+			for (int i = 0; i < neuros.size(); i++)
+			{
+				tb_delete = neuros[i]->getDelete();
+				if (tb_delete)
 				{
-					tb_delete = neuros[i]->getDelete();
-					if (tb_delete)
-					{
-						pickupScheduledForRemoval.push_back(neuros[i]);
-						neuros.erase(neuros.begin() + i);
-					}
+					pickupScheduledForRemoval.push_back(neuros[i]);
+					neuros.erase(neuros.begin() + i);
 				}
-				if (pickupScheduledForRemoval.size() != 0){
-					std::vector<Pickup*>::iterator it = pickupScheduledForRemoval.begin();
-					std::vector<Pickup*>::iterator end = pickupScheduledForRemoval.end();
-					for (; it != end; ++it){
-						Pickup* dyingNeuros = *it;
-						world.DestroyBody(dyingNeuros->getBody());
-					}
-					pickupScheduledForRemoval.clear();
+			}
+			if (pickupScheduledForRemoval.size() != 0){
+				std::vector<Pickup*>::iterator it = pickupScheduledForRemoval.begin();
+				std::vector<Pickup*>::iterator end = pickupScheduledForRemoval.end();
+				for (; it != end; ++it){
+					Pickup* dyingNeuros = *it;
+					world.DestroyBody(dyingNeuros->getBody());
 				}
-				for (int i = 0; i < neuros.size(); i++){
-					neuros[i]->draw();
-					if (!pause)
-						neuros[i]->animation();
-				}
+				pickupScheduledForRemoval.clear();
+			}
+			for (int i = 0; i < neuros.size(); i++){
+				neuros[i]->draw();
+				if (!pause)
+					neuros[i]->animation();
+			}
 
-				for (int i = 0; i < crates.size(); i++)
-				{
-					if (!pause)
-						crates[i]->crateMove(mousePos, barWidth);
-					crates[i]->Draw();
+			for (int i = 0; i < crates.size(); i++)
+			{
+				if (!pause)
+					crates[i]->crateMove(mousePos, barWidth);
+				crates[i]->Draw();
 
-				}
-				for (int i = 0; i < crates.size(); i++)
+			}
+			for (int i = 0; i < crates.size(); i++)
+			{
+				weight = crates[i]->getWeight();
+				liftingObject = crates[i]->getLifting();
+				if (weight != 0)
 				{
-					weight = crates[i]->getWeight();
-					liftingObject = crates[i]->getLifting();
-					if (weight != 0)
-					{
-						break;
-					}
+					break;
 				}
+			}
 
-				if (p.getLives() <= 0)
-				{
-					g_States->setState(END);
-					Sounds::getInstance()->stopLevel1Music();
-					Sounds::getInstance()->playMenuMusic();
-				}
+			if (p.getLives() <= 0)
+			{
+				g_States->setState(END);
+				Sounds::getInstance()->stopLevel1Music();
+				Sounds::getInstance()->playMenuMusic();
+			}
 			
 			textLives.setString("lives: " + std::to_string(p.getLives()));
 			textScore.setString("score: " + std::to_string(p.getScore()));
@@ -428,7 +462,7 @@ int main()
 			// pause
 			if (pause)
 			{
-				t = c.getElapsedTime();
+				t = clock.getElapsedTime();
 				if (t.asSeconds() > .3f)
 				{
 					if (pauseText.getColor() == Color::Red)
@@ -439,16 +473,28 @@ int main()
 					{
 						pauseText.setColor(Color::Red);
 					}
-					c.restart();
+					clock.restart();
 				}
 				pauseText.setString("PAUSED");
 				window.draw(pauseText);
 			}
+			//particle updater
+
 			window.draw(textLives);
 			window.draw(textScore);
+			if (partAlive)
+			{
+				particles.setEmitter(mousePos);
+				sf::Time elapsed = partClock.restart();
+				particles.update(elapsed);
+				window.draw(particles);
+			}
+
 
 			if (drawDebug)
 				world.DrawDebugData();
+
+
 			
 		}
 		if (g_States->CurrentState() == END)

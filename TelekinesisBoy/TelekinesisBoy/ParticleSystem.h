@@ -2,34 +2,36 @@
 #include "SFML/Graphics.hpp"
 #include <list>
 
-namespace Shape{ enum { CIRCLE, SWUARE }; }
 
 struct Particle
 {
-	sf::Vector2f pos;
-	sf::Vector2f vel;
-	sf::Color color;
+	sf::Vector2f velocity;
+	sf::Time lifetime;
 };
 
-typedef std::list<Particle*>::iterator ParticleIter;
-
-class ParticleSystem
+class ParticleSystem : public sf::Drawable, public sf::Transformable
 {
 public:
-	ParticleSystem(int width, int height);
-	~ParticleSystem();
 
-	void fuel(int particles); 
-	void update();
-	void remove();
-	void render();
+	ParticleSystem(unsigned int count) :
+		m_particles(count),
+		m_vertices(sf::Points, count),
+		m_lifetime(sf::seconds(3)),
+		m_emitter(0, 0)
+	{
+	}
+	void setEmitter(sf::Vector2f position);
 
-	void setPosition(float x, float y);
-	void setGravity(float x, float y);
-	
-
+	void update(sf::Time elapsed);
 private:
+	void resetParticle(std::size_t index);
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
+
+	std::vector<Particle> m_particles;
+	sf::VertexArray m_vertices;
+	sf::Time m_lifetime;
+	sf::Vector2f m_emitter;
 
 };
 

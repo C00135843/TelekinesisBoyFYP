@@ -2,6 +2,10 @@
 #include "ParticleSystem.h"
 #include <sstream>
 
+//ParticleSystem::ParticleSystem(unsigned int count)
+//{
+//}
+
 void ParticleSystem::setEmitter(sf::Vector2f position)
 {
 	m_emitter = position;

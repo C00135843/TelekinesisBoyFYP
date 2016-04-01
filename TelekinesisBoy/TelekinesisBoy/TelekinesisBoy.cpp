@@ -209,7 +209,7 @@ int main()
 	bool playSound = false;
 	Menu menu(window.getSize().x, window.getSize().y);
 	int weight = 0;
-	ParticleSystem particles(2000);
+	ParticleSystem particles=NULL;
 	bool partAlive = false;
 
 	// Start game loop 
@@ -296,7 +296,7 @@ int main()
 					if (Event.mouseButton.button == sf::Mouse::Left)
 					{
 						mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-						//particles = new ParticleSystem(3000);
+						particles = ParticleSystem(1000);
 						particles.setEmitter(mousePos);
 						partAlive = true;
 					}
@@ -306,6 +306,7 @@ int main()
 					{
 						//particles.erase(particles.end());
 						partAlive = false;
+
 							
 					}
 					break;
@@ -330,7 +331,13 @@ int main()
 			{
 				world.Step(1 / 60.f, 8, 3);
 				mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-				
+				if (partAlive)
+				{
+					particles.setEmitter(mousePos);
+					sf::Time elapsed = partClock.restart();
+					particles.update(elapsed);
+					window.draw(particles);
+				}
 				if (p.getPosition().x >= levelWidth - window.getSize().x / 2)
 				{
 					player_view.setCenter(1100, 300);
@@ -482,15 +489,6 @@ int main()
 
 			window.draw(textLives);
 			window.draw(textScore);
-			if (partAlive)
-			{
-				particles.setEmitter(mousePos);
-				sf::Time elapsed = partClock.restart();
-				particles.update(elapsed);
-				window.draw(particles);
-			}
-
-
 			if (drawDebug)
 				world.DrawDebugData();
 

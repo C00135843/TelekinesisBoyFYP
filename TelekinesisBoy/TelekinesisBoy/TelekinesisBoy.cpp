@@ -48,6 +48,7 @@
 //////////////////////////////////////////////////////////// 
 
 void DisplayOptions(RenderWindow* w);
+void Hud(RenderWindow* w, Player*p);
 bool showTutorial;
 bool mouseClick = false;
 static const float SCALE = 30.f;
@@ -73,23 +74,14 @@ int main()
 	
 	sf::Font font;
 	Text pauseText;
-
-	Text textScore;
 	Text tutorial1, tutorial2, tutorial3;
-	Text textLives;
 	if (!font.loadFromFile("../Font/leadcoat.ttf"))
 	{
-		std::cout << "error with font load for player hud";
+		std::cout << "error with font load for writing onthe walls";
 	}
 	pauseText.setFont(font);
 	pauseText.setCharacterSize(80);
 	pauseText.setColor(Color::Red);
-	textScore.setFont(font);
-	textScore.setColor(Color::Red);
-	textScore.setCharacterSize(25);
-	textLives.setFont(font);
-	textLives.setColor(Color::Red);
-	textLives.setCharacterSize(25);
 	tutorial1.setFont(font);
 	tutorial1.setColor(Color::Red);
 	tutorial1.setCharacterSize(25);
@@ -200,6 +192,9 @@ int main()
 	Time t;
 	Clock c;
 
+	Time barTime;
+	Clock barClock;
+
 	//create the size of world
 	int count = 0;
 	//create the world
@@ -294,57 +289,78 @@ int main()
 		if (g_States->CurrentState() == GAME){
 									
 			window.clear(sf::Color::Color(125,125,125));
+
+			if (p.getPosition().x >= levelWidth - window.getSize().x / 2)
+			{
+				player_view.setCenter(1100, 300);
+			}
+			else if (p.getPosition().x >= 400)
+			{
+				player_view.setCenter(p.getPosition().x, 300);
+			}
+			else
+			{
+				player_view.setCenter(400, 300);
+				tutorial1.setPosition(200, window.getView().getCenter().y - 100);
+				tutorial2.setPosition(500, window.getView().getCenter().y);
+				tutorial3.setPosition(700, window.getView().getCenter().y - 250);
+			}
+			Hud(&window, &p);
 			if (!pause)
 			{
 				world.Step(1 / 60.f, 8, 3);
 				mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
-				if (p.getPosition().x >= levelWidth - window.getSize().x / 2)
-				{
-					player_view.setCenter(1100, 300);
-				}
-				else if (p.getPosition().x >= 400)
-				{
-					player_view.setCenter(p.getPosition().x, 300);
-				}
-				else
-				{
-					player_view.setCenter(400, 300);
-					tutorial1.setPosition(200, window.getView().getCenter().y - 100);
-					tutorial2.setPosition(500, window.getView().getCenter().y);
-					tutorial3.setPosition(700, window.getView().getCenter().y - 250);
-				}
-				textLives.setPosition(window.getView().getCenter().x - 390, window.getView().getCenter().y - 290);
-				textScore.setPosition(window.getView().getCenter().x - 20, window.getView().getCenter().y - 290);
 				pauseText.setPosition(window.getView().getCenter().x - 80, window.getView().getCenter().y - 80);
+
 				window.setView(player_view);
 				count++;
 				// bar hud telekinesis 
-				if (weight > 0)
+
+
+			}
+
+			for (int i = 0; i < crates.size(); i++)
+			{
+				liftingObject = crates[i]->getLifting();
+				if (liftingObject)
+				{
+					weight = crates[i]->getWeight();
+					//barWidth = 300;
+					break;
+				}
+				else
+				{
+					liftingObject = false;
+					//barWidth = 300;
+				}	
+			}
+			if (liftingObject)
+			{
+				if (!pause)
 				{
 					barWidth -= weight;
 					if (barWidth <= 0)
 					{
 						barWidth = 0;
+						barClock.restart();
 
 					}
-					barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
 				}
-				if (liftingObject)
-				{
-					
-					barSprite.setPosition(window.getView().getCenter().x - 150, window.getView().getCenter().y - 200);
-					window.draw(barSprite);
-					liftingObject = false;
-				}
-				else
-				{
-					if (count > 200)
-					{
-						barWidth = 300;
-						count = 0;
-					}
+				barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
+				barSprite.setPosition(window.getView().getCenter().x - 150, window.getView().getCenter().y - 200);
+				window.draw(barSprite);
+			}
+			else
+				//barWidth = 300;
 
+			if (barWidth == 0 || !liftingObject)
+			{
+				Time bTime = barClock.getElapsedTime();
+				if (bTime.asSeconds() > 1)
+				{
+					barWidth = 300;
+					barClock.restart();
 				}
 			}
 			// drawing and updating crates
@@ -365,57 +381,49 @@ int main()
 			}
 
 
-				//how to destroy bodies in box2d
-				for (int i = 0; i < neuros.size(); i++)
+			//how to destroy bodies in box2d
+			for (int i = 0; i < neuros.size(); i++)
+			{
+				tb_delete = neuros[i]->getDelete();
+				if (tb_delete)
 				{
-					tb_delete = neuros[i]->getDelete();
-					if (tb_delete)
-					{
-						pickupScheduledForRemoval.push_back(neuros[i]);
-						neuros.erase(neuros.begin() + i);
-					}
+					pickupScheduledForRemoval.push_back(neuros[i]);
+					neuros.erase(neuros.begin() + i);
 				}
-				if (pickupScheduledForRemoval.size() != 0){
-					std::vector<Pickup*>::iterator it = pickupScheduledForRemoval.begin();
-					std::vector<Pickup*>::iterator end = pickupScheduledForRemoval.end();
-					for (; it != end; ++it){
-						Pickup* dyingNeuros = *it;
-						world.DestroyBody(dyingNeuros->getBody());
-					}
-					pickupScheduledForRemoval.clear();
+			}
+			if (pickupScheduledForRemoval.size() != 0){
+				std::vector<Pickup*>::iterator it = pickupScheduledForRemoval.begin();
+				std::vector<Pickup*>::iterator end = pickupScheduledForRemoval.end();
+				for (; it != end; ++it){
+					Pickup* dyingNeuros = *it;
+					world.DestroyBody(dyingNeuros->getBody());
 				}
-				for (int i = 0; i < neuros.size(); i++){
-					neuros[i]->draw();
-					if (!pause)
-						neuros[i]->animation();
-				}
+				pickupScheduledForRemoval.clear();
+			}
+			for (int i = 0; i < neuros.size(); i++){
+				neuros[i]->draw();
+				if (!pause)
+					neuros[i]->animation();
+			}
 
-				for (int i = 0; i < crates.size(); i++)
+			for (int i = 0; i < crates.size(); i++)
+			{
+				if (!pause)
 				{
-					if (!pause)
-						crates[i]->crateMove(mousePos, barWidth);
-					crates[i]->Draw();
+					crates[i]->crateMove(mousePos, barWidth);
+				}				
+				crates[i]->Draw();
 
-				}
-				for (int i = 0; i < crates.size(); i++)
-				{
-					weight = crates[i]->getWeight();
-					liftingObject = crates[i]->getLifting();
-					if (weight != 0)
-					{
-						break;
-					}
-				}
+			}
 
-				if (p.getLives() <= 0)
-				{
-					g_States->setState(END);
-					Sounds::getInstance()->stopLevel1Music();
-					Sounds::getInstance()->playMenuMusic();
-				}
-			
-			textLives.setString("lives: " + std::to_string(p.getLives()));
-			textScore.setString("score: " + std::to_string(p.getScore()));
+
+			if (p.getLives() <= 0)
+			{
+				g_States->setState(END);
+				Sounds::getInstance()->stopLevel1Music();
+				Sounds::getInstance()->playMenuMusic();
+			}
+		
 			if (showTutorial)
 			{
 				tutorial1.setString("USE THE LEFT MOUSE CLICK TO MOVE CRATES");
@@ -444,8 +452,7 @@ int main()
 				pauseText.setString("PAUSED");
 				window.draw(pauseText);
 			}
-			window.draw(textLives);
-			window.draw(textScore);
+
 
 			if (drawDebug)
 				world.DrawDebugData();
@@ -458,9 +465,9 @@ int main()
 			bgspriteEnd.setTextureRect(sf::IntRect(0, 0,503,166));
 			bgspriteEnd.setPosition(window.getView().getCenter().x -250, window.getView().getCenter().y - 250);
 			window.draw(bgspriteEnd);
-			textScore.setString("YOUR SCORE IS: " +std::to_string(p.getScore()));
-			textScore.setPosition(window.getView().getCenter().x - 100, window.getView().getCenter().y - 25);
-			window.draw(textScore);
+			//textScore.setString("YOUR SCORE IS: " +std::to_string(p.getScore()));
+			//textScore.setPosition(window.getView().getCenter().x - 100, window.getView().getCenter().y - 25);
+			//window.draw(textScore);
 		}
 		if (g_States->CurrentState() == UPGRADE)
 		{
@@ -481,7 +488,33 @@ int main()
 
 	return EXIT_SUCCESS;
 }
+void Hud(sf::RenderWindow *win,Player * p)
+{
+	Text textScore;
+	Text textPower;
+	sf::Font font;
 
+	Text textLives;
+	if (!font.loadFromFile("../Font/leadcoat.ttf"))
+	{
+		std::cout << "error with font load for player hud";
+	}
+	textScore.setFont(font);
+	textScore.setColor(Color::Red);
+	textScore.setCharacterSize(25);
+	textLives.setFont(font);
+	textLives.setColor(Color::Red);
+	textLives.setCharacterSize(25);
+	textLives.setString("lives: " + std::to_string(p->getLives()));
+	textScore.setString("score: " + std::to_string(p->getScore()));
+	textLives.setPosition(win->getView().getCenter().x - 390, win->getView().getCenter().y - 290);
+	textScore.setPosition(win->getView().getCenter().x + 300, win->getView().getCenter().y - 290);
+
+	win->draw(textLives);
+	win->draw(textScore);
+	
+
+}
 void DisplayOptions(sf::RenderWindow *win)
 {
 

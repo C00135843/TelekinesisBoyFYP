@@ -10,6 +10,7 @@
 #include "Crate.h"
 #include "Door.h"
 #include "Button.h"
+#include "Sounds.h"
 
 class ContactListener :public b2ContactListener{
 private:
@@ -66,11 +67,15 @@ public:
 			|| fixAType == "Exit" && fixBType == "Player"){
 			if (fixAType == "Player")
 			{
-				g_states->setState(END);
+				g_states->setState(UPGRADE);
+				Sounds::getInstance()->stopLevel1Music();
+				Sounds::getInstance()->playMenuMusic();
 			}
 			else if (fixBType == "Player")
 			{
-				g_states->setState(END);
+				Sounds::getInstance()->stopLevel1Music();
+				Sounds::getInstance()->playMenuMusic();
+				g_states->setState(UPGRADE);
 			}
 
 		}
@@ -96,6 +101,7 @@ public:
 				void* bodyUserData1 = contact->GetFixtureB()->GetBody()->GetUserData();
 				static_cast<Player*>(bodyUserData)->increaseScore();
 				static_cast<Pickup*>(bodyUserData1)->setDelete();
+				Sounds::getInstance()->playPickupSound();
 				
 
 			}
@@ -105,6 +111,7 @@ public:
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 				static_cast<Player*>(bodyUserData)->increaseScore();
 				static_cast<Pickup*>(bodyUserData1)->setDelete();
+				Sounds::getInstance()->playPickupSound();
 			}
 			
 		}
@@ -117,12 +124,14 @@ public:
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
 				static_cast<Player*>(bodyUserData)->decreaseLives();
 				static_cast<Player*>(bodyUserData)->resetPosition();
+				Sounds::getInstance()->playDeathSound();
 			}
 			else if (fixBType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 				static_cast<Player*>(bodyUserData)->decreaseLives();
 				static_cast<Player*>(bodyUserData)->resetPosition();
+				Sounds::getInstance()->playDeathSound();
 			}
 		}
 

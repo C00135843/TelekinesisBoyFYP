@@ -63,7 +63,7 @@ int main()
 	UpgradeScreen us = UpgradeScreen(&window);
 
 	GameStates* g_States = GameStates::getInstance();
-	g_States->setState(MENU);
+	g_States->setState(UPGRADE);
 	Sounds* s_Sound = Sounds::getInstance();
 	Sounds::getInstance()->playMenuMusic();
 	
@@ -460,7 +460,8 @@ int main()
 		if (g_States->CurrentState() == UPGRADE)
 		{
 			window.clear(sf::Color::Black);
-			us.DisplayScreen();
+			mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+			us.DisplayScreen(&p,mousePos);
 		}
 	
 		// Finally, display rendered frame on screen 

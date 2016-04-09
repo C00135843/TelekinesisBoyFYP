@@ -22,6 +22,7 @@ Player::Player(b2World* world, RenderWindow* win, float x, float y) : m_world(wo
 	loadAssets();
 	grounded = false;
 	resetPos = false;
+	enduranceLevel = 1;
 
 }
 void Player::createBox2dBody()

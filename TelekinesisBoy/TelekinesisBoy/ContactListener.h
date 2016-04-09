@@ -99,7 +99,7 @@ public:
 			{
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
 				void* bodyUserData1 = contact->GetFixtureB()->GetBody()->GetUserData();
-				static_cast<Player*>(bodyUserData)->increaseScore();
+				static_cast<Player*>(bodyUserData)->increaseScore(10);
 				static_cast<Pickup*>(bodyUserData1)->setDelete();
 				
 
@@ -108,7 +108,7 @@ public:
 			{
 				void* bodyUserData1 = contact->GetFixtureA()->GetBody()->GetUserData();
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-				static_cast<Player*>(bodyUserData)->increaseScore();
+				static_cast<Player*>(bodyUserData)->increaseScore(10);
 				static_cast<Pickup*>(bodyUserData1)->setDelete();
 			}
 			

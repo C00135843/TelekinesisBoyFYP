@@ -1,5 +1,6 @@
 #pragma once
 #include "SFML/Graphics.hpp"
+#include "Player.h"
 
 class UpgradeScreen
 {
@@ -9,18 +10,26 @@ private:
 	sf::Texture bgTexture;
 	sf::Sprite bg_Sprite;
 	sf::Sprite g_Sprite;
+	sf::Sprite bl_sprite;
 	sf::Sprite b_sprite;
 	sf::Font f;
 	sf::Text t;
-	int noOfStars;
+	int mouseX;
+	int mouseY;
+	bool mouseClicked;
+	int noOfEnduranceStars;
+	int noOfLivesStars;
+	int livesSelected;
+	int previousLivesSel;
 	sf::RenderWindow* m_win;
-	void displayLivesAndScore();
-	void displayEnduranceLevel();
-	void displayNumberOfLives();
+	void displayLivesAndScore(Player *p);
+	void displayEnduranceLevel(Player *p, Vector2f mousePos);
+	void displayNumberOfLives(Player *p, Vector2f mousePos);
 	void LoadAssets();
 public:
 	UpgradeScreen(sf::RenderWindow*);
 	~UpgradeScreen();
-	void DisplayScreen();
+	void UpdateStars(Vector2f mousePos);
+	void DisplayScreen(Player *p, Vector2f mousePos);
 };
 

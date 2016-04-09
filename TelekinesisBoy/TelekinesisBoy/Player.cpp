@@ -28,11 +28,11 @@ Player::Player(b2World* world, RenderWindow* win, float x, float y) : m_world(wo
 void Player::createBox2dBody()
 {
 	m_bodyDef.type = b2_dynamicBody;
-	m_bodyDef.position.Set(startPosition.x / SCALE, startPosition.y / SCALE);
+	m_bodyDef.position.Set(startPosition.x/ SCALE, startPosition.y / SCALE);
 	m_bodyDef.userData = this;
 	m_bodyDef.fixedRotation = true;
 	m_body = m_world->CreateBody(&m_bodyDef);
-	dynamicBox.SetAsBox((29/ 2.0f) / SCALE, (33 / 2.0f) / SCALE);
+	dynamicBox.SetAsBox((20/ 2.0f) / SCALE, (33 / 2.0f) / SCALE);
 	fixtureDef.shape = &dynamicBox;
 
 	fixtureDef.density = 1.1f;

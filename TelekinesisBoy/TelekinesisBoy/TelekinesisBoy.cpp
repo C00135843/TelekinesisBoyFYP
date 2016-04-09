@@ -46,6 +46,11 @@
 ////////////////////////////////////////////////////////////
 ///Entrypoint of application 
 //////////////////////////////////////////////////////////// 
+
+void DisplayOptions(RenderWindow* w);
+void Hud(RenderWindow* w, Player*p);
+bool showTutorial;
+bool mouseClick = false;
 static const float SCALE = 30.f;
 int main()
 {
@@ -59,7 +64,7 @@ int main()
 	float mouseX;
 	float mouseY;
 	Vector2f mousePos;
-	bool showTutorial = false;
+	showTutorial = false;
 	UpgradeScreen us = UpgradeScreen(&window);
 
 	GameStates* g_States = GameStates::getInstance();
@@ -69,23 +74,14 @@ int main()
 	
 	sf::Font font;
 	Text pauseText;
-
-	Text textScore;
 	Text tutorial1, tutorial2, tutorial3;
-	Text textLives;
 	if (!font.loadFromFile("../Font/leadcoat.ttf"))
 	{
-		std::cout << "error with font load for player hud";
+		std::cout << "error with font load for writing onthe walls";
 	}
 	pauseText.setFont(font);
 	pauseText.setCharacterSize(80);
 	pauseText.setColor(Color::Red);
-	textScore.setFont(font);
-	textScore.setColor(Color::Red);
-	textScore.setCharacterSize(25);
-	textLives.setFont(font);
-	textLives.setColor(Color::Red);
-	textLives.setCharacterSize(25);
 	tutorial1.setFont(font);
 	tutorial1.setColor(Color::Red);
 	tutorial1.setCharacterSize(25);
@@ -196,6 +192,9 @@ int main()
 	Time t;
 	Clock c;
 
+	Time barTime;
+	Clock barClock;
+
 	//create the size of world
 	int count = 0;
 	//create the world
@@ -250,7 +249,7 @@ int main()
 					if (menu.GetPressedItem() == 1)
 					{
 						std::cout << "options pressed";
-						//g_States->setState(OPTIONS);
+						g_States->setState(OPTIONS);
 					}
 					//exit
 					if (menu.GetPressedItem() == 2)
@@ -290,57 +289,78 @@ int main()
 		if (g_States->CurrentState() == GAME){
 									
 			window.clear(sf::Color::Color(125,125,125));
+
+			if (p.getPosition().x >= levelWidth - window.getSize().x / 2)
+			{
+				player_view.setCenter(1100, 300);
+			}
+			else if (p.getPosition().x >= 400)
+			{
+				player_view.setCenter(p.getPosition().x, 300);
+			}
+			else
+			{
+				player_view.setCenter(400, 300);
+				tutorial1.setPosition(200, window.getView().getCenter().y - 100);
+				tutorial2.setPosition(500, window.getView().getCenter().y);
+				tutorial3.setPosition(700, window.getView().getCenter().y - 250);
+			}
+			Hud(&window, &p);
 			if (!pause)
 			{
 				world.Step(1 / 60.f, 8, 3);
 				mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
-				if (p.getPosition().x >= levelWidth - window.getSize().x / 2)
-				{
-					player_view.setCenter(1100, 300);
-				}
-				else if (p.getPosition().x >= 400)
-				{
-					player_view.setCenter(p.getPosition().x, 300);
-				}
-				else
-				{
-					player_view.setCenter(400, 300);
-					tutorial1.setPosition(200, window.getView().getCenter().y - 100);
-					tutorial2.setPosition(500, window.getView().getCenter().y);
-					tutorial3.setPosition(700, window.getView().getCenter().y - 250);
-				}
-				textLives.setPosition(window.getView().getCenter().x - 390, window.getView().getCenter().y - 290);
-				textScore.setPosition(window.getView().getCenter().x - 20, window.getView().getCenter().y - 290);
 				pauseText.setPosition(window.getView().getCenter().x - 80, window.getView().getCenter().y - 80);
+
 				window.setView(player_view);
 				count++;
 				// bar hud telekinesis 
-				if (weight > 0)
+
+
+			}
+
+			for (int i = 0; i < crates.size(); i++)
+			{
+				liftingObject = crates[i]->getLifting();
+				if (liftingObject)
+				{
+					weight = crates[i]->getWeight();
+					//barWidth = 300;
+					break;
+				}
+				else
+				{
+					liftingObject = false;
+					//barWidth = 300;
+				}	
+			}
+			if (liftingObject)
+			{
+				if (!pause)
 				{
 					barWidth -= weight;
 					if (barWidth <= 0)
 					{
 						barWidth = 0;
+						barClock.restart();
 
 					}
-					barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
-
 				}
-				if (liftingObject)
-				{
-					barSprite.setPosition(window.getView().getCenter().x - 150, window.getView().getCenter().y - 200);
-					window.draw(barSprite);
-					liftingObject = false;
-				}
-				else
-				{
-					if (count > 200)
-					{
-						barWidth = 300;
-						count = 0;
-					}
+				barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
+				barSprite.setPosition(window.getView().getCenter().x - 150, window.getView().getCenter().y - 200);
+				window.draw(barSprite);
+			}
+			else
+				//barWidth = 300;
 
+			if (barWidth == 0 || !liftingObject)
+			{
+				Time bTime = barClock.getElapsedTime();
+				if (bTime.asSeconds() > 1)
+				{
+					barWidth = 300;
+					barClock.restart();
 				}
 			}
 			// drawing and updating crates
@@ -361,57 +381,49 @@ int main()
 			}
 
 
-				//how to destroy bodies in box2d
-				for (int i = 0; i < neuros.size(); i++)
+			//how to destroy bodies in box2d
+			for (int i = 0; i < neuros.size(); i++)
+			{
+				tb_delete = neuros[i]->getDelete();
+				if (tb_delete)
 				{
-					tb_delete = neuros[i]->getDelete();
-					if (tb_delete)
-					{
-						pickupScheduledForRemoval.push_back(neuros[i]);
-						neuros.erase(neuros.begin() + i);
-					}
+					pickupScheduledForRemoval.push_back(neuros[i]);
+					neuros.erase(neuros.begin() + i);
 				}
-				if (pickupScheduledForRemoval.size() != 0){
-					std::vector<Pickup*>::iterator it = pickupScheduledForRemoval.begin();
-					std::vector<Pickup*>::iterator end = pickupScheduledForRemoval.end();
-					for (; it != end; ++it){
-						Pickup* dyingNeuros = *it;
-						world.DestroyBody(dyingNeuros->getBody());
-					}
-					pickupScheduledForRemoval.clear();
+			}
+			if (pickupScheduledForRemoval.size() != 0){
+				std::vector<Pickup*>::iterator it = pickupScheduledForRemoval.begin();
+				std::vector<Pickup*>::iterator end = pickupScheduledForRemoval.end();
+				for (; it != end; ++it){
+					Pickup* dyingNeuros = *it;
+					world.DestroyBody(dyingNeuros->getBody());
 				}
-				for (int i = 0; i < neuros.size(); i++){
-					neuros[i]->draw();
-					if (!pause)
-						neuros[i]->animation();
-				}
+				pickupScheduledForRemoval.clear();
+			}
+			for (int i = 0; i < neuros.size(); i++){
+				neuros[i]->draw();
+				if (!pause)
+					neuros[i]->animation();
+			}
 
-				for (int i = 0; i < crates.size(); i++)
+			for (int i = 0; i < crates.size(); i++)
+			{
+				if (!pause)
 				{
-					if (!pause)
-						crates[i]->crateMove(mousePos, barWidth);
-					crates[i]->Draw();
+					crates[i]->crateMove(mousePos, barWidth);
+				}				
+				crates[i]->Draw();
 
-				}
-				for (int i = 0; i < crates.size(); i++)
-				{
-					weight = crates[i]->getWeight();
-					liftingObject = crates[i]->getLifting();
-					if (weight != 0)
-					{
-						break;
-					}
-				}
+			}
 
-				if (p.getLives() <= 0)
-				{
-					g_States->setState(END);
-					Sounds::getInstance()->stopLevel1Music();
-					Sounds::getInstance()->playMenuMusic();
-				}
-			
-			textLives.setString("lives: " + std::to_string(p.getLives()));
-			textScore.setString("score: " + std::to_string(p.getScore()));
+
+			if (p.getLives() <= 0)
+			{
+				g_States->setState(END);
+				Sounds::getInstance()->stopLevel1Music();
+				Sounds::getInstance()->playMenuMusic();
+			}
+		
 			if (showTutorial)
 			{
 				tutorial1.setString("USE THE LEFT MOUSE CLICK TO MOVE CRATES");
@@ -421,6 +433,7 @@ int main()
 				window.draw(tutorial2);
 				window.draw(tutorial3);
 			}
+			// pause
 			if (pause)
 			{
 				t = c.getElapsedTime();
@@ -439,8 +452,7 @@ int main()
 				pauseText.setString("PAUSED");
 				window.draw(pauseText);
 			}
-			window.draw(textLives);
-			window.draw(textScore);
+
 
 			if (drawDebug)
 				world.DrawDebugData();
@@ -453,9 +465,9 @@ int main()
 			bgspriteEnd.setTextureRect(sf::IntRect(0, 0,503,166));
 			bgspriteEnd.setPosition(window.getView().getCenter().x -250, window.getView().getCenter().y - 250);
 			window.draw(bgspriteEnd);
-			textScore.setString("YOUR SCORE IS: " +std::to_string(p.getScore()));
-			textScore.setPosition(window.getView().getCenter().x - 100, window.getView().getCenter().y - 25);
-			window.draw(textScore);
+			//textScore.setString("YOUR SCORE IS: " +std::to_string(p.getScore()));
+			//textScore.setPosition(window.getView().getCenter().x - 100, window.getView().getCenter().y - 25);
+			//window.draw(textScore);
 		}
 		if (g_States->CurrentState() == UPGRADE)
 		{
@@ -463,10 +475,177 @@ int main()
 			mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 			us.DisplayScreen(&p,mousePos);
 		}
+		if (g_States->CurrentState() == OPTIONS)
+		{
+			window.clear(sf::Color::Black);
+			DisplayOptions(&window);
+		}
+
+
 	
 		// Finally, display rendered frame on screen 
 		window.display();
 	} //loop back for next frame
 
 	return EXIT_SUCCESS;
+}
+void Hud(sf::RenderWindow *win,Player * p)
+{
+	Text textScore;
+	Text textPower;
+	sf::Font font;
+
+	Text textLives;
+	if (!font.loadFromFile("../Font/leadcoat.ttf"))
+	{
+		std::cout << "error with font load for player hud";
+	}
+	textScore.setFont(font);
+	textScore.setColor(Color::Red);
+	textScore.setCharacterSize(25);
+	textLives.setFont(font);
+	textLives.setColor(Color::Red);
+	textLives.setCharacterSize(25);
+	textLives.setString("lives: " + std::to_string(p->getLives()));
+	textScore.setString("score: " + std::to_string(p->getScore()));
+	textLives.setPosition(win->getView().getCenter().x - 390, win->getView().getCenter().y - 290);
+	textScore.setPosition(win->getView().getCenter().x + 300, win->getView().getCenter().y - 290);
+
+	win->draw(textLives);
+	win->draw(textScore);
+	
+
+}
+void DisplayOptions(sf::RenderWindow *win)
+{
+
+	Vector2f mousePos;
+	sf::Text tutorialShow;
+	sf::Text playSoundShow;
+	sf::Texture SwitchOnTexture;
+	sf::Texture SwitchOffTexture;
+	sf::Sprite tutorialSwitchSprite;
+	sf::Sprite soundSwitchSprite;
+	sf::Texture backTexture;
+	sf::Sprite backSprite;
+	
+	///////////////////////////////////////////////////////// load assets ////////////////////////////////////////
+	if (!SwitchOnTexture.loadFromFile("../Assets/switchOn.png"))
+	{
+		std::cout << "cant find switch on texture" << std::endl;
+	}
+	if (!SwitchOffTexture.loadFromFile("../Assets/switchOff.png"))
+	{
+		std::cout << "cant find switch off texture" << std::endl;
+	}
+	if (!backTexture.loadFromFile("../Assets/back.png"))
+	{
+		std::cout << "cant find back texture" << std::endl;
+	}
+	backSprite.setTexture(backTexture);
+	backSprite.setPosition(win->getView().getCenter().x-400, win->getView().getCenter().y - 300);
+	sf::Font f;
+	if (!f.loadFromFile("../Font/leadcoat.ttf"))
+	{
+		std::cout << "cant find font for the options" << std::endl;
+	}
+	
+
+	tutorialShow.setFont(f);
+	tutorialShow.setCharacterSize(80);
+	tutorialShow.setString("TUTORIAL");
+	tutorialShow.setColor(sf::Color::Red);
+	tutorialShow.setPosition(win->getView().getCenter().x - 200, win->getView().getCenter().y - 120);
+	playSoundShow.setFont(f);
+	playSoundShow.setCharacterSize(80);
+	playSoundShow.setString("SOUNDS");
+	playSoundShow.setColor(sf::Color::Red);
+	playSoundShow.setPosition(win->getView().getCenter().x - 200, win->getView().getCenter().y + 50);
+	tutorialSwitchSprite.setPosition(win->getView().getCenter().x + 120, win->getView().getCenter().y - 110);
+	soundSwitchSprite.setPosition(win->getView().getCenter().x + 120, win->getView().getCenter().y + 60);
+
+	///////////////////////////////////////// show tutorial and switch ///////////////////////////////
+	if (showTutorial)
+	{
+		//switch on
+		tutorialSwitchSprite.setTexture(SwitchOnTexture);
+		
+	}
+	else
+		tutorialSwitchSprite.setTexture(SwitchOffTexture);
+
+	//////////////////////////////////////// show play sounds and switch //////////////////////////////
+	if (Sounds::getInstance()->getSound())
+	{
+		soundSwitchSprite.setTexture(SwitchOnTexture);
+	}
+	else
+		soundSwitchSprite.setTexture(SwitchOffTexture);
+
+	///////////////////////////////////////////// click on/off switches /////////////////////////////// 
+	if (!mouseClick)
+	{
+		if (Mouse::isButtonPressed(Mouse::Left))
+		{
+			mouseClick = true;
+			mousePos = win->mapPixelToCoords(sf::Mouse::getPosition(*win));
+		}
+
+	}
+	else if (!Mouse::isButtonPressed(Mouse::Left))
+	{
+		mouseClick = false;
+	}
+
+	//clicking tutorial on off
+	if (mousePos.x >= tutorialSwitchSprite.getPosition().x && mousePos.x <= tutorialSwitchSprite.getPosition().x + tutorialSwitchSprite.getTexture()->getSize().x
+		&& mousePos.y >= tutorialSwitchSprite.getPosition().y && mousePos.y <= tutorialSwitchSprite.getPosition().y + tutorialSwitchSprite.getTexture()->getSize().y)
+	{
+		if (showTutorial)
+		{
+			showTutorial = false;
+		}
+		else
+			showTutorial = true;
+		if (Sounds::getInstance()->getSound())
+			Sounds::getInstance()->playMenuSound();
+
+	}
+	//clicking sounds on off
+	if (mousePos.x >= soundSwitchSprite.getPosition().x && mousePos.x <= soundSwitchSprite.getPosition().x + soundSwitchSprite.getTexture()->getSize().x
+		&& mousePos.y >= soundSwitchSprite.getPosition().y && mousePos.y <= soundSwitchSprite.getPosition().y + soundSwitchSprite.getTexture()->getSize().y)
+	{
+		if (Sounds::getInstance()->getSound())
+		{
+			Sounds::getInstance()->setSound(false);
+		}
+		else
+			Sounds::getInstance()->setSound(true);
+		if (Sounds::getInstance()->getSound())
+		{
+			Sounds::getInstance()->playMenuSound();
+			Sounds::getInstance()->playMenuMusic();
+
+		}
+		else
+			Sounds::getInstance()->stopMenuMusic();
+
+	}
+	// clicking back
+	
+	if (mousePos != Vector2f(0,0) && mousePos.x >= backSprite.getPosition().x && mousePos.x <= backSprite.getPosition().x + backSprite.getTexture()->getSize().x
+		&& mousePos.y >= backSprite.getPosition().y && mousePos.y <= backSprite.getPosition().y + backSprite.getTexture()->getSize().y)
+	{
+
+		if (Sounds::getInstance()->getSound())
+			Sounds::getInstance()->playMenuSound();
+		GameStates::getInstance()->setState(MENU);
+	}
+	
+	win->draw(tutorialShow);
+	win->draw(playSoundShow);
+	win->draw(tutorialSwitchSprite);
+	win->draw(soundSwitchSprite);
+	win->draw(backSprite);
+
 }

@@ -14,7 +14,8 @@ public:
 	void crateMove(Vector2f m,int);
 	void Draw();
 	int getWeight();
-	bool getLifting(){ return liftingObject; }
+	bool getLifting(){ return lifting; }
+	void setLifting(bool l){ lifting = l; }
 	
 
 private:
@@ -33,7 +34,8 @@ private:
 	const int SCALE = 30.f;
 	bool lifting = false;
 	int weight = 2.f;
-	bool liftingObject = false;
+	bool playPowerSound = false;
+	bool mouseClicked;
 
 };
 

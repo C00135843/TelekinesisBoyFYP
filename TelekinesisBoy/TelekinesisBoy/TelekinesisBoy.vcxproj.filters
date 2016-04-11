@@ -66,6 +66,12 @@
     <ClInclude Include="UpgradeScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MovableObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Plank.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -111,6 +117,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UpgradeScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MovableObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Plank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

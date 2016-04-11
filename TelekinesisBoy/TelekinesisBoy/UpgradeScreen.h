@@ -1,6 +1,8 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "Player.h"
+#include "GameStates.h"
+#include "Sounds.h"
 const int COST_OF_LIVES = 350;
 const int COST_OF_UPGRADE = 200;
 class UpgradeScreen
@@ -21,14 +23,16 @@ private:
 	int originalScore;
 	int originalLives;
 	int mouseY;
-	bool mouseClicked;
+	Sounds* s_Sound = Sounds::getInstance();
+	GameStates* g_States = GameStates::getInstance();
+	bool mouseClicked = false;
 	int noOfEnduranceStars;
 	int noOfLivesStars;
 	int livesSelected;
 	int previousLivesSel;
 	sf::RenderWindow* m_win;
 	Player*m_player;
-	void displayLivesAndScore();
+	void displayLivesAndScore(Vector2f mousePos);
 	void displayEnduranceLevel();
 	void displayNumberOfLives();
 	void LoadAssets();

@@ -59,6 +59,7 @@ class Player{
 		void setScore(int s) { score = s; }
 		void increaseScore(int is){ score += is; }
 		void decreaseLives(){ lives--; }
+		void setLives(int l) { lives = l; }
 		void increaseLives(int l) { lives += l; }
 		int getScore(){ return score; }
 		void resetPosition();

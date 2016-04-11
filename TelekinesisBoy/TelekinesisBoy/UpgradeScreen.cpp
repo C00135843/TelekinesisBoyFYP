@@ -56,39 +56,80 @@ void UpgradeScreen::LoadAssets()
 	displayNumberOfLives();
 
 }
-void UpgradeScreen::displayLivesAndScore()
+void UpgradeScreen::displayLivesAndScore(Vector2f mousePos)
 {
+	mouseX = mousePos.x;
+	mouseY = mousePos.y;
+	if (!mouseClicked)
+	{
+		if (Mouse::isButtonPressed(Mouse::Left)) {
+
+			mouseClicked = true;
+		}
+	}
+	else if (!Mouse::isButtonPressed(Mouse::Left))
+	{
+		mouseClicked = false;
+	}
 	t.setFont(f);
 	t.setCharacterSize(50);
 	//scoreText.Bold;
 	t.setString(std::string("TOTAL SCORE:\t") + std::to_string(m_player->getScore()));
-	t.setPosition(m_win->getView().getCenter().x - 150, m_win->getView().getCenter().y - 250);
+	t.setPosition(m_win->getView().getCenter().x - 200, m_win->getView().getCenter().y - 250);
 	m_win->draw(t);
 
 	t.setFont(f);
 	t.setCharacterSize(50);
 	//scoreText.Bold;
 	t.setString(std::string("TOTAL LIVES:\t\t") + std::to_string(m_player->getLives()));
-	t.setPosition(m_win->getView().getCenter().x - 150, m_win->getView().getCenter().y - 150);
+	t.setPosition(m_win->getView().getCenter().x - 200, m_win->getView().getCenter().y - 150);
 	m_win->draw(t);
 
 	for (int i = 0; i < 3; i++)
 	{
 		buttonSprite[i].setTexture(buttonTexture);
-		buttonSprite[i].setScale(.8f, .6f);
+		buttonSprite[i].setScale(.5f, .6f);
 		if (i == 0)
 		{
-			buttonSprite[i].setPosition(m_win->getView().getCenter().x , m_win->getView().getCenter().y + 25);
+			buttonSprite[i].setPosition(m_win->getView().getCenter().x+220 , m_win->getView().getCenter().y+13);
 		}
 		else if (i == 1)
 		{
-			buttonSprite[i].setPosition(m_win->getView().getCenter().x + 275, m_win->getView().getCenter().y + 150);
+			buttonSprite[i].setPosition(m_win->getView().getCenter().x + 220, m_win->getView().getCenter().y + 137);
 		}
 		else
-			buttonSprite[i].setPosition(m_win->getView().getCenter().x - 50, m_win->getView().getCenter().y + 200);
+			buttonSprite[i].setPosition(m_win->getView().getCenter().x - 40, m_win->getView().getCenter().y + 225);
 		m_win->draw(buttonSprite[i]);
-	}
 
+		if (mousePos.x >= buttonSprite[i].getPosition().x && mousePos.x <= buttonSprite[i].getPosition().x + buttonSprite[i].getGlobalBounds().width
+			&& mousePos.y >= buttonSprite[i].getPosition().y && mousePos.y <= buttonSprite[i].getPosition().y + buttonSprite[i].getGlobalBounds().height)
+		{
+			if (mouseClicked)
+			{
+				std::cout << "button" << std::endl;
+				
+				if (i == 0)
+				{
+					m_player->setScore(originalScore);
+					m_player->increaseEnduranceLevel(originalEndurance);
+				}
+				else if (i == 1)
+				{
+					m_player->setScore(originalScore);
+					m_player->setLives(originalLives);
+					livesSelected = 0;
+				}
+				else
+				{
+					g_States->setState(MENU);
+				}
+				
+			}
+		}
+
+
+	}
+	
 
 
 	t.setCharacterSize(20);
@@ -97,10 +138,11 @@ void UpgradeScreen::displayLivesAndScore()
 	t.setPosition(m_win->getView().getCenter().x + 275, m_win->getView().getCenter().y+25 );
 	m_win->draw(t);
 
-	t.setCharacterSize(20);
-	t.setColor(sf::Color::White);
-	t.setString(std::string("CLEAR"));
 	t.setPosition(m_win->getView().getCenter().x + 275, m_win->getView().getCenter().y + 150);
+	m_win->draw(t);
+
+	t.setString(std::string("FINISH"));
+	t.setPosition(m_win->getView().getCenter().x + 15, m_win->getView().getCenter().y + 235);
 	m_win->draw(t);
 
 
@@ -230,7 +272,7 @@ void UpgradeScreen::DisplayScreen(Vector2f mousePos)
 	bg_Sprite.setColor(sf::Color(255, 255, 255, 128)); // halftransparent
 	m_win->draw(bg_Sprite);
 	
-	displayLivesAndScore();
+	displayLivesAndScore(mousePos);
 	displayEnduranceLevel();
 	displayNumberOfLives();
 	UpdateStars(mousePos);

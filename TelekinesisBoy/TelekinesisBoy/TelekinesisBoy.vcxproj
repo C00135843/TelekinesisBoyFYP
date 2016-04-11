@@ -26,7 +26,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -97,7 +97,9 @@
     <ClInclude Include="GameStates.h" />
     <ClInclude Include="Hazard.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="MovableObject.h" />
     <ClInclude Include="Pickup.h" />
+    <ClInclude Include="Plank.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Sounds.h" />
@@ -114,7 +116,9 @@
     <ClCompile Include="GameStates.cpp" />
     <ClCompile Include="Hazard.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="MovableObject.cpp" />
     <ClCompile Include="Pickup.cpp" />
+    <ClCompile Include="Plank.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Sounds.cpp" />

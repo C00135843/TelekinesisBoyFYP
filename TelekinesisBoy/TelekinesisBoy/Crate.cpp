@@ -7,12 +7,14 @@ enum _entityCatergory{
 	CRATE = 0x0008,
 	HAZARD = 0x0016,
 	EXIT = 0x0032,
-	BUTTON = 0x0064
+	BUTTON = 0x0064,
+	PLANK = 0x0128
+
 };
 
 Crate::Crate(b2World* world, RenderWindow* win, float x, float y, float w, float h) : MovableObject(world,win,x,y,w,h)
 {
-	m_weight = 2.0f;
+	m_weight = 3.0f;
 	createBox2dBody();
 	loadAssets();
 
@@ -31,12 +33,12 @@ Crate::~Crate()
 
 	dynamicBox.SetAsBox((size.x/2.f) / SCALE, (size.y/2.f) / SCALE);
 	fixtureDef.shape = &dynamicBox;
-	fixtureDef.density = 1.f;
+	fixtureDef.density = 5.f;
 	fixtureDef.userData = "Crate";
 	
 
 	fixtureDef.filter.categoryBits = CRATE;
-	fixtureDef.filter.maskBits =  PLAYER | CRATE | PLATFORM | BUTTON;
+	fixtureDef.filter.maskBits =  PLAYER | CRATE | PLATFORM | BUTTON | PLANK;
 
 	m_body->CreateFixture(&fixtureDef);
 }

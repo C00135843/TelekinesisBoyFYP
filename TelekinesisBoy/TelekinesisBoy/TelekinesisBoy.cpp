@@ -65,7 +65,7 @@ int main()
 	float mouseY;
 	Vector2f mousePos;
 	showTutorial = false;
-	UpgradeScreen us = UpgradeScreen(&window);
+	
 
 	GameStates* g_States = GameStates::getInstance();
 	g_States->setState(UPGRADE);
@@ -166,6 +166,7 @@ int main()
 	
 	Player p = Player(&world, &window, 100, 460);
 	//Player p = Player(&world, &window, 1200, 500);
+	UpgradeScreen us = UpgradeScreen(&window,&p);
 	std::vector<Pickup*>neuros;
 	Pickup* n = new Pickup(&world, &window, 320, 460);
 	Pickup* n1 = new Pickup(&world, &window, 360, 460);
@@ -473,7 +474,7 @@ int main()
 		{
 			window.clear(sf::Color::Black);
 			mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-			us.DisplayScreen(&p,mousePos);
+			us.DisplayScreen(mousePos);
 		}
 		if (g_States->CurrentState() == OPTIONS)
 		{

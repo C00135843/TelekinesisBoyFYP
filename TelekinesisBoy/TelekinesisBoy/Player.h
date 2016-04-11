@@ -56,6 +56,7 @@ class Player{
 		void ground();
 		void notGrounded();
 		void movePlayer();
+		void setScore(int s) { score = s; }
 		void increaseScore(int is){ score += is; }
 		void decreaseLives(){ lives--; }
 		void increaseLives(int l) { lives += l; }

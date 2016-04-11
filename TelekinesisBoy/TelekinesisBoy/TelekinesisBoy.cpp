@@ -69,7 +69,7 @@ int main()
 	
 
 	GameStates* g_States = GameStates::getInstance();
-	g_States->setState(UPGRADE);
+	g_States->setState(MENU);
 	Sounds* s_Sound = Sounds::getInstance();
 	Sounds::getInstance()->playMenuMusic();
 	
@@ -289,6 +289,8 @@ int main()
 						
 			window.clear(sf::Color::Black);
 			window.draw(bgsprite);
+			player_view.setCenter(400, 300);
+			window.setView(player_view);
 			menu.draw(window);
 		}
 		if (g_States->CurrentState() == GAME){

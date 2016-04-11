@@ -61,6 +61,28 @@ public:
 					static_cast<Player*>(bodyUserData)->ground();
 			}
 		}
+		//Player and Plank
+		if (fixAType == "Player" && fixBType == "Plank"
+			|| fixAType == "Plank" && fixBType == "Player"){
+			if (fixAType == "Player")
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
+				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+
+				if (posPlat.y - (10 / 60.0f) > posPlayer.y + 16 / 30.0f)
+					static_cast<Player*>(bodyUserData)->ground();
+
+			}
+			else if (fixBType == "Player")
+			{
+				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
+				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+				if (posPlat.y - (10 / 60.0f) > posPlayer.y + 16 / 30.0f)
+					static_cast<Player*>(bodyUserData)->ground();
+			}
+		}
 		// PLAYER AND EXIT COLLISION
 
 		if (fixAType == "Player" && fixBType == "Exit"
@@ -161,6 +183,25 @@ public:
 
 		if (fixAType == "Player" && fixBType == "Crate"
 			|| fixAType == "Crate" && fixBType == "Player"){
+			if (fixAType == "Player")
+			{
+				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
+				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+				if (posPlat.y + (10 / 60.0f) > posPlayer.y - 16 / 30.0f)
+					static_cast<Player*>(bodyUserData)->notGrounded();
+			}
+			else if (fixBType == "Player")
+			{
+				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
+				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+				if (posPlat.y + (10 / 60.0f) > posPlayer.y - 16 / 30.0f)
+					static_cast<Player*>(bodyUserData)->notGrounded();
+			}
+		}
+		if (fixAType == "Player" && fixBType == "Plank"
+			|| fixAType == "Plank" && fixBType == "Player"){
 			if (fixAType == "Player")
 			{
 				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();

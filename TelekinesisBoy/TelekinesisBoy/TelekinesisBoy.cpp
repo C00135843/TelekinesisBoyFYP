@@ -41,6 +41,7 @@
 #include "Sounds.h"
 #include "DebugDraw.h"
 #include "UpgradeScreen.h"
+#include "Plank.h"
 #include <vector>
 
 ////////////////////////////////////////////////////////////
@@ -107,6 +108,7 @@ int main()
 	int barheight = 20;
 	barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
 	bool liftingObject = false;
+	bool liftingPlankObject = false;
 
 
 	//load background
@@ -142,6 +144,8 @@ int main()
 	Door door = Door(&world, &window, 1100, 150, 16, 234);
 	Exit e = Exit(&world, &window, 1440, 453, 61, 47);
 	//Exit e = Exit(&world, &window, 0, 453, 61, 47);
+	Plank* plank = new Plank(&world, &window, 200, 200, 128, 32);
+
 	std::vector<Crate*>crates;
 	int const numOfCrates = 9;
 	crates.reserve(numOfCrates);
@@ -335,7 +339,19 @@ int main()
 					//barWidth = 300;
 				}	
 			}
-			if (liftingObject)
+			liftingPlankObject = plank->getLifting();
+			if (liftingPlankObject)
+			{
+				weight = plank->getWeight();
+				//barWidth = 300;
+				//break;
+			}
+			else
+			{
+				liftingPlankObject = false;
+				//barWidth = 300;
+			}
+			if (liftingObject || liftingPlankObject)
 			{
 				if (!pause)
 				{
@@ -351,10 +367,9 @@ int main()
 				barSprite.setPosition(window.getView().getCenter().x - 150, window.getView().getCenter().y - 200);
 				window.draw(barSprite);
 			}
-			else
-				//barWidth = 300;
 
-			if (barWidth == 0 || !liftingObject)
+
+			if (barWidth == 0 || !liftingObject && !liftingPlankObject)
 			{
 				Time bTime = barClock.getElapsedTime();
 				if (bTime.asSeconds() > 1)
@@ -363,6 +378,8 @@ int main()
 					barClock.restart();
 				}
 			}
+			///////////////////////////////////////////////plank tester//////////////////////////////////
+
 			// drawing and updating crates
 			ground.draw();
 			ground2.draw();
@@ -415,7 +432,12 @@ int main()
 				crates[i]->Draw();
 
 			}
-
+			///////////////////////////////////////////////////////// plank tester
+			if (!pause)
+			{
+				plank->crateMove(mousePos, barWidth);
+			}
+			plank->Draw();
 
 			if (p.getLives() <= 0)
 			{

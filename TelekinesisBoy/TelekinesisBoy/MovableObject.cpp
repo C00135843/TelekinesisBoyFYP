@@ -33,8 +33,8 @@ void MovableObject::crateMove(Vector2f mousePos, int  barTime)
 		mouseClicked = false;
 
 
-	if (mouseClicked && mouseX >= c_sprite.getPosition().x && mouseX <= c_sprite.getPosition().x + c_sprite.getTexture()->getSize().x
-		&& mouseY >= c_sprite.getPosition().y && mouseY <= c_sprite.getPosition().y + c_sprite.getTexture()->getSize().y)
+	if (mouseClicked && mouseX >= c_sprite.getPosition().x && mouseX <= c_sprite.getPosition().x + c_sprite.getGlobalBounds().width
+		&& mouseY >= c_sprite.getPosition().y && mouseY <= c_sprite.getPosition().y + c_sprite.getGlobalBounds().height)
 	{
 		if (barTime > 0)
 		{

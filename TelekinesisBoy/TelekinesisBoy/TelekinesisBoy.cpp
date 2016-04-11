@@ -199,7 +199,7 @@ int main()
 	int count = 0;
 	//create the world
 	bool playSound = false;
-	Menu menu(window.getSize().x, window.getSize().y);
+	Menu menu(&window);
 	int weight = 0;
 	// Start game loop 
 	while (window.isOpen())
@@ -472,7 +472,8 @@ int main()
 		if (g_States->CurrentState() == UPGRADE)
 		{
 			window.clear(sf::Color::Black);
-			us.DisplayScreen();
+			mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+			us.DisplayScreen(&p,mousePos);
 		}
 		if (g_States->CurrentState() == OPTIONS)
 		{

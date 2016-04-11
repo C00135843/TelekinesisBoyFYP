@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Crate.h"
-#include "Sounds.h"
 enum _entityCatergory{
 	PLATFORM = 0x0001,
 	PLAYER = 0x0002,
@@ -11,17 +10,17 @@ enum _entityCatergory{
 	BUTTON = 0x0064
 };
 
-Crate::Crate(b2World* world, RenderWindow* win, float x, float y, float w, float h) : m_world(world), m_win(win), startPosition(x, y), size(w, h)
+Crate::Crate(b2World* world, RenderWindow* win, float x, float y, float w, float h) : MovableObject(world,win,x,y,w,h)
 {
+	m_weight = 2.0f;
 	createBox2dBody();
 	loadAssets();
 
 }
-
 Crate::~Crate()
 {
 }
-void Crate::createBox2dBody()
+ void Crate::createBox2dBody()
 {
 	m_bodyDef.type =b2_dynamicBody;
 	m_bodyDef.position.Set((startPosition.x + size.x / 2.0f) / SCALE, (startPosition.y + size.y / 2.f) / SCALE);
@@ -51,73 +50,73 @@ void Crate::loadAssets()
 	//c_sprite.setOrigin(16,16);
 
 }
-void Crate::crateMove(Vector2f mousePos, int barTime){
-
-	if (Mouse::isButtonPressed(Mouse::Left)){
-		mouseClicked = true;
-		mouseX = mousePos.x;
-		mouseY = mousePos.y;
-	}
-	else
-		mouseClicked = false;
-
-
-		if (mouseClicked && mouseX >= c_sprite.getPosition().x && mouseX <= c_sprite.getPosition().x + c_sprite.getTexture()->getSize().x
-			&& mouseY >= c_sprite.getPosition().y && mouseY <= c_sprite.getPosition().y + c_sprite.getTexture()->getSize().y)
-		{
-			if (barTime > 0)
-			{
-				lifting = true;
-			}				
-
-		}	
-		if (barTime <= 0)
-		{
-			lifting = false;
-		}
-	
-	if (!mouseClicked)
-	{
-		lifting = false;
-		if (playPowerSound)
-		{
-			playPowerSound = false;
-			Sounds::getInstance()->stopPowerSound();
-		}
-	}
-	if (mouseClicked && lifting)
-	{
-		if (!playPowerSound)
-		{
-			Sounds::getInstance()->playPowerSound();
-			playPowerSound = true;
-		}
-		m_body->SetTransform(b2Vec2((mouseX) / SCALE, (mouseY) / SCALE), 0);
-		m_body->SetAwake(true);
-		mouseX = 0;
-		mouseY = 0;
-
-	}
-	else
-		if (playPowerSound)
-		{
-			playPowerSound = false;
-			Sounds::getInstance()->stopPowerSound();
-		}
-
-	m_body->SetLinearVelocity(b2Vec2(0, 9.81f));
-	c_sprite.setPosition(m_body->GetPosition().x *SCALE - size.x / 2, m_body->GetPosition().y*SCALE - size.y / 2);
-		
-}
-void Crate::Draw()
-{
-	m_win->draw(c_sprite);
-}
-int Crate::getWeight()
-{
-	if (lifting)
-		return weight;
-	else
-		return 0;
-	
-}
+////void Crate::crateMove(Vector2f mousePos, int barTime){
+////
+////	if (Mouse::isButtonPressed(Mouse::Left)){
+////		mouseClicked = true;
+////		mouseX = mousePos.x;
+////		mouseY = mousePos.y;
+////	}
+////	else
+////		mouseClicked = false;
+////
+////
+////		if (mouseClicked && mouseX >= c_sprite.getPosition().x && mouseX <= c_sprite.getPosition().x + c_sprite.getTexture()->getSize().x
+////			&& mouseY >= c_sprite.getPosition().y && mouseY <= c_sprite.getPosition().y + c_sprite.getTexture()->getSize().y)
+////		{
+////			if (barTime > 0)
+////			{
+////				lifting = true;
+////			}				
+////
+////		}	
+////		if (barTime <= 0)
+////		{
+////			lifting = false;
+////		}
+////	
+////	if (!mouseClicked)
+////	{
+////		lifting = false;
+////		if (playPowerSound)
+////		{
+////			playPowerSound = false;
+////			Sounds::getInstance()->stopPowerSound();
+////		}
+////	}
+////	if (mouseClicked && lifting)
+////	{
+////		if (!playPowerSound)
+////		{
+////			Sounds::getInstance()->playPowerSound();
+////			playPowerSound = true;
+////		}
+////		m_body->SetTransform(b2Vec2((mouseX) / SCALE, (mouseY) / SCALE), 0);
+////		m_body->SetAwake(true);
+////		mouseX = 0;
+////		mouseY = 0;
+////
+////	}
+////	else
+////		if (playPowerSound)
+////		{
+////			playPowerSound = false;
+////			Sounds::getInstance()->stopPowerSound();
+////		}
+////
+////	m_body->SetLinearVelocity(b2Vec2(0, 9.81f));
+////	c_sprite.setPosition(m_body->GetPosition().x *SCALE - size.x / 2, m_body->GetPosition().y*SCALE - size.y / 2);
+////		
+////}
+//void Crate::Draw()
+//{
+//	m_win->draw(c_sprite);
+//}
+//int Crate::getWeight()
+//{
+//	if (lifting)
+//		return weight;
+//	else
+//		return 0;
+//	
+//}

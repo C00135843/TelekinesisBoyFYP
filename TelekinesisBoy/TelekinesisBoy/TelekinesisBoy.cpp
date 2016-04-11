@@ -199,7 +199,7 @@ int main()
 	int count = 0;
 	//create the world
 	bool playSound = false;
-	Menu menu(window.getSize().x, window.getSize().y);
+	Menu menu(&window);
 	int weight = 0;
 	// Start game loop 
 	while (window.isOpen())

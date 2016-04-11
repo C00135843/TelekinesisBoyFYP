@@ -68,7 +68,7 @@ int main()
 	UpgradeScreen us = UpgradeScreen(&window);
 
 	GameStates* g_States = GameStates::getInstance();
-	g_States->setState(UPGRADE);
+	g_States->setState(MENU);
 	Sounds* s_Sound = Sounds::getInstance();
 	Sounds::getInstance()->playMenuMusic();
 	

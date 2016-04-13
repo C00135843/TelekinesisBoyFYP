@@ -98,6 +98,8 @@
     <ClInclude Include="Hazard.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MovableObject.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Pickup.h" />
     <ClInclude Include="Plank.h" />
     <ClInclude Include="Platform.h" />
@@ -117,6 +119,8 @@
     <ClCompile Include="Hazard.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MovableObject.cpp" />
+    <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="Plank.cpp" />
     <ClCompile Include="Platform.cpp" />

@@ -96,6 +96,7 @@
     <ClInclude Include="Exit.h" />
     <ClInclude Include="GameStates.h" />
     <ClInclude Include="Hazard.h" />
+    <ClInclude Include="LevelManager.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MovableObject.h" />
     <ClInclude Include="Particle.h" />
@@ -117,6 +118,7 @@
     <ClCompile Include="Exit.cpp" />
     <ClCompile Include="GameStates.cpp" />
     <ClCompile Include="Hazard.cpp" />
+    <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MovableObject.cpp" />
     <ClCompile Include="Particle.cpp" />

@@ -17,9 +17,11 @@ private:
 	float m_fuel;
 	
 public:
+
+	void removeParticles(std::size_t i);
 	static ParticleSystem* GetInstance();
 	void addParticle(int fuel, sf::Vector2f pos, sf::RenderWindow * win);
-	void update(sf::Time t);
+	void update(sf::Time t, bool partAlive);
 
 	void draw(sf::RenderWindow* win);
 

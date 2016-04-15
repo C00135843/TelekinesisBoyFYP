@@ -14,9 +14,15 @@ ParticleSystem::ParticleSystem()
 
 ParticleSystem::~ParticleSystem()
 {
+	
 }
 
 
+
+void ParticleSystem::removeParticles(std::size_t i)
+{
+	m_particles.erase(m_particles.begin()+i);
+}
 
 ParticleSystem* ParticleSystem::GetInstance()
 {
@@ -40,13 +46,16 @@ void ParticleSystem::addParticle(int fuel, sf::Vector2f pos,sf::RenderWindow* wi
 	}
 }
 
-void ParticleSystem::update(sf::Time t)
+void ParticleSystem::update(sf::Time t, bool partAlive)
 {
 	float deltaTime = static_cast<float>(t.asSeconds());
 	for (std::size_t i = 0; i < m_particles.size(); ++i)
 	{
-		m_particles[i]->update(deltaTime);
-
+		m_particles[i]->update(deltaTime, partAlive);
+		if (m_particles[i]->getAlive())
+		{
+			removeParticles(i);
+		}
 	}
 }
 void ParticleSystem::draw(sf::RenderWindow * win)
@@ -55,6 +64,7 @@ void ParticleSystem::draw(sf::RenderWindow * win)
 	{
 		win->draw(*m_particles[i]);
 	}
+	std::cout <<  m_particles.size() << std::endl;
 }
 
 //bool ParticleSystem::instanceFlag = false;

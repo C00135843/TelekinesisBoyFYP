@@ -7,6 +7,8 @@ public:
 	Particle(sf::Vector2f pos, sf::RenderWindow* win);
 	~Particle();
 
+	void update(float time);
+
 	void update(float time, bool partALive);
 	void setLifeTime();
 	float distanceFormStart();

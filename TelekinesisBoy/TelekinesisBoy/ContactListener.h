@@ -190,6 +190,8 @@ public:
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
 				if (posPlat.y + (10 / 60.0f) > posPlayer.y - 16 / 30.0f)
 					static_cast<Player*>(bodyUserData)->notGrounded();
+				else
+					static_cast<Player*>(bodyUserData)->ground();
 			}
 			else if (fixBType == "Player")
 			{
@@ -198,6 +200,8 @@ public:
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 				if (posPlat.y + (10 / 60.0f) > posPlayer.y - 16 / 30.0f)
 					static_cast<Player*>(bodyUserData)->notGrounded();
+				else
+					static_cast<Player*>(bodyUserData)->ground();
 			}
 		}
 		if (fixAType == "Player" && fixBType == "Plank"
@@ -209,6 +213,8 @@ public:
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
 				if (posPlat.y + (10 / 60.0f) > posPlayer.y - 16 / 30.0f)
 					static_cast<Player*>(bodyUserData)->notGrounded();
+				else
+					static_cast<Player*>(bodyUserData)->ground();
 			}
 			else if (fixBType == "Player")
 			{
@@ -217,6 +223,8 @@ public:
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 				if (posPlat.y + (10 / 60.0f) > posPlayer.y - 16 / 30.0f)
 					static_cast<Player*>(bodyUserData)->notGrounded();
+				else
+					static_cast<Player*>(bodyUserData)->ground();
 			}
 		}
 	}

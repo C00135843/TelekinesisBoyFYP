@@ -42,6 +42,7 @@
 #include "DebugDraw.h"
 #include "UpgradeScreen.h"
 #include "Plank.h"
+#include "ParticleSystem.h"
 #include <vector>
 
 ////////////////////////////////////////////////////////////
@@ -67,7 +68,8 @@ int main()
 	Vector2f mousePos;
 	showTutorial = false;
 	
-
+	ParticleSystem* p_System = ParticleSystem::GetInstance();
+	//p_System->Init();
 	GameStates* g_States = GameStates::getInstance();
 	g_States->setState(MENU);
 	Sounds* s_Sound = Sounds::getInstance();
@@ -194,12 +196,15 @@ int main()
 	neuros.push_back(n9);
 	//level 1///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	Time t;
-	Clock c;
+	Time pauseTimer;
+	Clock pauseClock;
 
 	Time barTime;
 	Clock barClock;
 
+	Clock clock;
+	Time elapsed;
+	bool partAlive = false;
 	//create the size of world
 	int count = 0;
 	//create the world
@@ -264,22 +269,44 @@ int main()
 				}
 			}
 			// check keypress for debug
-			if (g_States->CurrentState() == GAME){
+			if (g_States->CurrentState() == GAME) {
 
-				if ((Event.type == sf::Event::KeyReleased) && (Event.key.code == sf::Keyboard::F1))
-				{
-					if (drawDebug)
-						drawDebug = false;
-					else
-						drawDebug = true;
-				}
-				if ((Event.type == sf::Event::KeyPressed) && (Event.key.code == sf::Keyboard::P))
-				{
-					if (!pause)
-						pause = true;
-					else
-						pause = false;
 
+				switch (Event.type)
+				{
+				case Event::KeyReleased:
+					if (Event.key.code == sf::Keyboard::F1)
+					{
+						if (drawDebug)
+							drawDebug = false;
+						else
+							drawDebug = true;
+					}
+					break;
+				case Event::KeyPressed:
+					if (Event.key.code == sf::Keyboard::P)
+					{
+						if (!pause)
+							pause = true;
+						else
+							pause = false;
+					}
+					break;
+				case Event::MouseButtonPressed:
+					if (Event.mouseButton.button == sf::Mouse::Left)
+					{
+						partAlive = true;
+						mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+						p_System->addParticle(3000,mousePos,&window);
+							
+					}
+					break;
+				case Event::MouseButtonReleased:
+					if (Event.mouseButton.button == sf::Mouse::Left)
+					{
+						partAlive = false;
+					}
+					break;
 				}
 			}
 
@@ -296,6 +323,10 @@ int main()
 		if (g_States->CurrentState() == GAME){
 									
 			window.clear(sf::Color::Color(125,125,125));
+			elapsed = clock.getElapsedTime();
+			float deltaTime = elapsed.asSeconds();
+			clock.restart();
+
 
 			if (p.getPosition().x >= levelWidth - window.getSize().x / 2)
 			{
@@ -317,7 +348,7 @@ int main()
 			{
 				world.Step(1 / 60.f, 8, 3);
 				mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-
+				
 				pauseText.setPosition(window.getView().getCenter().x - 80, window.getView().getCenter().y - 80);
 
 				window.setView(player_view);
@@ -461,8 +492,8 @@ int main()
 			// pause
 			if (pause)
 			{
-				t = c.getElapsedTime();
-				if (t.asSeconds() > .3f)
+				pauseTimer = pauseClock.getElapsedTime();
+				if (pauseTimer.asSeconds() > .3f)
 				{
 					if (pauseText.getColor() == Color::Red)
 					{
@@ -472,13 +503,16 @@ int main()
 					{
 						pauseText.setColor(Color::Red);
 					}
-					c.restart();
+					pauseClock.restart();
 				}
 				pauseText.setString("PAUSED");
 				window.draw(pauseText);
 			}
 
 
+			p_System->update(elapsed, partAlive);
+			p_System->draw(&window);
+			
 			if (drawDebug)
 				world.DrawDebugData();
 			

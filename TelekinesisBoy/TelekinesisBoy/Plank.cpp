@@ -37,7 +37,7 @@ void Plank::createBox2dBody()
 
 	dynamicBox.SetAsBox((size.x / 2.f) / SCALE, (size.y / 2.f) / SCALE);
 	fixtureDef.shape = &dynamicBox;
-	fixtureDef.density = 5.f;
+	fixtureDef.density = 1.f;
 	fixtureDef.userData = "Plank";
 
 	fixtureDef.filter.categoryBits = PLANK;

@@ -28,21 +28,20 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "Player.h"
-#include "Platform.h"
+//#include "Platform.h"
 #include "ContactListener.h"
 #include "Menu.h"
-#include "Pickup.h"
-#include "Crate.h"
-#include "Hazard.h"
-#include "Exit.h"
-#include "GameStates.h"
-#include "Button.h"
-#include "Door.h"
-#include "Sounds.h"
+//#include "Pickup.h"
+//#include "Crate.h"
+//#include "Hazard.h"
+//#include "GameStates.h"
+//#include "Button.h"
+//#include "Sounds.h"
 #include "DebugDraw.h"
 #include "UpgradeScreen.h"
-#include "Plank.h"
+//#include "Plank.h"
 #include "ParticleSystem.h"
+#include "LevelManager.h"
 #include <vector>
 
 ////////////////////////////////////////////////////////////
@@ -56,7 +55,7 @@ bool mouseClick = false;
 static const float SCALE = 30.f;
 int main()
 {
-	std::vector<Pickup*> pickupScheduledForRemoval;
+	//std::vector<Pickup*> pickupScheduledForRemoval;
 	// Create the main window 
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "SFML First Program");
 	sf::View player_view(FloatRect(0,0,800,600));
@@ -74,7 +73,8 @@ int main()
 	g_States->setState(MENU);
 	Sounds* s_Sound = Sounds::getInstance();
 	Sounds::getInstance()->playMenuMusic();
-	
+
+
 	sf::Font font;
 	Text pauseText;
 	Text tutorial1, tutorial2, tutorial3;
@@ -119,8 +119,7 @@ int main()
 	bgsprite.setTexture(background);
 	bgsprite.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
 
-	
-	bool tb_delete = false;
+
 	bool drawDebug = false;
 	bool pause = false;
 	//setup the world properties
@@ -136,64 +135,62 @@ int main()
 	ContactListener contact = ContactListener(&world);
 	world.SetContactListener(&contact);
 
-	Platform wallLeft = Platform(&world, &window, -16, 0, 16, 600);
-	Platform wallRight = Platform(&world, &window, 1500, 0, 16, 600);
-	Platform ground = Platform(&world, &window, 1, 500,600,16);
-	Hazard h = Hazard(&world, &window, 600, 500, 300, 16);
-	Platform ground2 = Platform(&world, &window, 900, 500, 600, 16);
-	Platform roof = Platform(&world, &window, 900, 250, 800, 16);
-	Button b = Button(&world, &window, 950, 224, 57, 26);
-	Door door = Door(&world, &window, 1100, 150, 16, 234);
-	Exit e = Exit(&world, &window, 1440, 453, 61, 47);
-	//Exit e = Exit(&world, &window, 0, 453, 61, 47);
-	Plank* plank = new Plank(&world, &window, 200, 200, 128, 32);
+	//Platform wallLeft = Platform(&world, &window, -16, 0, 16, 600);
+	//Platform wallRight = Platform(&world, &window, 1500, 0, 16, 600);
+	//Platform ground = Platform(&world, &window, 1, 500,600,16);
+	//Hazard h = Hazard(&world, &window, 600, 500, 300, 16);
+	//Platform ground2 = Platform(&world, &window, 900, 500, 600, 16);
+	//Platform roof = Platform(&world, &window, 900, 250, 800, 16);
+	//Button b = Button(&world, &window, 950, 224, 57, 26);
+	//Door door = Door(&world, &window, 1100, 150, 16, 234);
+	//Exit e = Exit(&world, &window, 1440, 453, 61, 47);
+	////Exit e = Exit(&world, &window, 0, 453, 61, 47);
+	//Plank* plank = new Plank(&world, &window, 200, 200, 128, 32);
+	//std::vector<Crate*>crates;
 
-	std::vector<Crate*>crates;
-	int const numOfCrates = 9;
-	crates.reserve(numOfCrates);
-	float pos = 330;
-	for (int i = 0,k=0,j=0; i < numOfCrates; i++){
-		Crate* c = new Crate(&world, &window, pos + k * 34, 468 - j * 34, 32, 32);
-		crates.push_back(c);
-		if (i == 4 )
-		{
-			k = 1;
-			j = 1;
-		}
-		else if (i == 7)
-		{
-			k = 2;
-			j = 2;
-		}
-		else
-			k++;
-	}
+	//float pos = 330;
+	//for (int i = 0,k=0,j=0; i < numOfCrates; i++){
+	//	Crate* c = new Crate(&world, &window, pos + k * 34, 468 - j * 34, 32, 32);
+	//	crates.push_back(c);
+	//	if (i == 4 )
+	//	{
+	//		k = 1;
+	//		j = 1;
+	//	}
+	//	else if (i == 7)
+	//	{
+	//		k = 2;
+	//		j = 2;
+	//	}
+	//	else
+	//		k++;
+	//}
 	
 	
 	Player p = Player(&world, &window, 100, 460);
 	//Player p = Player(&world, &window, 1200, 500);
 	UpgradeScreen us = UpgradeScreen(&window,&p);
-	std::vector<Pickup*>neuros;
-	Pickup* n = new Pickup(&world, &window, 320, 460);
-	Pickup* n1 = new Pickup(&world, &window, 360, 460);
-	Pickup* n2 = new Pickup(&world, &window, 400, 460);
-	Pickup* n3 = new Pickup(&world, &window, 360, 420);
-	Pickup* n4 = new Pickup(&world, &window, 200, 460);
-	Pickup* n5 = new Pickup(&world, &window, 500, 460);
-	Pickup* n6 = new Pickup(&world, &window, 700, 420);
-	Pickup* n7 = new Pickup(&world, &window, 900, 420);
-	Pickup* n8 = new Pickup(&world, &window, 1100, 460);
-	Pickup* n9 = new Pickup(&world, &window, 1300, 460);
-	neuros.push_back(n);
-	neuros.push_back(n1);
-	neuros.push_back(n2);
-	neuros.push_back(n3);
-	neuros.push_back(n4);
-	neuros.push_back(n5);
-	neuros.push_back(n6);
-	neuros.push_back(n7);
-	neuros.push_back(n8);
-	neuros.push_back(n9);
+	//std::vector<Pickup*>neuros;
+	/*Pickup* n = new Pickup(&world, &window, 320, 460);*/
+	//Pickup* n1 = new Pickup(&world, &window, 360, 460);
+	//Pickup* n2 = new Pickup(&world, &window, 400, 460);
+	//Pickup* n3 = new Pickup(&world, &window, 360, 420);
+	//Pickup* n4 = new Pickup(&world, &window, 200, 460);
+	//Pickup* n5 = new Pickup(&world, &window, 500, 460);
+	//Pickup* n6 = new Pickup(&world, &window, 700, 420);
+	//Pickup* n7 = new Pickup(&world, &window, 900, 420);
+	//Pickup* n8 = new Pickup(&world, &window, 1100, 460);
+	//Pickup* n9 = new Pickup(&world, &window, 1300, 460);
+	//neuros.push_back(n);
+	//neuros.push_back(n1);
+	//neuros.push_back(n2);
+	//neuros.push_back(n3);
+	//neuros.push_back(n4);
+	//neuros.push_back(n5);
+	//neuros.push_back(n6);
+	//neuros.push_back(n7);
+	//neuros.push_back(n8);
+	//neuros.push_back(n9);
 	//level 1///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Time pauseTimer;
@@ -210,6 +207,7 @@ int main()
 	//create the world
 	bool playSound = false;
 	Menu menu(&window);
+	LevelManager* levelManager = new LevelManager(&world,&window);
 	int weight = 0;
 	// Start game loop 
 	while (window.isOpen())
@@ -271,7 +269,6 @@ int main()
 			// check keypress for debug
 			if (g_States->CurrentState() == GAME) {
 
-
 				switch (Event.type)
 				{
 				case Event::KeyReleased:
@@ -320,7 +317,8 @@ int main()
 			window.setView(player_view);
 			menu.draw(window);
 		}
-		if (g_States->CurrentState() == GAME){
+		if (g_States->CurrentState() == GAME)
+		{
 									
 			window.clear(sf::Color::Color(125,125,125));
 			elapsed = clock.getElapsedTime();
@@ -433,45 +431,45 @@ int main()
 
 
 			//how to destroy bodies in box2d
-			for (int i = 0; i < neuros.size(); i++)
-			{
-				tb_delete = neuros[i]->getDelete();
-				if (tb_delete)
-				{
-					pickupScheduledForRemoval.push_back(neuros[i]);
-					neuros.erase(neuros.begin() + i);
-				}
-			}
-			if (pickupScheduledForRemoval.size() != 0){
-				std::vector<Pickup*>::iterator it = pickupScheduledForRemoval.begin();
-				std::vector<Pickup*>::iterator end = pickupScheduledForRemoval.end();
-				for (; it != end; ++it){
-					Pickup* dyingNeuros = *it;
-					world.DestroyBody(dyingNeuros->getBody());
-				}
-				pickupScheduledForRemoval.clear();
-			}
-			for (int i = 0; i < neuros.size(); i++){
-				neuros[i]->draw();
-				if (!pause)
-					neuros[i]->animation();
-			}
+			//for (int i = 0; i < neuros.size(); i++)
+			//{
+			//	tb_delete = neuros[i]->getDelete();
+			//	if (tb_delete)
+			//	{
+			//		pickupScheduledForRemoval.push_back(neuros[i]);
+			//		neuros.erase(neuros.begin() + i);
+			//	}
+			//}
+			//if (pickupScheduledForRemoval.size() != 0){
+			//	std::vector<Pickup*>::iterator it = pickupScheduledForRemoval.begin();
+			//	std::vector<Pickup*>::iterator end = pickupScheduledForRemoval.end();
+			//	for (; it != end; ++it){
+			//		Pickup* dyingNeuros = *it;
+			//		world.DestroyBody(dyingNeuros->getBody());
+			//	}
+			//	pickupScheduledForRemoval.clear();
+			//}
+			//for (int i = 0; i < neuros.size(); i++){
+			//	neuros[i]->draw();
+			//	if (!pause)
+			//		neuros[i]->animation();
+			//}
 
-			for (int i = 0; i < crates.size(); i++)
-			{
-				if (!pause)
-				{
-					crates[i]->crateMove(mousePos, barWidth);
-				}				
-				crates[i]->Draw();
+			//for (int i = 0; i < crates.size(); i++)
+			//{
+			//	if (!pause)
+			//	{
+			//		crates[i]->crateMove(mousePos, barWidth);
+			//	}				
+			//	crates[i]->Draw();
 
-			}
-			///////////////////////////////////////////////////////// plank tester
-			if (!pause)
-			{
-				plank->crateMove(mousePos, barWidth);
-			}
-			plank->Draw();
+			//}
+			/////////////////////////////////////////////////////////// plank tester
+			//if (!pause)
+			//{
+			//	plank->crateMove(mousePos, barWidth);
+			//}
+			//plank->Draw();
 
 			if (p.getLives() <= 0)
 			{

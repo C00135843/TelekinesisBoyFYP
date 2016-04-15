@@ -21,6 +21,22 @@ Particle::~Particle()
 {
 }
 
+void Particle::update(float time)
+{
+	m_lifeTime -= time;
+	sf::Vector2f gravity(0, 9.81);
+	m_vel.x += gravity.x * time;
+	m_vel.y += gravity.y * time;
+
+	m_vertices[0].position.x += m_vel.x * time * m_speed;
+	m_vertices[0].position.y += m_vel.y * time * m_speed;
+	
+	if (m_lifeTime <= 0)
+	{
+		del = true;
+	}
+
+}
 void Particle::update(float time, bool partAlive)
 {
 

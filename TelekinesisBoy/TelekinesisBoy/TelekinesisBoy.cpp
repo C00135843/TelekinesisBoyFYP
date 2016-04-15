@@ -297,7 +297,7 @@ int main()
 					{
 						partAlive = true;
 						mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-						p_System->addParticle(2000,mousePos,&window);
+						p_System->addParticle(3000,mousePos,&window);
 							
 					}
 					break;
@@ -509,11 +509,10 @@ int main()
 				window.draw(pauseText);
 			}
 
-				p_System->update(elapsed);
-				p_System->draw(&window);
 
-
-
+			p_System->update(elapsed, partAlive);
+			p_System->draw(&window);
+			
 			if (drawDebug)
 				world.DrawDebugData();
 			

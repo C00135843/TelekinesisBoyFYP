@@ -7,7 +7,8 @@ public:
 	Particle(sf::Vector2f pos, sf::RenderWindow* win);
 	~Particle();
 
-	void update(float time);
+	void update(float time, bool partALive);
+	void setLifeTime();
 	float distanceFormStart();
 	void resetParticles();
 	bool getAlive();
@@ -28,6 +29,8 @@ private:
 	float m_lifeTime;
 	bool alive;
 	float dissolveRatio;
+	bool del;
+	int alpha;
 	sf::RenderWindow* m_win;
 	sf::VertexArray m_vertices;
 

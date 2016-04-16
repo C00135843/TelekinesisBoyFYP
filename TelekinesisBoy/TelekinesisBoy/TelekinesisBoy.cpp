@@ -27,22 +27,21 @@
 #include <iostream> 
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include "Player.h"
-#include "Platform.h"
-#include "ContactListener.h"
+//#include "Player.h"
+//#include "Platform.h"
+//#include "ContactListener.h"
 #include "Menu.h"
-#include "Pickup.h"
-#include "Crate.h"
-#include "Hazard.h"
-#include "Exit.h"
+//#include "Pickup.h"
+//#include "Crate.h"
+//#include "Hazard.h"
 #include "GameStates.h"
-#include "Button.h"
-#include "Door.h"
+//#include "Button.h"
 #include "Sounds.h"
-#include "DebugDraw.h"
+//#include "DebugDraw.h"
 #include "UpgradeScreen.h"
-#include "Plank.h"
+//#include "Plank.h"
 #include "ParticleSystem.h"
+#include "LevelManager.h"
 #include <vector>
 
 ////////////////////////////////////////////////////////////
@@ -56,25 +55,24 @@ bool mouseClick = false;
 static const float SCALE = 30.f;
 int main()
 {
-	std::vector<Pickup*> pickupScheduledForRemoval;
 	// Create the main window 
 	sf::RenderWindow window(sf::VideoMode(800, 600, 32), "SFML First Program");
 	sf::View player_view(FloatRect(0,0,800,600));
 	player_view.zoom(1.f);
 	window.setFramerateLimit(60);
 	float levelWidth = 1500;
-	float mouseX;
-	float mouseY;
+
 	Vector2f mousePos;
 	showTutorial = false;
 	
 	ParticleSystem* p_System = ParticleSystem::GetInstance();
-	//p_System->Init();
+
 	GameStates* g_States = GameStates::getInstance();
 	g_States->setState(MENU);
 	Sounds* s_Sound = Sounds::getInstance();
 	Sounds::getInstance()->playMenuMusic();
-	
+
+
 	sf::Font font;
 	Text pauseText;
 	Text tutorial1, tutorial2, tutorial3;
@@ -119,88 +117,29 @@ int main()
 	bgsprite.setTexture(background);
 	bgsprite.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
 
-	
-	bool tb_delete = false;
+
 	bool drawDebug = false;
 	bool pause = false;
+	LevelManager* levelManager = new LevelManager(&window);
 	//setup the world properties
 
-	b2Vec2 gravity(0, 9.81f);
-	b2World world(gravity);
+	//b2Vec2 gravity(0, 9.81f);
+	//b2World world(gravity);
 
-	DebugDraw debugDraw(&window);
-	world.SetDebugDraw(&debugDraw);
-	debugDraw.SetFlags(b2Draw::e_shapeBit);
+	//DebugDraw debugDraw(&window);
+	//world.SetDebugDraw(&debugDraw);
+	//debugDraw.SetFlags(b2Draw::e_shapeBit);
 
 	//level 1///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	ContactListener contact = ContactListener(&world);
-	world.SetContactListener(&contact);
-
-	Platform wallLeft = Platform(&world, &window, -16, 0, 16, 600);
-	Platform wallRight = Platform(&world, &window, 1500, 0, 16, 600);
-	Platform ground = Platform(&world, &window, 1, 500,600,16);
-	Hazard h = Hazard(&world, &window, 600, 500, 300, 16);
-	Platform ground2 = Platform(&world, &window, 900, 500, 600, 16);
-	Platform roof = Platform(&world, &window, 900, 250, 800, 16);
-	Button b = Button(&world, &window, 950, 224, 57, 26);
-	Door door = Door(&world, &window, 1100, 150, 16, 234);
-	Exit e = Exit(&world, &window, 1440, 453, 61, 47);
-	//Exit e = Exit(&world, &window, 0, 453, 61, 47);
-	Plank* plank = new Plank(&world, &window, 200, 200, 128, 32);
-
-	std::vector<Crate*>crates;
-	int const numOfCrates = 9;
-	crates.reserve(numOfCrates);
-	float pos = 330;
-	for (int i = 0,k=0,j=0; i < numOfCrates; i++){
-		Crate* c = new Crate(&world, &window, pos + k * 34, 468 - j * 34, 32, 32);
-		crates.push_back(c);
-		if (i == 4 )
-		{
-			k = 1;
-			j = 1;
-		}
-		else if (i == 7)
-		{
-			k = 2;
-			j = 2;
-		}
-		else
-			k++;
-	}
 	
-	
-	Player p = Player(&world, &window, 100, 460);
-	//Player p = Player(&world, &window, 1200, 500);
-	UpgradeScreen us = UpgradeScreen(&window,&p);
-	std::vector<Pickup*>neuros;
-	Pickup* n = new Pickup(&world, &window, 320, 460);
-	Pickup* n1 = new Pickup(&world, &window, 360, 460);
-	Pickup* n2 = new Pickup(&world, &window, 400, 460);
-	Pickup* n3 = new Pickup(&world, &window, 360, 420);
-	Pickup* n4 = new Pickup(&world, &window, 200, 460);
-	Pickup* n5 = new Pickup(&world, &window, 500, 460);
-	Pickup* n6 = new Pickup(&world, &window, 700, 420);
-	Pickup* n7 = new Pickup(&world, &window, 900, 420);
-	Pickup* n8 = new Pickup(&world, &window, 1100, 460);
-	Pickup* n9 = new Pickup(&world, &window, 1300, 460);
-	neuros.push_back(n);
-	neuros.push_back(n1);
-	neuros.push_back(n2);
-	neuros.push_back(n3);
-	neuros.push_back(n4);
-	neuros.push_back(n5);
-	neuros.push_back(n6);
-	neuros.push_back(n7);
-	neuros.push_back(n8);
-	neuros.push_back(n9);
+	//world.SetContactListener(&contact);
+
+	UpgradeScreen us = UpgradeScreen(&window,levelManager->getPlayer());
+
 	//level 1///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	Time pauseTimer;
 	Clock pauseClock;
-
-	Time barTime;
-	Clock barClock;
 
 	Clock clock;
 	Time elapsed;
@@ -210,7 +149,8 @@ int main()
 	//create the world
 	bool playSound = false;
 	Menu menu(&window);
-	int weight = 0;
+
+	//int weight = 0;
 	// Start game loop 
 	while (window.isOpen())
 	{
@@ -271,7 +211,6 @@ int main()
 			// check keypress for debug
 			if (g_States->CurrentState() == GAME) {
 
-
 				switch (Event.type)
 				{
 				case Event::KeyReleased:
@@ -320,21 +259,21 @@ int main()
 			window.setView(player_view);
 			menu.draw(window);
 		}
-		if (g_States->CurrentState() == GAME){
+		if (g_States->CurrentState() == GAME)
+		{
 									
 			window.clear(sf::Color::Color(125,125,125));
 			elapsed = clock.getElapsedTime();
 			float deltaTime = elapsed.asSeconds();
 			clock.restart();
-
-
-			if (p.getPosition().x >= levelWidth - window.getSize().x / 2)
+			
+			if (levelManager->getPlayer()->getPosition().x >= levelWidth - window.getSize().x / 2)
 			{
 				player_view.setCenter(1100, 300);
 			}
-			else if (p.getPosition().x >= 400)
+			else if (levelManager->getPlayer()->getPosition().x >= 400)
 			{
-				player_view.setCenter(p.getPosition().x, 300);
+				player_view.setCenter(levelManager->getPlayer()->getPosition().x, 300);
 			}
 			else
 			{
@@ -343,137 +282,18 @@ int main()
 				tutorial2.setPosition(500, window.getView().getCenter().y);
 				tutorial3.setPosition(700, window.getView().getCenter().y - 250);
 			}
-			Hud(&window, &p);
+			Hud(&window, levelManager->getPlayer());
+	
 			if (!pause)
 			{
-				world.Step(1 / 60.f, 8, 3);
-				mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-				
 				pauseText.setPosition(window.getView().getCenter().x - 80, window.getView().getCenter().y - 80);
-
 				window.setView(player_view);
-				count++;
-				// bar hud telekinesis 
-
-
 			}
-
-			for (int i = 0; i < crates.size(); i++)
-			{
-				liftingObject = crates[i]->getLifting();
-				if (liftingObject)
-				{
-					weight = crates[i]->getWeight();
-					//barWidth = 300;
-					break;
-				}
-				else
-				{
-					liftingObject = false;
-					//barWidth = 300;
-				}	
-			}
-			liftingPlankObject = plank->getLifting();
-			if (liftingPlankObject)
-			{
-				weight = plank->getWeight();
-				//barWidth = 300;
-				//break;
-			}
-			else
-			{
-				liftingPlankObject = false;
-				//barWidth = 300;
-			}
-			if (liftingObject || liftingPlankObject)
-			{
-				if (!pause)
-				{
-					barWidth -= weight;
-					if (barWidth <= 0)
-					{
-						barWidth = 0;
-						barClock.restart();
-
-					}
-				}
-				barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
-				barSprite.setPosition(window.getView().getCenter().x - 150, window.getView().getCenter().y - 200);
-				window.draw(barSprite);
-			}
-
-
-			if (barWidth == 0 || !liftingObject && !liftingPlankObject)
-			{
-				Time bTime = barClock.getElapsedTime();
-				if (bTime.asSeconds() > 1)
-				{
-					barWidth = 300;
-					barClock.restart();
-				}
-			}
-			///////////////////////////////////////////////plank tester//////////////////////////////////
-
-			// drawing and updating crates
-			ground.draw();
-			ground2.draw();
-			roof.draw();
-			h.Draw();
-			e.Draw();
-			
-			door.draw();
-			b.Draw();
-			p.draw();
-			if (!pause)
-			{
-				door.Update();
-				p.movePlayer();
-				p.update();
-			}
-
-
-			//how to destroy bodies in box2d
-			for (int i = 0; i < neuros.size(); i++)
-			{
-				tb_delete = neuros[i]->getDelete();
-				if (tb_delete)
-				{
-					pickupScheduledForRemoval.push_back(neuros[i]);
-					neuros.erase(neuros.begin() + i);
-				}
-			}
-			if (pickupScheduledForRemoval.size() != 0){
-				std::vector<Pickup*>::iterator it = pickupScheduledForRemoval.begin();
-				std::vector<Pickup*>::iterator end = pickupScheduledForRemoval.end();
-				for (; it != end; ++it){
-					Pickup* dyingNeuros = *it;
-					world.DestroyBody(dyingNeuros->getBody());
-				}
-				pickupScheduledForRemoval.clear();
-			}
-			for (int i = 0; i < neuros.size(); i++){
-				neuros[i]->draw();
-				if (!pause)
-					neuros[i]->animation();
-			}
-
-			for (int i = 0; i < crates.size(); i++)
-			{
-				if (!pause)
-				{
-					crates[i]->crateMove(mousePos, barWidth);
-				}				
-				crates[i]->Draw();
-
-			}
-			///////////////////////////////////////////////////////// plank tester
-			if (!pause)
-			{
-				plank->crateMove(mousePos, barWidth);
-			}
-			plank->Draw();
-
-			if (p.getLives() <= 0)
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			levelManager->Level1Update(pause,mousePos);
+			levelManager->Level1Draw(drawDebug);
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			if (levelManager->getPlayer()->getLives() <= 0)
 			{
 				g_States->setState(END);
 				Sounds::getInstance()->stopLevel1Music();
@@ -513,8 +333,7 @@ int main()
 			p_System->update(elapsed, partAlive);
 			p_System->draw(&window);
 			
-			if (drawDebug)
-				world.DrawDebugData();
+
 			
 		}
 		if (g_States->CurrentState() == END)
@@ -524,9 +343,7 @@ int main()
 			bgspriteEnd.setTextureRect(sf::IntRect(0, 0,503,166));
 			bgspriteEnd.setPosition(window.getView().getCenter().x -250, window.getView().getCenter().y - 250);
 			window.draw(bgspriteEnd);
-			//textScore.setString("YOUR SCORE IS: " +std::to_string(p.getScore()));
-			//textScore.setPosition(window.getView().getCenter().x - 100, window.getView().getCenter().y - 25);
-			//window.draw(textScore);
+
 		}
 		if (g_States->CurrentState() == UPGRADE)
 		{
@@ -540,8 +357,6 @@ int main()
 			DisplayOptions(&window);
 		}
 
-
-	
 		// Finally, display rendered frame on screen 
 		window.display();
 	} //loop back for next frame

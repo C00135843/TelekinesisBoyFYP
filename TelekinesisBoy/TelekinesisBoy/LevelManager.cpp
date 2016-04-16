@@ -2,8 +2,22 @@
 #include "LevelManager.h"
 
 
-LevelManager::LevelManager(b2World *world, sf::RenderWindow *window): m_world(world),m_win(window)
+LevelManager::LevelManager(sf::RenderWindow *window): m_win(window)
 {
+	gravity = new b2Vec2(0, 9.81);
+	m_world = new b2World(*gravity);
+	contact = new ContactListener(m_world);
+
+	debugDraw = new DebugDraw(m_win);
+	m_world->SetDebugDraw(debugDraw);
+	debugDraw->SetFlags(b2Draw::e_shapeBit);
+
+	m_world->SetContactListener(contact);
+	s_Sound = Sounds::getInstance();
+	g_States = GameStates::getInstance();
+
+	p = new Player(m_world, m_win, 100, 460);
+	Level1Load();
 }
 
 
@@ -13,6 +27,7 @@ LevelManager::~LevelManager()
 
 void LevelManager::Level1Load()
 {
+	weight = 0;
 	tb_delete = false;
 	//pick ups (blue balls)
 	int const numOfCrates = 9;
@@ -81,10 +96,15 @@ void LevelManager::Level1Load()
 
 }
 
-void LevelManager::Level1Update(bool pause)
+void LevelManager::Level1Update(bool pause,sf::Vector2f mousePos)
 {
 
-
+	if (!pause)
+	{
+		m_world->Step(1 / 60.f, 8, 3);
+		mousePos = m_win->mapPixelToCoords(sf::Mouse::getPosition(*m_win));
+		// bar hud telekinesis 
+	}
 
 
 	/////////////////////////////////////////////////////update animate and destroy pickups///////////////////////////////////
@@ -108,7 +128,7 @@ void LevelManager::Level1Update(bool pause)
 		pickupScheduledForRemoval.clear();
 	}
 	for (int i = 0; i < neuros.size(); i++) {
-		neuros[i]->draw();
+		//neuros[i]->draw();
 		if (!pause)
 			neuros[i]->animation();
 	}
@@ -154,8 +174,8 @@ void LevelManager::Level1Update(bool pause)
 			}
 		}
 		barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
-		barSprite.setPosition(window.getView().getCenter().x - 150, window.getView().getCenter().y - 200);
-		window.draw(barSprite);
+		barSprite.setPosition(m_win->getView().getCenter().x - 150, m_win->getView().getCenter().y - 200);
+		m_win->draw(barSprite);
 	}
 
 
@@ -169,17 +189,16 @@ void LevelManager::Level1Update(bool pause)
 		}
 	}
 	
+
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	if (!pause)
+	{
+		door->Update();
+		plank->crateMove(mousePos, barWidth);
+		p->movePlayer();
+		p->update();
+	}
+
 	
 	for (int i = 0; i < crates.size(); i++)
 	{
@@ -187,21 +206,34 @@ void LevelManager::Level1Update(bool pause)
 		{
 			crates[i]->crateMove(mousePos, barWidth);
 		}
-		crates[i]->Draw();
 
 	}
-	///////////////////////////////////////////////////////// plank tester
-	if (!pause)
-	{
-		plank->crateMove(mousePos, barWidth);
-	}
-	plank->Draw();
-
 
 }
 
-void LevelManager::Level1Draw()
+void LevelManager::Level1Draw(bool drawDebug)
 {
+
+	for (int i = 0; i < neuros.size(); i++) {
+		neuros[i]->draw();
+	}
+
+	ground->draw();
+	ground2->draw();
+	roof->draw();
+	h->Draw();
+	e->Draw();
+	door->draw();
+	b->Draw();
+
+	for (int i = 0; i < crates.size(); i++)
+	{
+		crates[i]->Draw();
+	}
+	plank->Draw();
+	p->draw();
+	if (drawDebug)
+		m_world->DrawDebugData();
 }
 
 void LevelManager::Level1Del()
@@ -238,4 +270,9 @@ void LevelManager::Level3Draw()
 
 void LevelManager::Level3Del()
 {
+}
+
+Player* LevelManager::getPlayer()
+{
+	return p;
 }

@@ -64,12 +64,14 @@ void Menu::highLightButton()
 				{
 					std::cout << "game pressed" << std::endl;
 					g_States->setState(GAME);
+					Sounds::getInstance()->playMenuSound();
 					Sounds::getInstance()->stopMenuMusic();
 					Sounds::getInstance()->playLevel1Music();
 				}
 				else if (i == 1)
 				{
 					std::cout << "options pressed" << std::endl;
+					Sounds::getInstance()->playMenuSound();
 					g_States->setState(OPTIONS);
 				}
 				else

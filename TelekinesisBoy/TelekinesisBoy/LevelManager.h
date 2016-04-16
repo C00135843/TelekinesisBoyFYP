@@ -11,15 +11,20 @@
 #include "Crate.h"
 #include "Pickup.h"
 #include <vector>
+#include "Player.h"
+#include "ContactListener.h"
+#include "DebugDraw.h"
+#include "GameStates.h"
+#include "Sounds.h"
 
 class LevelManager
 {
 public:
-	LevelManager(b2World *world, sf::RenderWindow *window);
+	LevelManager(sf::RenderWindow *window);
 	~LevelManager();
 	void Level1Load();
-	void Level1Update(bool pause);
-	void Level1Draw();
+	void Level1Update(bool pause, sf::Vector2f mousePos);
+	void Level1Draw(bool drawDebug);
 	void Level1Del();
 
 	void Level2Load();
@@ -32,8 +37,18 @@ public:
 	void Level3Draw();
 	void Level3Del();
 
+	Player * getPlayer();
+
 private:
+
+	b2Vec2* gravity;
 	b2World* m_world;
+	ContactListener* contact;
+	DebugDraw* debugDraw;
+	GameStates* g_States;
+	Sounds* s_Sound;
+
+
 	sf::RenderWindow* m_win;
 	std::vector<Pickup*> pickupScheduledForRemoval;
 	std::vector<Pickup*>neuros;
@@ -48,6 +63,7 @@ private:
 	Pickup* n8;
 	Pickup* n9;
 
+	Player* p;
 	Platform* wallLeft;
 	Platform* wallRight;
 	Platform* ground;
@@ -68,8 +84,16 @@ private:
 	int barWidth;
 	int barheight;
 
+	/////////////////////////////////////////lifting items/////////////////////
 	bool liftingObject = false;
 	bool liftingPlankObject = false;
+
+	int weight;
+
+	Time barTime;
+	Clock barClock;
+
+	//Vector2f mousePos;
 
 
 };

@@ -17,7 +17,7 @@ LevelManager::LevelManager(sf::RenderWindow *window): m_win(window)
 	g_States = GameStates::getInstance();
 
 	p = new Player(m_world, m_win, 100, 460);
-	Level1Load();
+	Level2Load();
 }
 
 
@@ -219,7 +219,7 @@ void LevelManager::Level1Draw(bool drawDebug)
 	}
 
 	ground->draw();
-	ground2->draw();
+	ground2->draw();;
 	roof->draw();
 	h->Draw();
 	e->Draw();
@@ -238,18 +238,39 @@ void LevelManager::Level1Draw(bool drawDebug)
 
 void LevelManager::Level1Del()
 {
+
+
 }
 
 void LevelManager::Level2Load()
 {
+	walkingEnemy = new Enemy(m_world, m_win, 300, 100, 81, 47);
+	ground = new Platform(m_world, m_win, 1, 500, 3000, 16);
+
+	
 }
 
-void LevelManager::Level2Update()
+void LevelManager::Level2Update(bool pause, sf::Vector2f mousePos)
 {
+
+	if (!pause)
+	{
+		m_world->Step(1 / 60.f, 8, 3);
+		mousePos = m_win->mapPixelToCoords(sf::Mouse::getPosition(*m_win));
+		p->movePlayer();
+		p->update();
+	}
+	walkingEnemy->update();
 }
 
-void LevelManager::Level2Draw()
+void LevelManager::Level2Draw(bool drawDebug)
 {
+	walkingEnemy->draw();
+	ground->draw();
+	p->draw();
+
+	if (drawDebug)
+		m_world->DrawDebugData();
 }
 
 void LevelManager::Level2Del()

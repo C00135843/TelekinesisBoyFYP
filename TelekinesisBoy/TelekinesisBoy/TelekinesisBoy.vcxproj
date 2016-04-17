@@ -93,6 +93,7 @@
     <ClInclude Include="Crate.h" />
     <ClInclude Include="DebugDraw.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Exit.h" />
     <ClInclude Include="GameStates.h" />
     <ClInclude Include="Hazard.h" />
@@ -115,6 +116,7 @@
     <ClCompile Include="Crate.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Exit.cpp" />
     <ClCompile Include="GameStates.cpp" />
     <ClCompile Include="Hazard.cpp" />

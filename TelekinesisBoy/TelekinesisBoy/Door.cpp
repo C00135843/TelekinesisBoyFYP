@@ -2,7 +2,7 @@
 #include "Door.h"
 #include <iostream>
 
-enum _entityCatergory{
+enum _entityCatergory {
 	PLATFORM = 0x0001,
 	PLAYER = 0x0002,
 	PICKUP = 0x0004,
@@ -10,7 +10,10 @@ enum _entityCatergory{
 	HAZARD = 0x0016,
 	EXIT = 0x0032,
 	BUTTON = 0x0064,
-	DOOR = 0x0128
+	DOOR = 0x0128,
+	PLANK = 0x0256,
+	WALKINGENEMY = 0x0512,
+	FLYINGENEMY = 0X1024
 };
 Door::Door(b2World* world, RenderWindow* win, float x, float y, float w, float h) : m_world(world), m_win(win), position(x, y), size(w, h)
 {

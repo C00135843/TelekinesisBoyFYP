@@ -2,14 +2,18 @@
 #include "Player.h"
 #include <iostream>
 #include "Sounds.h"
-enum _entityCatergory{
+enum _entityCatergory {
 	PLATFORM = 0x0001,
 	PLAYER = 0x0002,
 	PICKUP = 0x0004,
 	CRATE = 0x0008,
 	HAZARD = 0x0016,
 	EXIT = 0x0032,
-	BUTTON = 0x0064
+	BUTTON = 0x0064,
+	DOOR = 0x0128,
+	PLANK = 0x0256,
+	WALKINGENEMY = 0x0512,
+	FLYINGENEMY = 0X1024
 };
 
 Player::Player(b2World* world, RenderWindow* win, float x, float y) : m_world(world), m_win(win){
@@ -39,7 +43,7 @@ void Player::createBox2dBody()
 	fixtureDef.userData = "Player";
 
 	fixtureDef.filter.categoryBits = PLAYER;
-	fixtureDef.filter.maskBits = PLATFORM | PICKUP | CRATE | HAZARD | EXIT;
+	fixtureDef.filter.maskBits = PLATFORM | PICKUP | CRATE | HAZARD | EXIT  ;
 
 	m_body->CreateFixture(&fixtureDef);
 }
@@ -146,7 +150,7 @@ void Player::update()
 		m_body->SetTransform(b2Vec2(startPosition.x / SCALE, startPosition.y / SCALE), 0);
 		resetPos = false;
 	}
-	m_sprite.setPosition(m_body->GetPosition().x * SCALE-26/2, m_body->GetPosition().y*SCALE-26/2);
+	m_sprite.setPosition(m_body->GetPosition().x * SCALE-26/2, m_body->GetPosition().y*SCALE-32/2);
 }
 void Player::animationCheck()
 {

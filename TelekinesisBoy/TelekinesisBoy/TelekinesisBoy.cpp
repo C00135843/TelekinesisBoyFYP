@@ -60,19 +60,8 @@ int main()
 	sf::View player_view(FloatRect(0,0,800,600));
 	player_view.zoom(1.f);
 	window.setFramerateLimit(60);
-	float levelWidth = 1500;
 
-	Vector2f mousePos;
-	showTutorial = false;
-	
-	ParticleSystem* p_System = ParticleSystem::GetInstance();
-
-	GameStates* g_States = GameStates::getInstance();
-	g_States->setState(MENU);
-	Sounds* s_Sound = Sounds::getInstance();
-	Sounds::getInstance()->playMenuMusic();
-
-
+	//load a font
 	sf::Font font;
 	Text pauseText;
 	Text tutorial1, tutorial2, tutorial3;
@@ -83,6 +72,7 @@ int main()
 	pauseText.setFont(font);
 	pauseText.setCharacterSize(80);
 	pauseText.setColor(Color::Red);
+
 	tutorial1.setFont(font);
 	tutorial1.setColor(Color::Red);
 	tutorial1.setCharacterSize(25);
@@ -93,12 +83,6 @@ int main()
 	tutorial3.setColor(Color::Red);
 	tutorial3.setCharacterSize(25);
 	
-	//load a font
-	sf::Texture background;
-	sf::Sprite bgsprite;
-	sf::Texture backgroundEnd;
-	sf::Sprite bgspriteEnd;
-	
 	//duration bar for the telekinesis power
 	sf::Texture barTexture;
 	sf::Sprite barSprite;
@@ -107,48 +91,40 @@ int main()
 	int barWidth = 300;
 	int barheight = 20;
 	barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
-	bool liftingObject = false;
-	bool liftingPlankObject = false;
 
 
 	//load background
+	sf::Texture background;
+	sf::Sprite bgsprite;
+	sf::Texture backgroundEnd;
+	sf::Sprite bgspriteEnd;
 	background.loadFromFile("../Assets/menuBackground.png");
 	backgroundEnd.loadFromFile("../Assets/gameover.png");
 	bgsprite.setTexture(background);
 	bgsprite.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
 
-
-	bool drawDebug = false;
-	bool pause = false;
 	LevelManager* levelManager = new LevelManager(&window);
-	//setup the world properties
-
-	//b2Vec2 gravity(0, 9.81f);
-	//b2World world(gravity);
-
-	//DebugDraw debugDraw(&window);
-	//world.SetDebugDraw(&debugDraw);
-	//debugDraw.SetFlags(b2Draw::e_shapeBit);
-
-	//level 1///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	//world.SetContactListener(&contact);
-
 	UpgradeScreen us = UpgradeScreen(&window,levelManager->getPlayer());
-
-	//level 1///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	Menu menu(&window);
+	ParticleSystem* p_System = ParticleSystem::GetInstance();
+	GameStates* g_States = GameStates::getInstance();
+	g_States->setState(MENU);
+	Sounds* s_Sound = Sounds::getInstance();
+	Sounds::getInstance()->playMenuMusic();
 
 	Time pauseTimer;
 	Clock pauseClock;
-
 	Clock clock;
 	Time elapsed;
 	bool partAlive = false;
-	//create the size of world
-	int count = 0;
-	//create the world
-	bool playSound = false;
-	Menu menu(&window);
+	bool drawDebug = false;
+	bool pause = false;
+	bool liftingObject = false;
+	bool liftingPlankObject = false;
+	Vector2f mousePos;
+	showTutorial = false;
+	float levelWidth = 1500;
+
 
 	//int weight = 0;
 	// Start game loop 
@@ -290,8 +266,8 @@ int main()
 				window.setView(player_view);
 			}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			levelManager->Level1Update(pause,mousePos);
-			levelManager->Level1Draw(drawDebug);
+			levelManager->Level2Update(pause,mousePos);
+			levelManager->Level2Draw(true);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			if (levelManager->getPlayer()->getLives() <= 0)
 			{

@@ -8,7 +8,10 @@ enum _entityCatergory{
 	HAZARD = 0x0016,
 	EXIT = 0x0032, 
 	BUTTON = 0x0064,
-	DOOR = 0x0128
+	DOOR = 0x0128,
+	PLANK = 0x0256,
+	WALKINGENEMY = 0x0512,
+	FLYINGENEMY = 0X1024
 };
 
 Platform::Platform(b2World* world, RenderWindow* win, float x, float y, float w, float h) : m_world(world), m_win(win){
@@ -34,7 +37,7 @@ void Platform::createBox2dBody()
 	{
 		fixtureDef.userData = "Ground";
 		fixtureDef.filter.categoryBits = PLATFORM;
-		fixtureDef.filter.maskBits = PLAYER | CRATE;
+		fixtureDef.filter.maskBits = PLAYER | CRATE ;
 	}
 	else
 	{

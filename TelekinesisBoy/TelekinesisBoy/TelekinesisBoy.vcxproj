@@ -88,11 +88,13 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="birdEnemy.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ContactListener.h" />
     <ClInclude Include="Crate.h" />
     <ClInclude Include="DebugDraw.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Exit.h" />
     <ClInclude Include="GameStates.h" />
     <ClInclude Include="Hazard.h" />
@@ -111,10 +113,12 @@
     <ClInclude Include="UpgradeScreen.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="birdEnemy.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Crate.cpp" />
     <ClCompile Include="DebugDraw.cpp" />
     <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Exit.cpp" />
     <ClCompile Include="GameStates.cpp" />
     <ClCompile Include="Hazard.cpp" />

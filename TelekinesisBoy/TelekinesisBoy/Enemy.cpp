@@ -18,11 +18,10 @@ Enemy::Enemy()
 {
 }
 
-Enemy::Enemy(b2World * world, RenderWindow * win, float x, float y, float w, float h) : m_world(world),m_win(win)
+Enemy::Enemy(b2World * world, RenderWindow * win, float x, float y, float w, float h) : m_world(world), m_win(win), startPosition(x, y), size(w, h)
 {
-	startPosition = b2Vec2(x, y);
-	size = b2Vec2(w, h);
 	alive = true;
+	m_speed = 0.08f;
 	rangeOfTravel = 300;
 	facingRight = true;
 	animationFrames();
@@ -44,12 +43,12 @@ void Enemy::createBox2dBody()
 	m_body = m_world->CreateBody(&m_bodyDef);
 	dynamicBox.SetAsBox((80 / 2.0f) / SCALE, (46 / 2.0f) / SCALE);
 	fixtureDef.shape = &dynamicBox;
-
+	//fixtureDef.isSensor = true;
 	fixtureDef.density = 1.1f;
 	fixtureDef.userData = "walkingEnemy";
 
 	fixtureDef.filter.categoryBits = WALKINGENEMY;
-	fixtureDef.filter.maskBits = PLATFORM | CRATE | HAZARD | PLAYER;
+	fixtureDef.filter.maskBits = PLATFORM | CRATE | HAZARD | PLAYER|PLANK;
 
 	m_body->CreateFixture(&fixtureDef);
 
@@ -84,7 +83,7 @@ void Enemy::update()
 		facingRight = true;
 	}
 	moveLeftRight();
-	animate();
+	animate(.07);
 	m_sprite.setPosition(m_body->GetPosition().x *SCALE - size.x / 2, m_body->GetPosition().y*SCALE - size.y / 2);
 }
 
@@ -92,12 +91,12 @@ void Enemy::moveLeftRight()
 {
 	if (facingRight)
 	{
-		m_body->SetTransform(b2Vec2(m_body->GetPosition().x + 0.08f, m_body->GetPosition().y), 0);
+		m_body->SetTransform(b2Vec2(m_body->GetPosition().x + m_speed, m_body->GetPosition().y), 0);
 
 	}
 	else
 	{
-		m_body->SetTransform(b2Vec2(m_body->GetPosition().x - 0.08f, m_body->GetPosition().y), 0);
+		m_body->SetTransform(b2Vec2(m_body->GetPosition().x - m_speed, m_body->GetPosition().y), 0);
 	}
 	m_body->SetAwake(true);
 
@@ -115,12 +114,12 @@ void Enemy::animationFrames()
 	rec[7] = IntRect(568, 0, 81, 74);
 }
 
-void Enemy::animate()
+void Enemy::animate(float i)
 {
 	animaterTime = animaterClock.getElapsedTime();
 	if (facingRight)
 	{
-		if (animaterTime.asSeconds() >= .07)
+		if (animaterTime.asSeconds() >= i)
 		{
 			source1++;
 			animaterClock.restart();
@@ -133,7 +132,7 @@ void Enemy::animate()
 	}
 	else
 	{
-		if (animaterTime.asSeconds() >= .07)
+		if (animaterTime.asSeconds() >= i)
 		{
 			source2--;
 			animaterClock.restart();

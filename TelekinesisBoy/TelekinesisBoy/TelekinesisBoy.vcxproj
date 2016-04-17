@@ -88,6 +88,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="birdEnemy.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="ContactListener.h" />
     <ClInclude Include="Crate.h" />
@@ -112,6 +113,7 @@
     <ClInclude Include="UpgradeScreen.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="birdEnemy.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Crate.cpp" />
     <ClCompile Include="DebugDraw.cpp" />

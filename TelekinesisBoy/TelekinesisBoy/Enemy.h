@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include <Box2D\Box2D.h>
+#include "SFML/OpenGL.hpp" 
 #include <iostream>
 #include "Sounds.h"
 
@@ -12,14 +13,15 @@ public:
 	Enemy();
 	Enemy(b2World* world, RenderWindow* win, float x, float y, float w, float h);
 	~Enemy();
-	void createBox2dBody();
+	virtual void createBox2dBody();
 	virtual void LoadAssets();
 	void draw();
 	virtual void update();
 	void moveLeftRight();
 	virtual void animationFrames();
-	virtual void animate();
+	virtual void animate(float i);
 	bool getAlive();
+	Vector2f getPosition() { return m_sprite.getPosition(); }
 
 protected:
 	Sprite m_sprite;
@@ -43,6 +45,7 @@ protected:
 	const float SCALE = 30.f;
 	int source1 = 1;
 	int source2 = 6;
+	float m_speed;
 
 };
 

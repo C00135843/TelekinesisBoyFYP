@@ -17,6 +17,7 @@
 #include "GameStates.h"
 #include "Sounds.h"
 #include "Enemy.h"
+#include "birdEnemy.h"
 
 class LevelManager
 {
@@ -78,7 +79,7 @@ private:
 	Exit* e;
 	Plank* plank;
 	Enemy* walkingEnemy;
-	
+	birdEnemy* flyingEnemy;
 	std::vector<Crate*>crates;
 
 	bool tb_delete;

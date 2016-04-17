@@ -8,7 +8,10 @@ enum _entityCatergory {
 	HAZARD = 0x0016,
 	EXIT = 0x0032,
 	BUTTON = 0x0064,
-	PLANK = 0x0128
+	DOOR = 0x0128,
+	PLANK = 0x0256,
+	WALKINGENEMY = 0x0512,
+	FLYINGENEMY = 0X1024
 };
 
 Plank::Plank()

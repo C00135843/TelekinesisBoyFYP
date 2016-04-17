@@ -1,13 +1,18 @@
 #include "stdafx.h"
 #include "Hazard.h"
 
-enum _entityCatergory{
+enum _entityCatergory {
 	PLATFORM = 0x0001,
 	PLAYER = 0x0002,
 	PICKUP = 0x0004,
 	CRATE = 0x0008,
 	HAZARD = 0x0016,
-	EXIT = 0x0032
+	EXIT = 0x0032,
+	BUTTON = 0x0064,
+	DOOR = 0x0128,
+	PLANK = 0x0256,
+	WALKINGENEMY = 0x0512,
+	FLYINGENEMY = 0X1024
 };
 Hazard::Hazard(b2World* world, RenderWindow* win, float x, float y, float w, float h) : m_world(world), m_win(win), startPosition(x, y), size(w, h)
 {

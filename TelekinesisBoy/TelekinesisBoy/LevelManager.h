@@ -16,6 +16,8 @@
 #include "DebugDraw.h"
 #include "GameStates.h"
 #include "Sounds.h"
+#include "Enemy.h"
+#include "birdEnemy.h"
 
 class LevelManager
 {
@@ -28,8 +30,8 @@ public:
 	void Level1Del();
 
 	void Level2Load();
-	void Level2Update();
-	void Level2Draw();
+	void Level2Update(bool pause, sf::Vector2f mousePos);
+	void Level2Draw(bool drawDebug);
 	void Level2Del();
 
 	void Level3Load();
@@ -69,11 +71,15 @@ private:
 	Platform* ground;
 	Hazard* h;
 	Platform* ground2;
+	Platform* ground3;
+	Platform* ground4;
 	Platform* roof;
 	Button* b;
 	Door* door;
 	Exit* e;
 	Plank* plank;
+	Enemy* walkingEnemy;
+	birdEnemy* flyingEnemy;
 	std::vector<Crate*>crates;
 
 	bool tb_delete;

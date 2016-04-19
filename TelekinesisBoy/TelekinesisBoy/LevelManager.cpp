@@ -15,9 +15,11 @@ LevelManager::LevelManager(sf::RenderWindow *window): m_win(window)
 	m_world->SetContactListener(contact);
 	s_Sound = Sounds::getInstance();
 	g_States = GameStates::getInstance();
-
+	map = new tmx::TileMap("../Maps/Level1.tmx");
+	map->ShowObjects(true);
+	map->GetLayer("Backgound").visible = true;
 	p = new Player(m_world, m_win, 100, 460);
-	Level2Load();
+	Level1Load();
 }
 
 
@@ -175,7 +177,7 @@ void LevelManager::Level1Update(bool pause,sf::Vector2f mousePos)
 		}
 		barSprite.setTextureRect(IntRect(0, 0, barWidth, barheight));
 		barSprite.setPosition(m_win->getView().getCenter().x - 150, m_win->getView().getCenter().y - 200);
-		m_win->draw(barSprite);
+		//m_win->draw(barSprite);
 	}
 
 
@@ -213,7 +215,7 @@ void LevelManager::Level1Update(bool pause,sf::Vector2f mousePos)
 
 void LevelManager::Level1Draw(bool drawDebug)
 {
-
+	m_win->draw(*map);
 	for (int i = 0; i < neuros.size(); i++) {
 		neuros[i]->draw();
 	}
@@ -232,6 +234,10 @@ void LevelManager::Level1Draw(bool drawDebug)
 	}
 	plank->Draw();
 	p->draw();
+	if (liftingObject || liftingPlankObject)
+	{
+		m_win->draw(barSprite);
+	}
 	if (drawDebug)
 		m_world->DrawDebugData();
 }

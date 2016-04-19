@@ -69,6 +69,7 @@ class Player{
 		int getEnduranceLevel() { return enduranceLevel; }
 		void increaseEnduranceLevel(int el) { enduranceLevel = el; }
 		void decreaseScore(int ds) { score -= ds; }
+		
 
 };
 #endif

@@ -1,17 +1,18 @@
 #include "stdafx.h"
 #include "Platform.h"
-enum _entityCatergory{
+enum _entityCatergory {
 	PLATFORM = 0x0001,
 	PLAYER = 0x0002,
 	PICKUP = 0x0004,
 	CRATE = 0x0008,
 	HAZARD = 0x0016,
-	EXIT = 0x0032, 
+	EXIT = 0x0032,
 	BUTTON = 0x0064,
 	DOOR = 0x0128,
 	PLANK = 0x0256,
 	WALKINGENEMY = 0x0512,
-	FLYINGENEMY = 0X1024
+	FLYINGENEMY = 0X1024,
+	LINEOFSIGHT = 0x2048
 };
 
 Platform::Platform(b2World* world, RenderWindow* win, float x, float y, float w, float h) : m_world(world), m_win(win){
@@ -37,13 +38,13 @@ void Platform::createBox2dBody()
 	{
 		fixtureDef.userData = "Ground";
 		fixtureDef.filter.categoryBits = PLATFORM;
-		fixtureDef.filter.maskBits = PLAYER | CRATE ;
+		fixtureDef.filter.maskBits = PLAYER | CRATE |LINEOFSIGHT ;
 	}
 	else
 	{
 		fixtureDef.userData = "Wall";
 		fixtureDef.filter.categoryBits = PLATFORM;
-		fixtureDef.filter.maskBits = PLAYER | CRATE;
+		fixtureDef.filter.maskBits = PLAYER | CRATE| LINEOFSIGHT;
 	}
 
 	m_body->CreateFixture(&fixtureDef);

@@ -11,6 +11,7 @@
 #include "Door.h"
 #include "Button.h"
 #include "Sounds.h"
+#include "birdEnemy.h"
 
 class ContactListener :public b2ContactListener{
 private:
@@ -38,6 +39,70 @@ public:
 				static_cast<Player*>(bodyUserData)->ground();
 			}
 		}
+		// FLYING ENEMY AND GROUND
+		if (fixAType == "Ground" && fixBType == "lineOfSight"
+			|| fixAType == "lineOfSight" && fixBType == "Ground") {
+			if (fixAType == "lineOfSight")
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+				//contact->GetFixtureA()->GetBody()->SetAwake(false);
+				static_cast<birdEnemy*>(bodyUserData)->setToWander();
+			}
+			else if (fixBType == "lineOfSight")
+			{
+				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+				//contact->GetFixtureA()->GetBody()->SetAwake(false);
+				static_cast<birdEnemy*>(bodyUserData)->setToWander();
+			}
+		}
+		// FLYING ENEMY AND CRATE
+		if (fixAType == "Crate" && fixBType == "lineOfSight"
+			|| fixAType == "lineOfSight" && fixBType == "Crate") {
+			if (fixAType == "lineOfSight")
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+				//contact->GetFixtureA()->GetBody()->SetAwake(false);
+				static_cast<birdEnemy*>(bodyUserData)->setToWander();
+			}
+			else if (fixBType == "lineOfSight")
+			{
+				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+				//contact->GetFixtureA()->GetBody()->SetAwake(false);
+				static_cast<birdEnemy*>(bodyUserData)->setToWander();
+			}
+		}
+		// FLYING ENEMY AND PLANK
+		if (fixAType == "Plank" && fixBType == "lineOfSight"
+			|| fixAType == "lineOfSight" && fixBType == "Plank") {
+			if (fixAType == "lineOfSight")
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+				//contact->GetFixtureA()->GetBody()->SetAwake(false);
+				static_cast<birdEnemy*>(bodyUserData)->setToWander();
+			}
+			else if (fixBType == "lineOfSight")
+			{
+				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+				//contact->GetFixtureA()->GetBody()->SetAwake(false);
+				static_cast<birdEnemy*>(bodyUserData)->setToWander();
+			}
+		}
+		// FLYING ENEMY AND HAZARD
+		//if (fixAType == "Hazard" && fixBType == "lineOfSight"
+		//	|| fixAType == "lineOfSight" && fixBType == "Hazard") {
+		//	if (fixAType == "lineOfSight")
+		//	{
+		//		void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+		//		//contact->GetFixtureA()->GetBody()->SetAwake(false);
+		//		static_cast<birdEnemy*>(bodyUserData)->setToWander();
+		//	}
+		//	else if (fixBType == "lineOfSight")
+		//	{
+		//		void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+		//		//contact->GetFixtureA()->GetBody()->SetAwake(false);
+		//		static_cast<birdEnemy*>(bodyUserData)->setToWander();
+		//	}
+		//}
 
 		//PLAYER AND CRATE
 		if (fixAType == "Player" && fixBType == "Crate"
@@ -181,6 +246,7 @@ public:
 			}
 		}
 
+
 		if (fixAType == "Player" && fixBType == "Crate"
 			|| fixAType == "Crate" && fixBType == "Player"){
 			if (fixAType == "Player")
@@ -227,6 +293,22 @@ public:
 					static_cast<Player*>(bodyUserData)->ground();
 			}
 		}
+
+		//if (fixAType == "Ground" && fixBType == "lineOfSight"
+		//	|| fixAType == "lineOfSight" && fixBType == "Ground") {
+		//	if (fixAType == "lineOfSight")
+		//	{
+		//		void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+		//		//contact->GetFixtureA()->GetBody()->SetAwake(false);
+		//		static_cast<birdEnemy*>(bodyUserData)->setToSeek();
+		//	}
+		//	else if (fixBType == "lineOfSight")
+		//	{
+		//		void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
+		//		//contact->GetFixtureA()->GetBody()->SetAwake(false);
+		//		static_cast<birdEnemy*>(bodyUserData)->setToSeek();
+		//	}
+		//}
 	}
 };
 

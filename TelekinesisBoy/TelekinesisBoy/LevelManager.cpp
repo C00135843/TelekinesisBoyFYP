@@ -247,7 +247,7 @@ void LevelManager::Level2Load()
 	walkingEnemy = new Enemy(m_world, m_win, 300, 100, 81, 47);
 	flyingEnemy = new birdEnemy(m_world, m_win, 100, 100, 44, 50);
 	ground = new Platform(m_world, m_win, 1, 500, 3000, 16);
-
+	ground2 = new Platform(m_world, m_win, 110, 300, 3000, 16);
 	
 }
 
@@ -262,6 +262,7 @@ void LevelManager::Level2Update(bool pause, sf::Vector2f mousePos)
 		p->update();
 	}
 	walkingEnemy->update();
+	flyingEnemy->resetLineSight(p);
 	flyingEnemy->update(p);
 }
 
@@ -271,6 +272,7 @@ void LevelManager::Level2Draw(bool drawDebug)
 	ground->draw();
 	p->draw();
 	flyingEnemy->draw();
+	ground2->draw();
 
 	if (drawDebug)
 		m_world->DrawDebugData();

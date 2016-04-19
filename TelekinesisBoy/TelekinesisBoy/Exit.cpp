@@ -12,7 +12,8 @@ enum _entityCatergory {
 	DOOR = 0x0128,
 	PLANK = 0x0256,
 	WALKINGENEMY = 0x0512,
-	FLYINGENEMY = 0X1024
+	FLYINGENEMY = 0X1024,
+	LINEOFSIGHT = 0x2048
 };
 Exit::Exit(b2World* world, RenderWindow* win, float x, float y, float w, float h) : m_world(world), m_win(win), startPosition(x, y), size(w, h)
 {

@@ -52,7 +52,7 @@ void Plank::createBox2dBody()
 
 void Plank::loadAssets()
 {
-	c_Texture.loadFromFile("../Assets/crate.png");
+	c_Texture.loadFromFile("../Assets/plank.png");
 	c_Texture.setRepeated(true);
 	c_sprite.setTexture(c_Texture);
 	c_sprite.setTextureRect(sf::IntRect(0.f, 0.f, size.x, size.y));

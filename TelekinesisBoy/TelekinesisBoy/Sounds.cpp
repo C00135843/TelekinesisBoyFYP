@@ -28,27 +28,27 @@ Sounds* Sounds::getInstance(){
 
 void Sounds::LoadSounds()
 {
-	if (!menuBuffer.loadFromFile("../Assets/updown.ogg"))
+	if (!menuBuffer.loadFromFile("../Assets/Sounds/updown.ogg"))
 	{
 		std::cout << "Can't find Menu Sound" << std::endl;
 	}
 	
-	if (!jumpBuffer.loadFromFile("../Assets/jump.ogg"))
+	if (!jumpBuffer.loadFromFile("../Assets/Sounds/jump.ogg"))
 	{
 		std::cout << "Can't find jump Sound" << std::endl;
 	}
 
-	if (!deathBuffer.loadFromFile("../Assets/death.ogg"))
+	if (!deathBuffer.loadFromFile("../Assets/Sounds/death.ogg"))
 	{
 		std::cout << "Can't find jump Sound" << std::endl;
 	}
 
-	if (!powerBuffer.loadFromFile("../Assets/Magic.ogg"))
+	if (!powerBuffer.loadFromFile("../Assets/Sounds/Magic.ogg"))
 	{
 		std::cout << "Can't find jump Sound" << std::endl;
 	}
 
-	if (!pickupBuffer.loadFromFile("../Assets/pickup.ogg"))
+	if (!pickupBuffer.loadFromFile("../Assets/Sounds/pickup.ogg"))
 	{
 		std::cout << "Can't find jump Sound" << std::endl;
 	}
@@ -65,7 +65,7 @@ void Sounds::LoadSounds()
 //////////////////////////////////////////////menu music//////////////////
 void Sounds::playMenuMusic()
 {
-	if (!menuMusic.openFromFile("../Assets/MenuMusic.ogg"))
+	if (!menuMusic.openFromFile("../Assets/Sounds/MenuMusic.ogg"))
 	{
 		std::cout << "Can't find MenuMusic" << std::endl;
 	}
@@ -83,7 +83,7 @@ void Sounds::stopMenuMusic()
 /////////////////////////////////////////////Level1 Music///////////////////
 void Sounds::playLevel1Music()
 {
-	if (!level1Music.openFromFile("../Assets/level1.ogg"))
+	if (!level1Music.openFromFile("../Assets/Sounds/level1.ogg"))
 	{
 		std::cout << "Can't find Level 1 Music" << std::endl;
 	}

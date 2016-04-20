@@ -18,7 +18,6 @@ enum _entityCatergory {
 Platform::Platform(b2World* world, RenderWindow* win, float x, float y, float w, float h) : m_world(world), m_win(win){
 	position = b2Vec2(x,y);
 	size = b2Vec2(w, h);
-	
 	createBox2dBody();
 	loadAssets();
 
@@ -51,13 +50,13 @@ void Platform::createBox2dBody()
 	
 }
 void Platform::loadAssets(){
-	m_texture.loadFromFile("../Assets/ground.png");
-	m_sprite.setTexture(m_texture);
+	//m_texture.loadFromFile("../Assets/ground.png");
+	//m_sprite.setTexture(m_texture);
 	m_sprite.setTextureRect(sf::IntRect(0, 0, size.x, size.y));
 	m_sprite.setPosition(position.x, position.y);
 
 	
 }
 void Platform::draw(){
-	m_win->draw(m_sprite);
+//	m_win->draw(m_sprite);
 }

@@ -19,6 +19,7 @@ public:
 	int getWeight();
 	bool getLifting() { return lifting; }
 	void setLifting(bool l) { lifting = l; }
+	b2Body* getBody() { return m_body; }
 
 protected:
 	Sprite c_sprite;

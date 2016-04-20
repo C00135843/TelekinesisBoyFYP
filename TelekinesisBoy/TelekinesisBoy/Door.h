@@ -21,6 +21,7 @@ private:
 	float currentAngle = 0;
 	const int SCALE = 30.f;
 	bool rotatingDoor = false;
+	
 public:
 	Door(b2World*, RenderWindow*, float, float, float, float);
 	~Door();
@@ -29,5 +30,6 @@ public:
 	void draw();
 	void rotateDoor();
 	void Update();
+	b2Body* getBody() { return m_body; }
 };
 

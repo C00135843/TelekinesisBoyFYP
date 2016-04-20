@@ -29,8 +29,8 @@ class Player{
 		float velChangeY;
 		float impulseX;
 		float impulseY;
-		int score = 1000;
-		int lives = 3;
+		//int score = 1000;
+		//int lives = 3;
 		bool resetPos;
 		const float SCALE = 30.f;
 		bool facingRight;
@@ -43,7 +43,7 @@ class Player{
 		void AnimateFrames();
 		int source;
 		void animationCheck();
-		int enduranceLevel;
+		//int enduranceLevel;
 
 	public:
 		Player(){};
@@ -56,19 +56,20 @@ class Player{
 		void ground();
 		void notGrounded();
 		void movePlayer();
-		void setScore(int s) { score = s; }
-		void increaseScore(int is){ score += is; }
-		void decreaseLives(){ lives--; }
-		void setLives(int l) { lives = l; }
-		void increaseLives(int l) { lives += l; }
-		int getScore(){ return score; }
+//		void setScore(int s) { score = s; }
+	//	void increaseScore(int is){ score += is; }
+		//void decreaseLives(){ lives--; }
+		//void setLives(int l) { lives = l; }
+		//void increaseLives(int l) { lives += l; }
+		//int getScore(){ return score; }
 		void resetPosition();
-		int getLives(){ return lives; }
+		//int getLives(){ return lives; }
 		b2Body* getBody(){ return m_body; }
 		Vector2f getPosition(){ return m_sprite.getPosition(); }
-		int getEnduranceLevel() { return enduranceLevel; }
-		void increaseEnduranceLevel(int el) { enduranceLevel = el; }
-		void decreaseScore(int ds) { score -= ds; }
+		//int getEnduranceLevel() { return enduranceLevel; }
+		//void increaseEnduranceLevel(int el) { enduranceLevel = el; }
+		//void decreaseScore(int ds) { score -= ds; }
+
 		
 
 };

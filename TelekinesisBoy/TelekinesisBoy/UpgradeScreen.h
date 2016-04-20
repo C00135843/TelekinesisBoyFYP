@@ -3,6 +3,8 @@
 #include "Player.h"
 #include "GameStates.h"
 #include "Sounds.h"
+#include "LevelManager.h"
+#include "playerInfo.h"
 const int COST_OF_LIVES = 350;
 const int COST_OF_UPGRADE = 200;
 class UpgradeScreen
@@ -25,6 +27,8 @@ private:
 	int mouseY;
 	Sounds* s_Sound = Sounds::getInstance();
 	GameStates* g_States = GameStates::getInstance();
+	LevelManager* levelManager;
+	playerInfo* p;
 	bool mouseClicked = false;
 	int noOfEnduranceStars;
 	int noOfLivesStars;
@@ -37,9 +41,10 @@ private:
 	void displayNumberOfLives();
 	void LoadAssets();
 public:
-	UpgradeScreen(sf::RenderWindow*,Player*);
+	UpgradeScreen(sf::RenderWindow*);
 	~UpgradeScreen();
 	void UpdateStars(Vector2f mousePos);
 	void DisplayScreen(Vector2f mousePos);
+
 };
 

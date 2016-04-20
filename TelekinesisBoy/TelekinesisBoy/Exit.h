@@ -11,6 +11,7 @@ public:
 	void createBox2dBody();
 	void loadAssets();
 	void Draw();
+	b2Body* getBody() { return m_body; }
 private:
 	Sprite c_sprite;
 	Texture c_Texture;

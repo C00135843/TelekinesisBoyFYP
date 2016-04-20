@@ -15,7 +15,9 @@ public:
 	void resetLineSight(Player* p);
 	float angle(sf::Vector2f v);
 	void setToWander();
+	void resetPosition();
 	void setToSeek();
+	b2Body* getsBody() { return m_sightBody; }
 
 protected:
 	sf::Vector2f seek(sf::Vector2f target);
@@ -33,5 +35,6 @@ protected:
 	b2EdgeShape m_sightLine;
 	b2FixtureDef m_sightfixtureDef;
 	bool restart;
+	bool resetPos;
 };
 

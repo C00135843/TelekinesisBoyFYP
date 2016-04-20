@@ -19,6 +19,7 @@
 #include "Sounds.h"
 #include "Enemy.h"
 #include "birdEnemy.h"
+#include "playerInfo.h"
 #include <string>
 
 
@@ -44,8 +45,13 @@ public:
 
 	Player * getPlayer();
 	float getLevel() { return level; }
+	void increaseLevel() { level++; }
+	static LevelManager* getInstance(sf::RenderWindow *window);
+
+
 
 private:
+
 
 	b2Vec2* gravity;
 	b2World* m_world;
@@ -53,25 +59,30 @@ private:
 	DebugDraw* debugDraw;
 	GameStates* g_States;
 	Sounds* s_Sound;
+	playerInfo* pInfo;
 
 	tmx::TileMap* map;
 	sf::RenderWindow* m_win;
+	
 	std::vector<Pickup*> pickupScheduledForRemoval;
-	std::vector<Pickup*>neuros;
-	std::vector<Crate*>crates;
-	std::vector<Plank*>planks;
+
+	std::vector<Pickup*>neuros; //d
+	std::vector<Crate*>crates;//d
+	std::vector<Plank*>planks; //d
+	std::vector<Platform*> ground;//d
+	std::vector<Hazard*> hazard; //d
+
 	birdEnemy* flyingEnemy;
 	Enemy* walkingEnemy;
-	Player* p;
-	Platform* wallLeft;
-	Platform* wallRight;
-	std::vector<Platform*> ground;
-	std::vector<Hazard*> hazard;
+	Player* p;//d
+	Platform* wallLeft;//d
+	Platform* wallRight;//d
 
-	Platform* roof;
-	Button* b;
-	Door* door;
-	Exit* e;
+
+	Platform* roof;//d
+	Button* b; //d
+	Door* door; //d
+	Exit* e; //d
 	//Plank* plank;
 
 	bool tb_delete;
@@ -91,6 +102,7 @@ private:
 	Time barTime;
 	Clock barClock;
 	int level;
+	
 	//Vector2f mousePos;
 
 

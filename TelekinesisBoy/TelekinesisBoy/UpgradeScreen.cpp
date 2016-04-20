@@ -3,13 +3,15 @@
 #include <iostream>
 
 
-UpgradeScreen::UpgradeScreen(sf::RenderWindow* win, Player *p) :m_win(win),m_player(p)
+UpgradeScreen::UpgradeScreen(sf::RenderWindow* win) :m_win(win)
 {
+	p = playerInfo::getInstance();
+	levelManager = LevelManager::getInstance(m_win);
 	noOfEnduranceStars = 5;
 	noOfLivesStars = 5;
-	originalScore = m_player->getScore();
-	originalEndurance = m_player->getEnduranceLevel();
-	originalLives = m_player->getLives();
+	originalScore = p->getScore();
+	originalEndurance = p->getEnduranceLevel();
+	originalLives = p->getLives();
 	livesSelected = 0;
 	mouseX = 0;
 	mouseY = 0;
@@ -74,14 +76,14 @@ void UpgradeScreen::displayLivesAndScore(Vector2f mousePos)
 	t.setFont(f);
 	t.setCharacterSize(50);
 	//scoreText.Bold;
-	t.setString(std::string("TOTAL SCORE:\t") + std::to_string(m_player->getScore()));
+	t.setString(std::string("TOTAL SCORE:\t") + std::to_string(p->getScore()));
 	t.setPosition(m_win->getView().getCenter().x - 200, m_win->getView().getCenter().y - 250);
 	m_win->draw(t);
 
 	t.setFont(f);
 	t.setCharacterSize(50);
 	//scoreText.Bold;
-	t.setString(std::string("TOTAL LIVES:\t\t") + std::to_string(m_player->getLives()));
+	t.setString(std::string("TOTAL LIVES:\t\t") + std::to_string(p->getLives()));
 	t.setPosition(m_win->getView().getCenter().x - 200, m_win->getView().getCenter().y - 150);
 	m_win->draw(t);
 
@@ -110,18 +112,26 @@ void UpgradeScreen::displayLivesAndScore(Vector2f mousePos)
 				
 				if (i == 0)
 				{
-					m_player->setScore(originalScore);
-					m_player->increaseEnduranceLevel(originalEndurance);
+					p->setScore(originalScore);
+					p->increaseEnduranceLevel(originalEndurance);
 				}
 				else if (i == 1)
 				{
-					m_player->setScore(originalScore);
-					m_player->setLives(originalLives);
+					p->setScore(originalScore);
+					p->setLives(originalLives);
 					livesSelected = 0;
 				}
 				else
 				{
-					g_States->setState(MENU);
+					levelManager->Level1Del();
+					levelManager->Level2Load();
+					if (levelManager->getLevel() < 2)
+					{
+						levelManager->increaseLevel();
+						g_States->setState(GAME);
+					}
+					else
+						g_States->setState(END);
 				}
 				
 			}
@@ -150,7 +160,7 @@ void UpgradeScreen::displayLivesAndScore(Vector2f mousePos)
 void UpgradeScreen::displayEnduranceLevel()
 {
 
-	int enduranceLevel = m_player->getEnduranceLevel();
+	int enduranceLevel = p->getEnduranceLevel();
 	t.setFont(f);
 	t.setCharacterSize(30);
 	//scoreText.Bold;
@@ -215,7 +225,7 @@ void UpgradeScreen::UpdateStars(Vector2f mousePos)
 	{
 		mouseClicked = false;
 	}
-	int enduranceLevel = m_player->getEnduranceLevel();
+	int enduranceLevel = p->getEnduranceLevel();
 	for (int i = 0; i < noOfEnduranceStars; i++)
 	{
 		if (mouseX >= Endurance_sprite[i].getGlobalBounds().left && mouseX <= Endurance_sprite[i].getGlobalBounds().left + Endurance_sprite[i].getGlobalBounds().width
@@ -226,10 +236,10 @@ void UpgradeScreen::UpdateStars(Vector2f mousePos)
 				if (enduranceLevel < i + 1)
 				{
 					int costOfupgrade = ((i + 1) - enduranceLevel) * COST_OF_UPGRADE;
-					if (m_player->getScore() >= costOfupgrade)
+					if (p->getScore() >= costOfupgrade)
 					{
-						m_player->decreaseScore(costOfupgrade);
-						m_player->increaseEnduranceLevel(i + 1);
+						p->decreaseScore(costOfupgrade);
+						p->increaseEnduranceLevel(i + 1);
 					}
 
 				}
@@ -247,12 +257,12 @@ void UpgradeScreen::UpdateStars(Vector2f mousePos)
 				if (livesSelected < i + 1)
 				{
 					int costOflife = ((i + 1) - livesSelected) * COST_OF_LIVES;
-					if (m_player->getScore() >= costOflife)
+					if (p->getScore() >= costOflife)
 					{
 						previousLivesSel = livesSelected;
 						livesSelected = i + 1;
-						m_player->decreaseScore(costOflife);
-						m_player->increaseLives(livesSelected - previousLivesSel);
+						p->decreaseScore(costOflife);
+						p->increaseLives(livesSelected - previousLivesSel);
 					}
 
 				}

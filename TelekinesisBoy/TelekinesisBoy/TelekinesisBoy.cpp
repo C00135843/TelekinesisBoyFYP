@@ -42,6 +42,7 @@
 //#include "Plank.h"
 #include "ParticleSystem.h"
 #include "LevelManager.h"
+#include "playerInfo.h"
 #include <vector>
 
 ////////////////////////////////////////////////////////////
@@ -49,7 +50,7 @@
 //////////////////////////////////////////////////////////// 
 
 void DisplayOptions(RenderWindow* w);
-void Hud(RenderWindow* w, Player*p);
+void Hud(RenderWindow* w, playerInfo*p);
 bool showTutorial;
 bool mouseClick = false;
 static const float SCALE = 30.f;
@@ -64,6 +65,7 @@ int main()
 	//load a font
 	sf::Font font;
 	Text pauseText;
+	Text WinLose;
 	Text tutorial1, tutorial2, tutorial3;
 	if (!font.loadFromFile("../Font/leadcoat.ttf"))
 	{
@@ -72,6 +74,9 @@ int main()
 	pauseText.setFont(font);
 	pauseText.setCharacterSize(80);
 	pauseText.setColor(Color::Red);
+	WinLose.setFont(font);
+	WinLose.setCharacterSize(50);
+	WinLose.setColor(Color::Red);
 
 	tutorial1.setFont(font);
 	tutorial1.setColor(Color::Red);
@@ -103,8 +108,9 @@ int main()
 	bgsprite.setTexture(background);
 	bgsprite.setTextureRect(sf::IntRect(0, 0, window.getSize().x, window.getSize().y));
 
-	LevelManager* levelManager = new LevelManager(&window);
-	UpgradeScreen us = UpgradeScreen(&window,levelManager->getPlayer());
+	LevelManager* levelManager = LevelManager::getInstance(&window);
+	playerInfo* playerInfo = playerInfo::getInstance();
+	UpgradeScreen us = UpgradeScreen(&window);
 	Menu menu(&window);
 	ParticleSystem* p_System = ParticleSystem::GetInstance();
 	GameStates* g_States = GameStates::getInstance();
@@ -270,10 +276,20 @@ int main()
 				tutorial3.setPosition(700, window.getView().getCenter().y - 250);
 			}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			levelManager->Level2Update(pause, mousePos);
-			levelManager->Level2Draw(drawDebug);
+			
+			if (levelManager->getLevel() == 1)
+			{
+				levelManager->Level1Update(pause, mousePos);
+				levelManager->Level1Draw(drawDebug);
+			}
+			else if (levelManager->getLevel() == 2)
+			{
+				levelManager->Level2Update(pause, mousePos);
+				levelManager->Level2Draw(drawDebug);
+			}
+			
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			Hud(&window, levelManager->getPlayer());
+			Hud(&window,playerInfo);
 	
 			if (!pause)
 			{
@@ -281,7 +297,7 @@ int main()
 				window.setView(player_view);
 			}
 
-			if (levelManager->getPlayer()->getLives() <= 0)
+			if (playerInfo->getLives() <= 0)
 			{
 				g_States->setState(END);
 				Sounds::getInstance()->stopLevel1Music();
@@ -330,6 +346,21 @@ int main()
 			bgspriteEnd.setTexture(backgroundEnd);
 			bgspriteEnd.setTextureRect(sf::IntRect(0, 0,503,166));
 			bgspriteEnd.setPosition(window.getView().getCenter().x -250, window.getView().getCenter().y - 250);
+			//score win los
+			if (playerInfo->getLives() > 0)
+			{
+				WinLose.setString("YOU WIN");
+				WinLose.setPosition(window.getView().getCenter().x - 80, window.getView().getCenter().y - 80);
+			}
+			else
+			{
+				WinLose.setString("YOU LOSE");
+				WinLose.setPosition(window.getView().getCenter().x - 80, window.getView().getCenter().y - 80);
+			}
+			window.draw(WinLose);
+			WinLose.setString("SCORE " + std::to_string(playerInfo->getScore()));
+			WinLose.setPosition(window.getView().getCenter().x - 80, window.getView().getCenter().y + 50);
+			window.draw(WinLose);
 			window.draw(bgspriteEnd);
 
 		}
@@ -351,7 +382,7 @@ int main()
 
 	return EXIT_SUCCESS;
 }
-void Hud(sf::RenderWindow *win,Player * p)
+void Hud(sf::RenderWindow *win,playerInfo * p)
 {
 	Text textScore;
 	Text textPower;
@@ -371,7 +402,7 @@ void Hud(sf::RenderWindow *win,Player * p)
 	textLives.setString("lives: " + std::to_string(p->getLives()));
 	textScore.setString("score: " + std::to_string(p->getScore()));
 	textLives.setPosition(win->getView().getCenter().x - 390, win->getView().getCenter().y - 290);
-	textScore.setPosition(win->getView().getCenter().x + 300, win->getView().getCenter().y - 290);
+	textScore.setPosition(win->getView().getCenter().x + 280, win->getView().getCenter().y - 290);
 
 	win->draw(textLives);
 	win->draw(textScore);

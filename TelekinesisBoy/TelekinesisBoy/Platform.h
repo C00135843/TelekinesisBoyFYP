@@ -20,12 +20,14 @@ private:
 	b2Vec2 size;
 	const int SCALE = 30.f;
 
+
 public:
 	Platform(){};
 	Platform(b2World*, RenderWindow*, float, float,float,float);
 	void createBox2dBody();
 	void loadAssets();
 	void draw();
+	b2Body* getBody() { return m_body; }
 
 };
 

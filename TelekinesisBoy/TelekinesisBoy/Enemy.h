@@ -22,6 +22,7 @@ public:
 	virtual void animate(float i);
 	bool getAlive();
 	Vector2f getPosition() { return m_sprite.getPosition(); }
+	b2Body* getBody() { return m_body; }
 
 protected:
 	Sprite m_sprite;

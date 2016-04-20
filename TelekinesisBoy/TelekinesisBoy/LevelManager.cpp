@@ -2,7 +2,8 @@
 #include "LevelManager.h"
 #include <string>
 
-
+static bool instanceFlag = false;
+static LevelManager* instance = NULL;
 LevelManager::LevelManager(sf::RenderWindow *window): m_win(window)
 {
 	gravity = new b2Vec2(0, 9.81);
@@ -16,9 +17,12 @@ LevelManager::LevelManager(sf::RenderWindow *window): m_win(window)
 	m_world->SetContactListener(contact);
 	s_Sound = Sounds::getInstance();
 	g_States = GameStates::getInstance();
-
-	level = 2;	
-	Level2Load();
+	pInfo = playerInfo::getInstance();
+	//enduranceLevel = 1;
+	//lives = 3;
+	//score = 0;
+	level = 1;	
+	Level1Load();
 }
 
 
@@ -26,6 +30,19 @@ LevelManager::~LevelManager()
 {
 }
 
+LevelManager * LevelManager::getInstance(sf::RenderWindow * window)
+{
+	if (!instanceFlag)
+	{
+		instance = new LevelManager(window);
+		instanceFlag = true;
+		return instance;
+	}
+	else
+	{
+		return instance;
+	}
+}
 void LevelManager::Level1Load()
 {
 	weight = 0;
@@ -171,7 +188,7 @@ void LevelManager::Level1Update(bool pause,sf::Vector2f mousePos)
 	{
 		if (!pause)
 		{
-			barWidth -= weight;
+			barWidth -= weight / pInfo->getEnduranceLevel();
 			if (barWidth <= 0)
 			{
 				barWidth = 0;
@@ -250,9 +267,54 @@ void LevelManager::Level1Draw(bool drawDebug)
 
 void LevelManager::Level1Del()
 {
-	hazard.clear();
-	neuros.clear();
-	ground.clear();
+		std::vector<Pickup*>::iterator it = neuros.begin();
+		std::vector<Pickup*>::iterator end = neuros.end();
+		for (; it != end; ++it) {
+			m_world->DestroyBody((*it)->getBody());
+		}
+		neuros.clear();
+
+		std::vector<Platform*>::iterator it1 = ground.begin();
+		std::vector<Platform*>::iterator end1 = ground.end();
+		for (; it1 != end1; ++it1) {
+			
+			m_world->DestroyBody((*it1)->getBody());
+		}
+		ground.clear();
+
+		std::vector<Crate*>::iterator it2 = crates.begin();
+		std::vector<Crate*>::iterator end2 = crates.end();
+		for (; it2 != end2; ++it2) {
+
+			m_world->DestroyBody((*it2)->getBody());
+		}
+		crates.clear();
+
+		std::vector<Plank*>::iterator it3 = planks.begin();
+		std::vector<Plank*>::iterator end3 = planks.end();
+		for (; it3 != end3; ++it3) {
+
+			m_world->DestroyBody((*it3)->getBody());
+		}
+		planks.clear();
+
+		std::vector<Hazard*>::iterator it4 = hazard.begin();
+		std::vector<Hazard*>::iterator end4 = hazard.end();
+		for (; it4 != end4; ++it4) {
+
+			m_world->DestroyBody((*it4)->getBody());
+		}
+		hazard.clear();
+
+		m_world->DestroyBody(e->getBody());
+		m_world->DestroyBody(door->getBody());
+		m_world->DestroyBody(b->getBody());
+		m_world->DestroyBody(wallRight->getBody());
+		m_world->DestroyBody(wallLeft->getBody());
+		m_world->DestroyBody(p->getBody());
+		//m_world->DestroyBody(flyingEnemy->getBody());
+		//m_world->DestroyBody(flyingEnemy->getsBody());
+		//m_world->DestroyBody(walkingEnemy->getBody());
 
 }
 
@@ -420,7 +482,7 @@ void LevelManager::Level2Update(bool pause, sf::Vector2f mousePos)
 	{
 		if (!pause)
 		{
-			barWidth -= weight;
+			barWidth -= weight/pInfo->getEnduranceLevel();
 			if (barWidth <= 0)
 			{
 				barWidth = 0;
@@ -443,7 +505,7 @@ void LevelManager::Level2Update(bool pause, sf::Vector2f mousePos)
 			barClock.restart();
 		}
 	}
-
+	door->Update();
 	for (int i = 0; i < planks.size(); i++)
 	{
 		if (!pause)
@@ -505,6 +567,54 @@ void LevelManager::Level2Draw(bool drawDebug)
 
 void LevelManager::Level2Del()
 {
+	std::vector<Pickup*>::iterator it = neuros.begin();
+	std::vector<Pickup*>::iterator end = neuros.end();
+	for (; it != end; ++it) {
+		m_world->DestroyBody((*it)->getBody());
+	}
+	neuros.clear();
+
+	std::vector<Platform*>::iterator it1 = ground.begin();
+	std::vector<Platform*>::iterator end1 = ground.end();
+	for (; it1 != end1; ++it1) {
+
+		m_world->DestroyBody((*it1)->getBody());
+	}
+	ground.clear();
+
+	std::vector<Crate*>::iterator it2 = crates.begin();
+	std::vector<Crate*>::iterator end2 = crates.end();
+	for (; it2 != end2; ++it2) {
+
+		m_world->DestroyBody((*it2)->getBody());
+	}
+	crates.clear();
+
+	std::vector<Plank*>::iterator it3 = planks.begin();
+	std::vector<Plank*>::iterator end3 = planks.end();
+	for (; it3 != end3; ++it3) {
+
+		m_world->DestroyBody((*it3)->getBody());
+	}
+	planks.clear();
+
+	std::vector<Hazard*>::iterator it4 = hazard.begin();
+	std::vector<Hazard*>::iterator end4 = hazard.end();
+	for (; it4 != end4; ++it4) {
+
+		m_world->DestroyBody((*it4)->getBody());
+	}
+	hazard.clear();
+
+	m_world->DestroyBody(e->getBody());
+	m_world->DestroyBody(door->getBody());
+	m_world->DestroyBody(b->getBody());
+	m_world->DestroyBody(wallRight->getBody());
+	m_world->DestroyBody(wallLeft->getBody());
+	m_world->DestroyBody(p->getBody());
+	m_world->DestroyBody(flyingEnemy->getBody());
+	m_world->DestroyBody(flyingEnemy->getsBody());
+	m_world->DestroyBody(walkingEnemy->getBody());
 }
 
 void LevelManager::Level3Load()
@@ -527,3 +637,5 @@ Player* LevelManager::getPlayer()
 {
 	return p;
 }
+
+

@@ -35,6 +35,7 @@ birdEnemy::birdEnemy(b2World * world, RenderWindow * win, float x, float y, floa
 	wander = true;
 	seeking = false;
 	restart = false;
+	resetPos = false;
 }
 
 
@@ -154,6 +155,12 @@ void birdEnemy::resetLineSight(Player * p)
 }
 void birdEnemy::update(Player* p)
 {
+	if (resetPos)
+	{
+		m_body->SetLinearVelocity(b2Vec2(0, 0));
+		m_body->SetTransform(b2Vec2(startPosition.x / SCALE, startPosition.y / SCALE), 0);
+		resetPos = false;
+	}
 	if (wander)
 	{
 		if (m_body->GetPosition().x*SCALE - size.x / 2 >= startPosition.x + rangeOfTravel)
@@ -237,5 +244,9 @@ void birdEnemy::setToWander()
 	restart = true;
 	//seeking = false;
 	//wander = true;
+}
+void birdEnemy::resetPosition() {
+	resetPos = true;
+	m_body->SetLinearVelocity(b2Vec2(0, 0));
 }
 

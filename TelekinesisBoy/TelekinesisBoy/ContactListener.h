@@ -12,14 +12,18 @@
 #include "Button.h"
 #include "Sounds.h"
 #include "birdEnemy.h"
+#include "playerInfo.h"
 
 class ContactListener :public b2ContactListener{
 private:
 	GameStates* g_states = GameStates::getInstance();
 	b2World *w;
+	playerInfo* pi;
+
 public:
 	ContactListener(b2World* world) : b2ContactListener() {
 		w = world;
+		pi = playerInfo::getInstance();
 	}
 	void BeginContact(b2Contact* contact)
 	{
@@ -87,22 +91,6 @@ public:
 				static_cast<birdEnemy*>(bodyUserData)->setToWander();
 			}
 		}
-		// FLYING ENEMY AND HAZARD
-		//if (fixAType == "Hazard" && fixBType == "lineOfSight"
-		//	|| fixAType == "lineOfSight" && fixBType == "Hazard") {
-		//	if (fixAType == "lineOfSight")
-		//	{
-		//		void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-		//		//contact->GetFixtureA()->GetBody()->SetAwake(false);
-		//		static_cast<birdEnemy*>(bodyUserData)->setToWander();
-		//	}
-		//	else if (fixBType == "lineOfSight")
-		//	{
-		//		void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-		//		//contact->GetFixtureA()->GetBody()->SetAwake(false);
-		//		static_cast<birdEnemy*>(bodyUserData)->setToWander();
-		//	}
-		//}
 
 		//PLAYER AND CRATE
 		if (fixAType == "Player" && fixBType == "Crate"
@@ -110,20 +98,21 @@ public:
 			if (fixAType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
-				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+				b2Vec2 posPlayer = contact->GetFixtureA()->GetBody()->GetPosition();
+				b2Vec2 posPlat = contact->GetFixtureB()->GetBody()->GetPosition();
 
 				if (posPlat.y - (10 / 60.0f) > posPlayer.y + 16 / 30.0f)
-					static_cast<Player*>(bodyUserData)->ground();			
+					static_cast<Player*>(bodyUserData)->ground();
 
 			}
 			else if (fixBType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
 				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
 				if (posPlat.y - (10 / 60.0f) > posPlayer.y + 16 / 30.0f)
 					static_cast<Player*>(bodyUserData)->ground();
+
 			}
 		}
 		//Player and Plank
@@ -132,8 +121,8 @@ public:
 			if (fixAType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
-				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+				b2Vec2 posPlayer = contact->GetFixtureA()->GetBody()->GetPosition();
+				b2Vec2 posPlat = contact->GetFixtureB()->GetBody()->GetPosition();
 
 				if (posPlat.y - (10 / 60.0f) > posPlayer.y + 16 / 30.0f)
 					static_cast<Player*>(bodyUserData)->ground();
@@ -142,8 +131,8 @@ public:
 			else if (fixBType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
 				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
 				if (posPlat.y - (10 / 60.0f) > posPlayer.y + 16 / 30.0f)
 					static_cast<Player*>(bodyUserData)->ground();
 			}
@@ -163,6 +152,56 @@ public:
 				Sounds::getInstance()->stopLevel1Music();
 				Sounds::getInstance()->playMenuMusic();
 				g_states->setState(UPGRADE);
+			}
+
+		}
+		//PLAYER AND FLYINGENEMY
+		if (fixAType == "Player" && fixBType == "flyingEnemy"
+			|| fixAType == "flyingEnemy" && fixBType == "Player") {
+			if (fixAType == "Player")
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+				void* bodyUserData1 = contact->GetFixtureB()->GetBody()->GetUserData();
+				pi->decreaseLives();
+				//static_cast<Player*>(bodyUserData)->decreaseLives();
+				static_cast<Player*>(bodyUserData)->resetPosition();
+				static_cast<birdEnemy*>(bodyUserData1)->resetPosition();
+				Sounds::getInstance()->playDeathSound();
+				//static_cast<birdEnemy*>(bodyUserData1)->setDelete();
+			}
+			else if (fixBType == "Player")
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+				void* bodyUserData1 = contact->GetFixtureB()->GetBody()->GetUserData();
+				//static_cast<Player*>(bodyUserData1)->decreaseLives();
+				pi->decreaseLives();
+				static_cast<Player*>(bodyUserData1)->resetPosition();
+				static_cast<birdEnemy*>(bodyUserData)->resetPosition();
+				Sounds::getInstance()->playDeathSound();
+			}
+
+		}
+
+		if (fixAType == "Player" && fixBType == "walkingEnemy"
+			|| fixAType == "walkingEnemy" && fixBType == "Player") {
+			if (fixAType == "Player")
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+				void* bodyUserData1 = contact->GetFixtureB()->GetBody()->GetUserData();
+				//static_cast<Player*>(bodyUserData)->decreaseLives();
+				pi->decreaseLives();
+				static_cast<Player*>(bodyUserData)->resetPosition();
+				Sounds::getInstance()->playDeathSound();
+				//static_cast<birdEnemy*>(bodyUserData1)->setDelete();
+			}
+			else if (fixBType == "Player")
+			{
+				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
+				void* bodyUserData1 = contact->GetFixtureB()->GetBody()->GetUserData();
+				//static_cast<Player*>(bodyUserData1)->decreaseLives();
+				pi->decreaseLives();
+				static_cast<Player*>(bodyUserData1)->resetPosition();
+				Sounds::getInstance()->playDeathSound();
 			}
 
 		}
@@ -186,7 +225,7 @@ public:
 			{
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
 				void* bodyUserData1 = contact->GetFixtureB()->GetBody()->GetUserData();
-				static_cast<Player*>(bodyUserData)->increaseScore(10);
+				pi->increaseScore(25);
 				static_cast<Pickup*>(bodyUserData1)->setDelete();
 				Sounds::getInstance()->playPickupSound();
 				
@@ -196,7 +235,7 @@ public:
 			{
 				void* bodyUserData1 = contact->GetFixtureA()->GetBody()->GetUserData();
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-				static_cast<Player*>(bodyUserData)->increaseScore(10);
+				pi->increaseScore(25);
 				static_cast<Pickup*>(bodyUserData1)->setDelete();
 				Sounds::getInstance()->playPickupSound();
 			}
@@ -209,14 +248,16 @@ public:
 			if (fixAType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
-				static_cast<Player*>(bodyUserData)->decreaseLives();
+				//static_cast<Player*>(bodyUserData)->decreaseLives();
+				pi->decreaseLives();
 				static_cast<Player*>(bodyUserData)->resetPosition();
 				Sounds::getInstance()->playDeathSound();
 			}
 			else if (fixBType == "Player")
 			{
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
-				static_cast<Player*>(bodyUserData)->decreaseLives();
+				//static_cast<Player*>(bodyUserData)->decreaseLives();
+				pi->decreaseLives();
 				static_cast<Player*>(bodyUserData)->resetPosition();
 				Sounds::getInstance()->playDeathSound();
 			}
@@ -251,8 +292,8 @@ public:
 			|| fixAType == "Crate" && fixBType == "Player"){
 			if (fixAType == "Player")
 			{
-				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
-				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+				b2Vec2 posPlayer = contact->GetFixtureA()->GetBody()->GetPosition();
+				b2Vec2 posPlat = contact->GetFixtureB()->GetBody()->GetPosition();
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
 				if (posPlat.y + (10 / 60.0f) > posPlayer.y - 16 / 30.0f)
 					static_cast<Player*>(bodyUserData)->notGrounded();
@@ -261,8 +302,8 @@ public:
 			}
 			else if (fixBType == "Player")
 			{
-				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
 				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 				if (posPlat.y + (10 / 60.0f) > posPlayer.y - 16 / 30.0f)
 					static_cast<Player*>(bodyUserData)->notGrounded();
@@ -274,8 +315,8 @@ public:
 			|| fixAType == "Plank" && fixBType == "Player"){
 			if (fixAType == "Player")
 			{
-				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
-				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+				b2Vec2 posPlayer = contact->GetFixtureA()->GetBody()->GetPosition();
+				b2Vec2 posPlat= contact->GetFixtureB()->GetBody()->GetPosition();
 				void* bodyUserData = contact->GetFixtureA()->GetBody()->GetUserData();
 				if (posPlat.y + (10 / 60.0f) > posPlayer.y - 16 / 30.0f)
 					static_cast<Player*>(bodyUserData)->notGrounded();
@@ -284,8 +325,8 @@ public:
 			}
 			else if (fixBType == "Player")
 			{
-				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
 				b2Vec2 posPlayer = contact->GetFixtureB()->GetBody()->GetPosition();
+				b2Vec2 posPlat = contact->GetFixtureA()->GetBody()->GetPosition();
 				void* bodyUserData = contact->GetFixtureB()->GetBody()->GetUserData();
 				if (posPlat.y + (10 / 60.0f) > posPlayer.y - 16 / 30.0f)
 					static_cast<Player*>(bodyUserData)->notGrounded();

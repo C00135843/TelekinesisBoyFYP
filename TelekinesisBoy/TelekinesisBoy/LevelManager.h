@@ -1,6 +1,7 @@
 #pragma once
 #include "SFML/Graphics.hpp" 
 #include "SFML/OpenGL.hpp" 
+#include "STP\TMXLoader.hpp"
 #include <Box2D\Box2D.h>
 #include "Platform.h"
 #include "Hazard.h"
@@ -18,6 +19,7 @@
 #include "Sounds.h"
 #include "Enemy.h"
 #include "birdEnemy.h"
+
 
 class LevelManager
 {
@@ -50,7 +52,7 @@ private:
 	GameStates* g_States;
 	Sounds* s_Sound;
 
-
+	tmx::TileMap* map;
 	sf::RenderWindow* m_win;
 	std::vector<Pickup*> pickupScheduledForRemoval;
 	std::vector<Pickup*>neuros;

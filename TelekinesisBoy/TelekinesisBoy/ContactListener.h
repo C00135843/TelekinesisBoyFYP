@@ -144,11 +144,17 @@ public:
 			if (fixAType == "Player")
 			{
 				g_states->setState(UPGRADE);
+				pi->setOrginalScore(pi->getScore());
+				pi->setOriginalEnduranceLevel(pi->getEnduranceLevel());
+				pi->setOriginalLives(pi->getLives());
 				Sounds::getInstance()->stopLevel1Music();
 				Sounds::getInstance()->playMenuMusic();
 			}
 			else if (fixBType == "Player")
 			{
+				pi->setOrginalScore(pi->getScore());
+				pi->setOriginalEnduranceLevel(pi->getEnduranceLevel());
+				pi->setOriginalLives(pi->getLives());
 				Sounds::getInstance()->stopLevel1Music();
 				Sounds::getInstance()->playMenuMusic();
 				g_states->setState(UPGRADE);

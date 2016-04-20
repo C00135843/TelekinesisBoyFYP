@@ -45,6 +45,11 @@ public:
 	~UpgradeScreen();
 	void UpdateStars(Vector2f mousePos);
 	void DisplayScreen(Vector2f mousePos);
+	void setOriginals() {
+		originalEndurance = p->getEnduranceLevel();
+		originalScore = p->getScore();
+		originalLives = p->getLives();
+	}
 
 };
 

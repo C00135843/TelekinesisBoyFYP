@@ -15,9 +15,19 @@ public:
 	void decreaseScore(int ds) { score -= ds; }
 	int getEnduranceLevel() { return enduranceLevel; }
 	void increaseEnduranceLevel(int el) { enduranceLevel = el; }
+
+	void setOrginalScore(int s) { originalScore = s; }
+	void setOriginalEnduranceLevel(int oe) { originalEndurance = oe; }
+	void setOriginalLives(int ol) { originalLives = ol; }
+	int getOrginalScore() { return originalScore; }
+	int getOriginalEnduranceLevel() { return originalEndurance; }
+	int getOriginalLives() { return originalLives; }
 private:
 	int score;
 	int lives;
 	int enduranceLevel;
+	int originalScore;
+	int originalLives;
+	int originalEndurance;
 };
 

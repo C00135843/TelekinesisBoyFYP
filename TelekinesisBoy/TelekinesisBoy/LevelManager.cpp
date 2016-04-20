@@ -188,7 +188,8 @@ void LevelManager::Level1Update(bool pause,sf::Vector2f mousePos)
 	{
 		if (!pause)
 		{
-			barWidth -= weight / pInfo->getEnduranceLevel();
+			float x = (static_cast<float>(weight) / pInfo->getEnduranceLevel());
+			barWidth -= x;
 			if (barWidth <= 0)
 			{
 				barWidth = 0;
@@ -332,7 +333,7 @@ void LevelManager::Level2Load()
 	//map->ShowObjects(true);
 	map->GetLayer("Background").visible = true;
 	map->GetLayer("Platforms").visible = true;
-	map->GetObjectGroup("levelObject").visible = true;
+	map->GetObjectGroup("levelObject").visible = false;
 	tmx::ObjectGroup t = map->GetObjectGroup("levelObject");
 
 	int length = t.objects_.size();
@@ -482,7 +483,8 @@ void LevelManager::Level2Update(bool pause, sf::Vector2f mousePos)
 	{
 		if (!pause)
 		{
-			barWidth -= weight/pInfo->getEnduranceLevel();
+			float x = (static_cast<float>(weight) / pInfo->getEnduranceLevel());
+			barWidth -= x;
 			if (barWidth <= 0)
 			{
 				barWidth = 0;

@@ -60,6 +60,7 @@ void UpgradeScreen::LoadAssets()
 }
 void UpgradeScreen::displayLivesAndScore(Vector2f mousePos)
 {
+	originalScore = p->getScore();
 	mouseX = mousePos.x;
 	mouseY = mousePos.y;
 	if (!mouseClicked)
@@ -112,13 +113,15 @@ void UpgradeScreen::displayLivesAndScore(Vector2f mousePos)
 				
 				if (i == 0)
 				{
-					p->setScore(originalScore);
-					p->increaseEnduranceLevel(originalEndurance);
+					Sounds::getInstance()->playMenuSound();
+					p->setScore(p->getOrginalScore());
+					p->increaseEnduranceLevel(p->getOriginalEnduranceLevel());
 				}
 				else if (i == 1)
 				{
-					p->setScore(originalScore);
-					p->setLives(originalLives);
+					Sounds::getInstance()->playMenuSound();
+					p->setScore(p->getOrginalScore());
+					p->setLives(p->getOriginalLives());
 					livesSelected = 0;
 				}
 				else
@@ -127,6 +130,8 @@ void UpgradeScreen::displayLivesAndScore(Vector2f mousePos)
 					levelManager->Level2Load();
 					if (levelManager->getLevel() < 2)
 					{
+						Sounds::getInstance()->stopMenuMusic();
+						Sounds::getInstance()->playLevel1Music();
 						levelManager->increaseLevel();
 						g_States->setState(GAME);
 					}
@@ -238,6 +243,7 @@ void UpgradeScreen::UpdateStars(Vector2f mousePos)
 					int costOfupgrade = ((i + 1) - enduranceLevel) * COST_OF_UPGRADE;
 					if (p->getScore() >= costOfupgrade)
 					{
+						Sounds::getInstance()->playMenuSound();
 						p->decreaseScore(costOfupgrade);
 						p->increaseEnduranceLevel(i + 1);
 					}
@@ -259,6 +265,7 @@ void UpgradeScreen::UpdateStars(Vector2f mousePos)
 					int costOflife = ((i + 1) - livesSelected) * COST_OF_LIVES;
 					if (p->getScore() >= costOflife)
 					{
+						Sounds::getInstance()->playMenuSound();
 						previousLivesSel = livesSelected;
 						livesSelected = i + 1;
 						p->decreaseScore(costOflife);

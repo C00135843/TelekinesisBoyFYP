@@ -5,8 +5,8 @@ static bool instanceFlag = false;
 static playerInfo* instance = NULL;
 playerInfo::playerInfo()
 {
-	score = 0;
-	enduranceLevel = 15;
+	score = 100;
+	enduranceLevel = 1;
 	lives = 3;
 }
 

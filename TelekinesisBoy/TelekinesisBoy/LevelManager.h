@@ -19,6 +19,7 @@
 #include "Sounds.h"
 #include "Enemy.h"
 #include "birdEnemy.h"
+#include <string>
 
 
 class LevelManager
@@ -42,6 +43,7 @@ public:
 	void Level3Del();
 
 	Player * getPlayer();
+	float getLevel() { return level; }
 
 private:
 
@@ -56,33 +58,21 @@ private:
 	sf::RenderWindow* m_win;
 	std::vector<Pickup*> pickupScheduledForRemoval;
 	std::vector<Pickup*>neuros;
-	Pickup* n;
-	Pickup* n1;
-	Pickup* n2;
-	Pickup* n3;
-	Pickup* n4;
-	Pickup* n5;
-	Pickup* n6;
-	Pickup* n7;
-	Pickup* n8;
-	Pickup* n9;
-
+	std::vector<Crate*>crates;
+	std::vector<Plank*>planks;
+	birdEnemy* flyingEnemy;
+	Enemy* walkingEnemy;
 	Player* p;
 	Platform* wallLeft;
 	Platform* wallRight;
-	Platform* ground;
-	Hazard* h;
-	Platform* ground2;
-	Platform* ground3;
-	Platform* ground4;
+	std::vector<Platform*> ground;
+	std::vector<Hazard*> hazard;
+
 	Platform* roof;
 	Button* b;
 	Door* door;
 	Exit* e;
-	Plank* plank;
-	Enemy* walkingEnemy;
-	birdEnemy* flyingEnemy;
-	std::vector<Crate*>crates;
+	//Plank* plank;
 
 	bool tb_delete;
 
@@ -100,7 +90,7 @@ private:
 
 	Time barTime;
 	Clock barClock;
-
+	int level;
 	//Vector2f mousePos;
 
 

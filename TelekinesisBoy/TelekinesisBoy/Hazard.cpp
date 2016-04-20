@@ -47,14 +47,14 @@ void Hazard::createBox2dBody()
 }
 void Hazard::loadAssets()
 {
-	c_Texture.loadFromFile("../Assets/hazard.png");
-	c_sprite.setTexture(c_Texture);
-	c_sprite.setTextureRect(sf::IntRect(0.f, 0.f, size.x, size.y));
-	c_sprite.setPosition(startPosition.x, startPosition.y);
+	//c_Texture.loadFromFile("../Assets/hazard.png");
+	//c_sprite.setTexture(c_Texture);
+	//c_sprite.setTextureRect(sf::IntRect(0.f, 0.f, size.x, size.y));
+	//c_sprite.setPosition(startPosition.x, startPosition.y);
 	//c_sprite.setOrigin(16,16);
 
 }
 void Hazard::Draw()
 {
-	m_win->draw(c_sprite);
+	//m_win->draw(c_sprite);
 }

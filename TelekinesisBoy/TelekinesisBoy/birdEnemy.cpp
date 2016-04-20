@@ -31,7 +31,7 @@ birdEnemy::birdEnemy(b2World * world, RenderWindow * win, float x, float y, floa
 	animationFrames();
 	createBox2dBody();
 	LoadAssets();
-	rangeOfTravel = 500;
+	rangeOfTravel = 300;
 	wander = true;
 	seeking = false;
 	restart = false;
@@ -193,7 +193,7 @@ void birdEnemy::update(Player* p)
 		{
 
 			float distance = DistanceBetween();
-			if (distance <= 4.0f)
+			if (distance <= 6.0f)
 			{
 				restart = false;
 				seeking = false;

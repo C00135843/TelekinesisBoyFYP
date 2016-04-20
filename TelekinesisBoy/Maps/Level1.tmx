@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="25" tilewidth="32" tileheight="32" nextobjectid="1">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="50" height="25" tilewidth="32" tileheight="32" nextobjectid="46">
  <tileset firstgid="1" name="background" tilewidth="32" tileheight="32" tilecount="60" columns="10">
   <image source="Stone_Tiles_08012015_320x192_.png" width="320" height="192"/>
+ </tileset>
+ <tileset firstgid="61" name="Platforms" tilewidth="32" tileheight="32" tilecount="8" columns="2">
+  <image source="plat.png" width="64" height="128"/>
+ </tileset>
+ <tileset firstgid="69" name="spikes" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+  <image source="Spikes.png" width="32" height="32"/>
+ </tileset>
+ <tileset firstgid="70" name="crate" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+  <image source="crate.png" width="32" height="32"/>
  </tileset>
  <layer name="Backgound" width="50" height="25">
   <data encoding="csv">
@@ -42,23 +51,259 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,61,62,61,62,61,62,61,62,61,62,61,62,61,61,62,61,62,61,62,61,61,62,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+61,62,61,62,61,62,61,62,61,62,61,62,61,62,61,62,61,61,69,69,69,69,69,69,69,69,69,69,62,61,62,61,62,61,62,61,62,61,62,61,62,61,62,61,62,61,62,61,61,62,
+63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,63,64,
+63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,63,64,
+65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,
+67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,
+65,65,65,65,66,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,65,66,65,65,65,65,65,65,65,65,65,65,65,66,65,65,65,65,65,65,65,65,65,65,66,65,65,65,65,65,
+67,67,67,67,68,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,68,67,67,67,67,67,67,67,67,67,67,67,68,67,67,67,67,67,67,67,67,67,67,68,67,67,67,67,67,
+65,66,65,66,66,65,66,65,66,65,66,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,65,66,66,65,66,65,65,66,65,66,65,66,
+67,68,67,68,68,67,68,67,68,67,68,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,67,68,68,67,68,67,67,68,67,68,67,68,
+67,67,67,67,68,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,67,68,67,67,67,67,67,67,68,67,67,67,67,67,67,67,67,68
 </data>
  </layer>
+ <objectgroup name="levelObject">
+  <properties>
+   <property name="type" value="platform"/>
+  </properties>
+  <object id="1" name="Platform" type="platform" x="1" y="479" width="576" height="32">
+   <properties>
+    <property name="height" type="float" value="32"/>
+    <property name="type" value="platform"/>
+    <property name="width" type="float" value="576"/>
+    <property name="x" type="float" value="1"/>
+    <property name="y" type="float" value="479"/>
+   </properties>
+  </object>
+  <object id="3" name="Spikes1" type="hazard" x="579" y="480" width="316" height="32">
+   <properties>
+    <property name="height" type="float" value="32"/>
+    <property name="type" value="hazard"/>
+    <property name="width" type="float" value="316"/>
+    <property name="x" type="float" value="579"/>
+    <property name="y" type="float" value="480"/>
+   </properties>
+  </object>
+  <object id="5" name="Platform2" type="platform" x="897" y="480" width="704" height="32">
+   <properties>
+    <property name="height" type="float" value="32"/>
+    <property name="type" value="platform"/>
+    <property name="width" type="float" value="704"/>
+    <property name="x" type="float" value="897"/>
+    <property name="y" type="float" value="480"/>
+   </properties>
+  </object>
+  <object id="6" name="Platform3" type="platform" x="896" y="256" width="704" height="32">
+   <properties>
+    <property name="height" type="float" value="32"/>
+    <property name="type" value="platform"/>
+    <property name="width" type="float" value="704"/>
+    <property name="x" type="float" value="896"/>
+    <property name="y" type="float" value="256"/>
+   </properties>
+  </object>
+  <object id="7" name="crate1" type="crate" x="321" y="442" width="32" height="32">
+   <properties>
+    <property name="height" type="float" value="32"/>
+    <property name="type" value="crate"/>
+    <property name="width" type="float" value="32"/>
+    <property name="x" type="float" value="321"/>
+    <property name="y" type="float" value="442"/>
+   </properties>
+  </object>
+  <object id="17" name="crate2" type="crate" x="359" y="443" width="32" height="32">
+   <properties>
+    <property name="height" type="float" value="32"/>
+    <property name="type" value="crate"/>
+    <property name="width" type="float" value="32"/>
+    <property name="x" type="float" value="359"/>
+    <property name="y" type="float" value="443"/>
+   </properties>
+  </object>
+  <object id="18" name="crate9" type="crate" x="397" y="373" width="32" height="32">
+   <properties>
+    <property name="height" type="float" value="32"/>
+    <property name="type" value="crate"/>
+    <property name="width" type="float" value="32"/>
+    <property name="x" type="float" value="397"/>
+    <property name="y" type="float" value="373"/>
+   </properties>
+  </object>
+  <object id="19" name="crate8" type="crate" x="439" y="407" width="32" height="32">
+   <properties>
+    <property name="height" type="float" value="32"/>
+    <property name="type" value="crate"/>
+    <property name="width" type="float" value="32"/>
+    <property name="x" type="float" value="439"/>
+    <property name="y" type="float" value="407"/>
+   </properties>
+  </object>
+  <object id="20" name="crate7" type="crate" x="398" y="408" width="32" height="32">
+   <properties>
+    <property name="height" type="float" value="32"/>
+    <property name="type" value="crate"/>
+    <property name="width" type="float" value="32"/>
+    <property name="x" type="float" value="398"/>
+    <property name="y" type="float" value="408"/>
+   </properties>
+  </object>
+  <object id="21" name="crate6" type="crate" x="359" y="408" width="32" height="32">
+   <properties>
+    <property name="height" type="float" value="32"/>
+    <property name="type" value="crate"/>
+    <property name="width" type="float" value="32"/>
+    <property name="x" type="float" value="359"/>
+    <property name="y" type="float" value="408"/>
+   </properties>
+  </object>
+  <object id="22" name="crate5" type="crate" x="481" y="443" width="32" height="32">
+   <properties>
+    <property name="height" type="float" value="32"/>
+    <property name="type" value="crate"/>
+    <property name="width" type="float" value="32"/>
+    <property name="x" type="float" value="481"/>
+    <property name="y" type="float" value="443"/>
+   </properties>
+  </object>
+  <object id="23" name="crate4" type="crate" x="440" y="443" width="32" height="32">
+   <properties>
+    <property name="height" type="float" value="32"/>
+    <property name="type" value="crate"/>
+    <property name="width" type="float" value="32"/>
+    <property name="x" type="float" value="440"/>
+    <property name="y" type="float" value="443"/>
+   </properties>
+  </object>
+  <object id="24" name="crate3" type="crate" x="398" y="443" width="32" height="32">
+   <properties>
+    <property name="height" type="float" value="32"/>
+    <property name="type" value="crate"/>
+    <property name="width" type="float" value="32"/>
+    <property name="x" type="float" value="398"/>
+    <property name="y" type="float" value="443"/>
+   </properties>
+  </object>
+  <object id="28" name="Player" type="player" x="98" y="435" width="20" height="32">
+   <properties>
+    <property name="type" value="player"/>
+    <property name="x" type="float" value="98"/>
+    <property name="y" type="float" value="435"/>
+   </properties>
+  </object>
+  <object id="30" name="neuros1" type="neuros" x="397" y="319" width="30" height="30">
+   <properties>
+    <property name="type" value="neuros"/>
+    <property name="x" type="float" value="397"/>
+    <property name="y" type="float" value="319"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="32" name="neuros2" type="neuros" x="398" y="386" width="30" height="30">
+   <properties>
+    <property name="type" value="neuros"/>
+    <property name="x" type="float" value="398"/>
+    <property name="y" type="float" value="386"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="33" name="neuros3" type="neuros" x="356" y="437" width="30" height="30">
+   <properties>
+    <property name="type" value="neuros"/>
+    <property name="x" type="float" value="356"/>
+    <property name="y" type="float" value="437"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="34" name="neuros4" type="neuros" x="401" y="435" width="30" height="30">
+   <properties>
+    <property name="type" value="neuros"/>
+    <property name="x" type="float" value="401"/>
+    <property name="y" type="float" value="435"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="35" name="neuros5" type="neuros" x="453" y="437" width="30" height="30">
+   <properties>
+    <property name="type" value="neuros"/>
+    <property name="x" type="float" value="453"/>
+    <property name="y" type="float" value="437"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="36" name="neuros6" type="neuros" x="619" y="400" width="30" height="30">
+   <properties>
+    <property name="type" value="neuros"/>
+    <property name="x" type="float" value="619"/>
+    <property name="y" type="float" value="400"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="37" name="neuros7" type="neuros" x="958" y="422" width="30" height="30">
+   <properties>
+    <property name="type" value="neuros"/>
+    <property name="x" type="float" value="958"/>
+    <property name="y" type="float" value="422"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="38" name="neuros8" type="neuros" x="831" y="394" width="30" height="30">
+   <properties>
+    <property name="type" value="neuros"/>
+    <property name="x" type="float" value="831"/>
+    <property name="y" type="float" value="394"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="39" name="neuros9" type="neuros" x="1257" y="422" width="30" height="30">
+   <properties>
+    <property name="type" value="neuros"/>
+    <property name="x" type="float" value="1257"/>
+    <property name="y" type="float" value="422"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="40" name="neuros10" type="neuros" x="1417" y="429" width="30" height="30">
+   <properties>
+    <property name="type" value="neuros"/>
+    <property name="x" type="float" value="1417"/>
+    <property name="y" type="float" value="429"/>
+   </properties>
+   <ellipse/>
+  </object>
+  <object id="41" name="door" type="door" x="1060" y="280" width="16" height="200">
+   <properties>
+    <property name="height" type="float" value="200"/>
+    <property name="type" value="door"/>
+    <property name="width" type="float" value="16"/>
+    <property name="x" type="float" value="1060"/>
+    <property name="y" type="float" value="280"/>
+   </properties>
+  </object>
+  <object id="43" name="Button" type="button" x="948" y="236" width="57" height="26">
+   <properties>
+    <property name="height" type="float" value="26"/>
+    <property name="type" value="button"/>
+    <property name="width" type="float" value="57"/>
+    <property name="x" type="float" value="948"/>
+    <property name="y" type="float" value="236"/>
+   </properties>
+  </object>
+  <object id="44" name="Exit" type="exit" x="1537" y="431" width="61" height="47">
+   <properties>
+    <property name="height" type="float" value="47"/>
+    <property name="type" value="exit"/>
+    <property name="width" type="float" value="61"/>
+    <property name="x" type="float" value="1537"/>
+    <property name="y" type="float" value="431"/>
+   </properties>
+  </object>
+ </objectgroup>
 </map>

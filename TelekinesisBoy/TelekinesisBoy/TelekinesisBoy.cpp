@@ -242,10 +242,21 @@ int main()
 			elapsed = clock.getElapsedTime();
 			float deltaTime = elapsed.asSeconds();
 			clock.restart();
-			
+			if (levelManager->getLevel() == 1)
+			{
+				levelWidth = 1600;
+			}
+			else if (levelManager->getLevel() == 2)
+			{
+				levelWidth = 3200;
+			}
+			else
+			{
+				levelWidth = 2400;
+			}
 			if (levelManager->getPlayer()->getPosition().x >= levelWidth - window.getSize().x / 2)
 			{
-				player_view.setCenter(1100, 300);
+				player_view.setCenter(levelWidth-window.getSize().x/2, 300);
 			}
 			else if (levelManager->getPlayer()->getPosition().x >= 400)
 			{
@@ -259,8 +270,8 @@ int main()
 				tutorial3.setPosition(700, window.getView().getCenter().y - 250);
 			}
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			levelManager->Level1Update(pause, mousePos);
-			levelManager->Level1Draw(true);
+			levelManager->Level2Update(pause, mousePos);
+			levelManager->Level2Draw(drawDebug);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			Hud(&window, levelManager->getPlayer());
 	
@@ -277,7 +288,7 @@ int main()
 				Sounds::getInstance()->playMenuMusic();
 			}
 		
-			if (showTutorial)
+			if (showTutorial && levelManager->getLevel() == 1)
 			{
 				tutorial1.setString("USE THE LEFT MOUSE CLICK TO MOVE CRATES");
 				tutorial2.setString("USE THE CRATES AS A BRIDGE TO PASS SPIKES");

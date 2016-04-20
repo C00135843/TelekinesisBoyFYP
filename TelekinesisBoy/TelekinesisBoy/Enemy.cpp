@@ -22,8 +22,8 @@ Enemy::Enemy()
 Enemy::Enemy(b2World * world, RenderWindow * win, float x, float y, float w, float h) : m_world(world), m_win(win), startPosition(x, y), size(w, h)
 {
 	alive = true;
-	m_speed = 0.08f;
-	rangeOfTravel = 300;
+	m_speed = 0.04f;
+	rangeOfTravel = 400;
 	facingRight = true;
 	animationFrames();
 	createBox2dBody();
